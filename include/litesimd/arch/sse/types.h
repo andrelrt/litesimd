@@ -20,6 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#ifdef __SSE2__
+
 #ifndef LITESIMD_SSE_TYPES_H
 #define LITESIMD_SSE_TYPES_H
 
@@ -105,4 +107,6 @@ template<> struct traits< double, sse_tag, void >
 } // namespace litesimd
 
 #endif //LITESIMD_SSE_TYPES_H
+
+#endif //__SSE2__
 

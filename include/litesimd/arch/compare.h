@@ -29,7 +29,7 @@ namespace litesimd {
 
 // Greater than
 // ---------------------------------------------------------------------------------------
-template< typename ValueType_T, typename Tag_T >
+template< typename ValueType_T, typename Tag_T = default_tag >
 typename traits< ValueType_T, Tag_T >::mask_type
 greater_than( typename traits< ValueType_T, Tag_T >::simd_type,
               typename traits< ValueType_T, Tag_T >::simd_type )
@@ -37,7 +37,7 @@ greater_than( typename traits< ValueType_T, Tag_T >::simd_type,
     return traits< ValueType_T, Tag_T >::zero();
 }
 
-template< typename ValueType_T, typename Tag_T >
+template< typename ValueType_T, typename Tag_T = default_tag >
 inline typename traits< ValueType_T, Tag_T >::mask_type
 greater_than( ValueType_T lhs,
               typename traits< ValueType_T, Tag_T >::simd_type rhs )
@@ -47,7 +47,7 @@ greater_than( ValueType_T lhs,
                   rhs );
 }
 
-template< typename ValueType_T, typename Tag_T >
+template< typename ValueType_T, typename Tag_T = default_tag >
 inline typename traits< ValueType_T, Tag_T >::mask_type
 greater_than( typename traits< ValueType_T, Tag_T >::simd_type lhs,
               ValueType_T rhs )
@@ -59,7 +59,7 @@ greater_than( typename traits< ValueType_T, Tag_T >::simd_type lhs,
 
 // Mask to bitmask
 // ---------------------------------------------------------------------------------------
-template< typename ValueType_T, typename Tag_T >
+template< typename ValueType_T, typename Tag_T = default_tag >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
 mask_to_bitmask( typename traits< ValueType_T, Tag_T >::mask_type )
 {

@@ -26,7 +26,7 @@
 
 namespace ls = litesimd;
 
-TEST(SimdCompareTest, GreaterThan)
+TEST(SimdCompareTest, GreaterThanDefault)
 {
     ls::t_int32_simd cmp;
     int32_t* pCmp = reinterpret_cast<int32_t*>( &cmp );
@@ -41,17 +41,17 @@ TEST(SimdCompareTest, GreaterThan)
 
     for( size_t i = 0; i < ls::int32_simd_size; ++i )
     {
-        // FIXME Default instruction TAG (ie. remove ls::sse_tag)
-        EXPECT_EQ( mask, (ls::greater_than_bitmask< int32_t, ls::sse_tag >( val, cmp )) )
+        EXPECT_EQ( mask, (ls::greater_than_bitmask< int32_t >( val, cmp )) )
             << "val: " << val
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
-            << ls::greater_than_bitmask< int32_t, ls::sse_tag >( val, cmp );
+            << ls::greater_than_bitmask< int32_t >( val, cmp );
         val += 10;
         mask <<= 4;
         mask |= 0xf;
     }
 }
 
+#ifdef __SSE2__
 TEST(SimdCompareTest, GreaterThanSSE)
 {
     using simd32 = typename ls::traits< int32_t, ls::sse_tag >::simd_type;
@@ -97,6 +97,7 @@ TEST(SimdCompareTest, GreaterThanSSE)
     EXPECT_EQ( 0x000fu, (ls::greater_than_bitmask< int32_t, ls::sse_tag >( 0x41a7, cmp )) ) << "hex: 0x" << std::hex
         << std::setw(8) << std::setfill( '0' ) << ls::greater_than_bitmask< int32_t, ls::sse_tag >( 0x41a7, cmp );
 }
+#endif //__SSE2__
 
 //TEST(SimdCompareTest, GreaterThanAVX)
 //{

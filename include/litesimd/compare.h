@@ -29,7 +29,7 @@ namespace litesimd {
 
 // Greater than bitmask
 // ---------------------------------------------------------------------------------------
-template< typename ValueType_T, typename Tag_T >
+template< typename ValueType_T, typename Tag_T = default_tag >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
 greater_than_bitmask( typename traits< ValueType_T, Tag_T >::simd_type lhs,
                       typename traits< ValueType_T, Tag_T >::simd_type rhs )
@@ -39,7 +39,7 @@ greater_than_bitmask( typename traits< ValueType_T, Tag_T >::simd_type lhs,
             );
 }
 
-template< typename ValueType_T, typename Tag_T >
+template< typename ValueType_T, typename Tag_T = default_tag >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
 greater_than_bitmask( ValueType_T lhs,
                       typename traits< ValueType_T, Tag_T >::simd_type rhs )
@@ -49,7 +49,7 @@ greater_than_bitmask( ValueType_T lhs,
                 rhs );
 }
 
-template< typename ValueType_T, typename Tag_T >
+template< typename ValueType_T, typename Tag_T = default_tag >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
 greater_than_bitmask( typename traits< ValueType_T, Tag_T >::simd_type lhs,
                       ValueType_T rhs )
