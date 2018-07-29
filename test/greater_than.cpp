@@ -26,6 +26,32 @@
 
 namespace ls = litesimd;
 
+TEST(SimdCompareTest, GreaterThan)
+{
+    ls::t_int32_simd cmp;
+    int32_t* pCmp = reinterpret_cast<int32_t*>( &cmp );
+    int32_t val = 10;
+    for( size_t i = 0; i < ls::int32_simd_size; ++i )
+    {
+        pCmp[ i ] = val;
+        val += 10;
+    }
+    ls::t_bitmask mask = 0;
+    val = 5;
+
+    for( size_t i = 0; i < ls::int32_simd_size; ++i )
+    {
+        // FIXME Default instruction TAG (ie. remove ls::sse_tag)
+        EXPECT_EQ( mask, (ls::greater_than_bitmask< int32_t, ls::sse_tag >( val, cmp )) )
+            << "val: " << val
+            << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
+            << ls::greater_than_bitmask< int32_t, ls::sse_tag >( val, cmp );
+        val += 10;
+        mask <<= 4;
+        mask |= 0xf;
+    }
+}
+
 TEST(SimdCompareTest, GreaterThanSSE)
 {
     using simd32 = typename ls::traits< int32_t, ls::sse_tag >::simd_type;
