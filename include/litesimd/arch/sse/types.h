@@ -45,25 +45,21 @@ struct traits< ValueType_T, sse_tag,
         return _mm_setzero_si128();
     }
 
-    template< class = std::enable_if_t< std::is_same< int8_t, ValueType_T >::value > >
     static inline simd_type from_value( int8_t val )
     {
         return _mm_set1_epi8( val );
     }
 
-    template< class = std::enable_if_t< std::is_same< int16_t, ValueType_T >::value > >
     static inline simd_type from_value( int16_t val )
     {
         return _mm_set1_epi16( val );
     }
 
-    template< class = std::enable_if_t< std::is_same< int32_t, ValueType_T >::value > >
     static inline simd_type from_value( int32_t val )
     {
         return _mm_set1_epi32( val );
     }
 
-    template< class = std::enable_if_t< std::is_same< int64_t, ValueType_T >::value > >
     static inline simd_type from_value( int64_t val )
     {
         return _mm_set1_epi64x( val );
