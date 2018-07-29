@@ -23,7 +23,9 @@
 #ifndef LITESIMD_COMPARE_H
 #define LITESIMD_COMPARE_H
 
+#include "types.h"
 #include "arch/sse/compare.h"
+#include "arch/avx/compare.h"
 
 namespace litesimd {
 

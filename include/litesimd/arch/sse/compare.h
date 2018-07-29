@@ -20,6 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#ifdef __SSE2__
+
 #ifndef LITESIMD_SSE_COMPARE_H
 #define LITESIMD_SSE_COMPARE_H
 
@@ -104,3 +106,4 @@ mask_to_bitmask< double, sse_tag >( typename traits< double, sse_tag >::mask_typ
 
 #endif // LITESIMD_SSE_COMPARE_H
 
+#endif //__SSE2__

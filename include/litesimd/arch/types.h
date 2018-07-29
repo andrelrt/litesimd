@@ -1,4 +1,3 @@
-
 // MIT License
 //
 // Copyright (c) 2018 André Tupinambá
@@ -25,12 +24,17 @@
 #define LITESIMD_ARCH_TYPES_H
 
 #include "sse/types.h"
+#include "avx/types.h"
 
 namespace litesimd {
 
-#ifdef __SSE2__
+#if defined(__AVX2__)
 
-using default_tag = sse_tag;
+    using default_tag = avx_tag;
+
+#elif defined(__SSE2__)
+
+    using default_tag = sse_tag;
 
 #endif //__SSE2__
 

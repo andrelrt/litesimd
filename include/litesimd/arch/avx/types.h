@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifdef __SSE2__
+#ifdef __AVX2__
 
-#ifndef LITESIMD_SSE_TYPES_H
-#define LITESIMD_SSE_TYPES_H
+#ifndef LITESIMD_AVX_TYPES_H
+#define LITESIMD_AVX_TYPES_H
 
 #include <immintrin.h>
 #include <type_traits>
@@ -31,81 +31,82 @@
 
 namespace litesimd {
 
-struct sse_tag {};
+struct avx_tag {};
 
 template< typename ValueType_T >
-struct traits< ValueType_T, sse_tag, 
+struct traits< ValueType_T, avx_tag, 
                std::enable_if_t< std::is_integral< ValueType_T >::value > >
 {
-    using simd_type = __m128i;
-    using mask_type = __m128i;
-    using bitmask_type = uint16_t;
+    using simd_type = __m256i;
+    using mask_type = __m256i;
+    using bitmask_type = uint32_t;
     constexpr static size_t simd_size = sizeof(simd_type)/sizeof(ValueType_T);
 
     static inline simd_type zero()
     {
-        return _mm_setzero_si128();
+        return _mm256_setzero_si256();
     }
 
     static inline simd_type from_value( int8_t val )
     {
-        return _mm_set1_epi8( val );
+        return _mm256_set1_epi8( val );
     }
 
     static inline simd_type from_value( int16_t val )
     {
-        return _mm_set1_epi16( val );
+        return _mm256_set1_epi16( val );
     }
 
     static inline simd_type from_value( int32_t val )
     {
-        return _mm_set1_epi32( val );
+        return _mm256_set1_epi32( val );
     }
 
     static inline simd_type from_value( int64_t val )
     {
-        return _mm_set1_epi64x( val );
+        return _mm256_set1_epi64x( val );
     }
 };
 
-template<> struct traits< float, sse_tag, void >
+template<> struct traits< float, avx_tag, void >
 {
-    using simd_type = __m128;
-    using mask_type = __m128i;
-    using bitmask_type = uint16_t;
+    using simd_type = __m256;
+    using mask_type = __m256i;
+    using bitmask_type = uint32_t;
     constexpr static size_t simd_size = sizeof(simd_type)/sizeof(float);
 
     static inline simd_type zero()
     {
-        return _mm_setzero_ps();
+        return _mm256_setzero_ps();
     }
 
     static inline simd_type from_value( float val )
     {
-        return _mm_set1_ps( val );
+        return _mm256_set1_ps( val );
     }
 };
 
-template<> struct traits< double, sse_tag, void >
+template<> struct traits< double, avx_tag, void >
 {
-    using simd_type = __m128d;
-    using mask_type = __m128i;
-    using bitmask_type = uint16_t;
+    using simd_type = __m256d;
+    using mask_type = __m256i;
+    using bitmask_type = uint32_t;
     constexpr static size_t simd_size = sizeof(simd_type)/sizeof(double);
 
     static inline simd_type zero()
     {
-        return _mm_setzero_pd();
+        return _mm256_setzero_pd();
     }
 
     static inline simd_type from_value( double val )
     {
-        return _mm_set1_pd( val );
+        return _mm256_set1_pd( val );
     }
 };
 
 } // namespace litesimd
 
-#endif //LITESIMD_SSE_TYPES_H
+#endif //LITESIMD_AVX_TYPES_H
 
-#endif //__SSE2__
+#endif //__AVX2__
+
