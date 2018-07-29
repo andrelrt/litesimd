@@ -41,10 +41,10 @@ TEST(SimdCompareTest, GreaterThanDefault)
 
     for( size_t i = 0; i < ls::int32_simd_size; ++i )
     {
-        EXPECT_EQ( mask, (ls::greater_than_bitmask< int32_t >( val, cmp )) )
+        EXPECT_EQ( mask, (ls::greater_than_bitmask( val, cmp )) )
             << "val: " << val
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
-            << ls::greater_than_bitmask< int32_t >( val, cmp );
+            << ls::greater_than_bitmask( val, cmp );
         val += 10;
         mask <<= 4;
         mask |= 0xf;
