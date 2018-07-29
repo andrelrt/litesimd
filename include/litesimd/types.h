@@ -23,21 +23,31 @@
 #ifndef LITESIMD_TYPES_H
 #define LITESIMD_TYPES_H
 
+#include <cstdint>
 #include "traits.h"
 #include "arch/sse/types.h"
 
 namespace litesimd {
 
-using t_int8_simd  = typename traits<  int8_t, sse_tag >::simd_type;
+using  t_int8_simd = typename traits<  int8_t, sse_tag >::simd_type;
 using t_int16_simd = typename traits< int16_t, sse_tag >::simd_type;
 using t_int32_simd = typename traits< int32_t, sse_tag >::simd_type;
 using t_int64_simd = typename traits< int64_t, sse_tag >::simd_type;
 
+constexpr static size_t  int8_simd_size = traits<  int8_t, sse_tag >::simd_size;
+constexpr static size_t int16_simd_size = traits< int16_t, sse_tag >::simd_size;
+constexpr static size_t int32_simd_size = traits< int32_t, sse_tag >::simd_size;
+constexpr static size_t int64_simd_size = traits< int64_t, sse_tag >::simd_size;
+
+
 using t_float_simd  = typename traits<  float, sse_tag >::simd_type;
 using t_double_simd = typename traits< double, sse_tag >::simd_type;
 
-using t_mask_simd = t_int8_simd;
-using t_bitmask = uint16_t;
+constexpr static size_t float_size  = traits<  float, sse_tag >::simd_size;
+constexpr static size_t double_size = traits< double, sse_tag >::simd_size;
+
+using t_mask_simd = typename traits< int8_t, sse_tag >::mask_type;
+using t_bitmask = typename traits< int8_t, sse_tag >::bitmask_type;
 
 } // namespace litesimd
 

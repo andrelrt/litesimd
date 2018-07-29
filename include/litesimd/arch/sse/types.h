@@ -36,19 +36,74 @@ struct traits< ValueType_T, sse_tag,
                std::enable_if_t< std::is_integral< ValueType_T >::value > >
 {
     using simd_type = __m128i;
+    using mask_type = __m128i;
+    using bitmask_type = uint16_t;
     constexpr static size_t simd_size = sizeof(simd_type)/sizeof(ValueType_T);
+
+    static inline simd_type zero()
+    {
+        return _mm_setzero_si128();
+    }
+
+    template< class = std::enable_if_t< std::is_same< int8_t, ValueType_T >::value > >
+    static inline simd_type from_value( int8_t val )
+    {
+        return _mm_set1_epi8( val );
+    }
+
+    template< class = std::enable_if_t< std::is_same< int16_t, ValueType_T >::value > >
+    static inline simd_type from_value( int16_t val )
+    {
+        return _mm_set1_epi16( val );
+    }
+
+    template< class = std::enable_if_t< std::is_same< int32_t, ValueType_T >::value > >
+    static inline simd_type from_value( int32_t val )
+    {
+        return _mm_set1_epi32( val );
+    }
+
+    template< class = std::enable_if_t< std::is_same< int64_t, ValueType_T >::value > >
+    static inline simd_type from_value( int64_t val )
+    {
+        return _mm_set1_epi64x( val );
+    }
 };
 
 template<> struct traits< float, sse_tag, void >
 {
     using simd_type = __m128;
+    using mask_type = __m128i;
+    using bitmask_type = uint16_t;
     constexpr static size_t simd_size = sizeof(simd_type)/sizeof(float);
+
+    static inline simd_type zero()
+    {
+        return _mm_setzero_ps();
+    }
+
+    static inline simd_type from_value( float val )
+    {
+        return _mm_set1_ps( val );
+    }
 };
 
 template<> struct traits< double, sse_tag, void >
 {
     using simd_type = __m128d;
+    using mask_type = __m128i;
+    using bitmask_type = uint16_t;
     constexpr static size_t simd_size = sizeof(simd_type)/sizeof(double);
+
+    static inline simd_type zero()
+    {
+        return _mm_setzero_pd();
+    }
+
+    static inline simd_type from_value( double val )
+    {
+        return _mm_set1_pd( val );
+    }
 };
 
 } // namespace litesimd
