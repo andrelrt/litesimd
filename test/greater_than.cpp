@@ -28,18 +28,31 @@ namespace ls = litesimd;
 
 template <typename T> class SimdCompareTypes: public ::testing::Test {};
 
-using SimdTypes = ::testing::Types<int8_t, int16_t, int32_t, int64_t, float, double>;
+using SimdTypes = ::testing::Types<
+#ifdef __SSE2__
+    std::pair<int8_t, ls::sse_tag>, std::pair<int16_t, ls::sse_tag>,
+    std::pair<int32_t, ls::sse_tag>, std::pair<int64_t, ls::sse_tag>,
+    std::pair<float, ls::sse_tag>, std::pair<double, ls::sse_tag>
+#ifdef __AVX2__
+    , std::pair<int8_t, ls::avx_tag>, std::pair<int16_t, ls::avx_tag>,
+    std::pair<int32_t, ls::avx_tag>, std::pair<int64_t, ls::avx_tag>,
+    std::pair<float, ls::avx_tag>, std::pair<double, ls::avx_tag>
+#endif //__AVX2__
+#endif //__SSE2__
+>;
 TYPED_TEST_CASE(SimdCompareTypes, SimdTypes);
 
 #ifdef __SSE2__
-TYPED_TEST(SimdCompareTypes, GreaterThanSSETypedTest)
+TYPED_TEST(SimdCompareTypes, GreaterThanTypedTest)
 {
-    using simd = typename ls::traits< TypeParam, ls::sse_tag >::simd_type;
-    constexpr size_t size = ls::traits< TypeParam, ls::sse_tag >::simd_size;
+    using type = typename TypeParam::first_type;
+    using tag = typename TypeParam::second_type;
+    using simd = typename ls::traits< type, tag >::simd_type;
+    constexpr size_t size = ls::traits< type, tag >::simd_size;
 
     simd cmp;
-    TypeParam* pCmp = reinterpret_cast<TypeParam*>( &cmp );
-    TypeParam val = 2;
+    type* pCmp = reinterpret_cast<type*>( &cmp );
+    type val = 2;
 
     for( size_t i = 0; i < size; ++i )
     {
@@ -47,53 +60,21 @@ TYPED_TEST(SimdCompareTypes, GreaterThanSSETypedTest)
         val += 2;
     }
 
-    typename ls::traits< TypeParam, ls::sse_tag >::bitmask_type mask = 0;
+    typename ls::traits< type, tag >::bitmask_type mask = 0;
     val = 1;
 
     for( size_t i = 0; i < size; ++i )
     {
-        EXPECT_EQ( mask, (ls::greater_than_bitmask< TypeParam, ls::sse_tag >( val, cmp )) )
+        EXPECT_EQ( mask, (ls::greater_than_bitmask< type, tag >( val, cmp )) )
             << "val: " << val
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
-            << ls::greater_than_bitmask< TypeParam, ls::sse_tag >( val, cmp );
+            << ls::greater_than_bitmask< type, tag >( val, cmp );
         val += 2;
-        mask <<= std::is_integral< TypeParam >::value ? sizeof(TypeParam) : 1;
-        mask |= std::is_integral< TypeParam >::value ? (1 << sizeof(TypeParam)) - 1 : 1;
+        mask <<= std::is_integral< type >::value ? sizeof(type) : 1;
+        mask |= std::is_integral< type >::value ? (1 << sizeof(type)) - 1 : 1;
     }
 }
 #endif //__SSE2__
-
-#ifdef __AVX2__
-TYPED_TEST(SimdCompareTypes, GreaterThanAVXTypedTest)
-{
-    using simd = typename ls::traits< TypeParam, ls::avx_tag >::simd_type;
-    constexpr size_t size = ls::traits< TypeParam, ls::avx_tag >::simd_size;
-
-    simd cmp;
-    TypeParam* pCmp = reinterpret_cast<TypeParam*>( &cmp );
-    TypeParam val = 2;
-
-    for( size_t i = 0; i < size; ++i )
-    {
-        pCmp[ i ] = val;
-        val += 2;
-    }
-
-    typename ls::traits< TypeParam, ls::avx_tag >::bitmask_type mask = 0;
-    val = 1;
-
-    for( size_t i = 0; i < size; ++i )
-    {
-        EXPECT_EQ( mask, (ls::greater_than_bitmask< TypeParam, ls::avx_tag >( val, cmp )) )
-            << "val: " << val
-            << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
-            << ls::greater_than_bitmask< TypeParam, ls::avx_tag >( val, cmp );
-        val += 2;
-        mask <<= std::is_integral< TypeParam >::value ? sizeof(TypeParam) : 1;
-        mask |= std::is_integral< TypeParam >::value ? (1 << sizeof(TypeParam)) - 1 : 1;
-    }
-}
-#endif //__AVX2__
 
 TEST(SimdCompareTest, GreaterThanDefault)
 {
