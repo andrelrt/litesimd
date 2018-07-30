@@ -69,6 +69,10 @@ TYPED_TEST(SimdCompareTypes, GreaterThanTypedTest)
             << "val: " << val
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::greater_than_bitmask< type, tag >( val, cmp );
+        EXPECT_EQ( mask, (ls::greater_than_bitmask< type, tag >( val + 1, cmp )) )
+            << "val: " << val + 1
+            << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
+            << ls::greater_than_bitmask< type, tag >( val, cmp );
         val += 2;
         mask <<= std::is_integral< type >::value ? sizeof(type) : 1;
         mask |= std::is_integral< type >::value ? (1 << sizeof(type)) - 1 : 1;
