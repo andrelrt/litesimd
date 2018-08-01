@@ -31,78 +31,81 @@
 
 namespace litesimd {
 
-struct sse_tag {};
+#define STRUCT_TRAITS_INT_SSE( INT_T ) \
+template<> struct traits< INT_T, sse_tag > { \
+    typedef __m128i  simd_type; \
+    typedef __m128i  mask_type; \
+    typedef uint16_t bitmask_type; \
+    constexpr static size_t simd_size = sizeof(simd_type)/sizeof(INT_T); \
+    static inline simd_type zero() { return _mm_setzero_si128(); } \
+}
+STRUCT_TRAITS_INT_SSE( int8_t );
+STRUCT_TRAITS_INT_SSE( int16_t );
+STRUCT_TRAITS_INT_SSE( int32_t );
+STRUCT_TRAITS_INT_SSE( int64_t );
+#undef STRUCT_TRAITS_INT_SSE
 
-template< typename ValueType_T >
-struct traits< ValueType_T, sse_tag, 
-               std::enable_if_t< std::is_integral< ValueType_T >::value > >
+template<> struct traits< float, sse_tag >
 {
-    using simd_type = __m128i;
-    using mask_type = __m128i;
-    using bitmask_type = uint16_t;
-    constexpr static size_t simd_size = sizeof(simd_type)/sizeof(ValueType_T);
-
-    static inline simd_type zero()
-    {
-        return _mm_setzero_si128();
-    }
-
-    static inline simd_type from_value( int8_t val )
-    {
-        return _mm_set1_epi8( val );
-    }
-
-    static inline simd_type from_value( int16_t val )
-    {
-        return _mm_set1_epi16( val );
-    }
-
-    static inline simd_type from_value( int32_t val )
-    {
-        return _mm_set1_epi32( val );
-    }
-
-    static inline simd_type from_value( int64_t val )
-    {
-        return _mm_set1_epi64x( val );
-    }
-};
-
-template<> struct traits< float, sse_tag, void >
-{
-    using simd_type = __m128;
-    using mask_type = __m128i;
-    using bitmask_type = uint16_t;
+    typedef __m128   simd_type;
+    typedef __m128i  mask_type;
+    typedef uint16_t bitmask_type;
     constexpr static size_t simd_size = sizeof(simd_type)/sizeof(float);
 
     static inline simd_type zero()
     {
         return _mm_setzero_ps();
     }
-
-    static inline simd_type from_value( float val )
-    {
-        return _mm_set1_ps( val );
-    }
 };
 
-template<> struct traits< double, sse_tag, void >
+template<> struct traits< double, sse_tag >
 {
-    using simd_type = __m128d;
-    using mask_type = __m128i;
-    using bitmask_type = uint16_t;
+    typedef __m128d  simd_type;
+    typedef __m128i  mask_type;
+    typedef uint16_t bitmask_type;
     constexpr static size_t simd_size = sizeof(simd_type)/sizeof(double);
 
     static inline simd_type zero()
     {
         return _mm_setzero_pd();
     }
-
-    static inline simd_type from_value( double val )
-    {
-        return _mm_set1_pd( val );
-    }
 };
+
+template<> inline typename traits< int8_t, sse_tag >::simd_type
+from_value< int8_t, sse_tag >( int8_t val )
+{
+    return _mm_set1_epi8( val );
+}
+
+template<> inline typename traits< int16_t, sse_tag >::simd_type
+from_value< int16_t, sse_tag >( int16_t val )
+{
+    return _mm_set1_epi16( val );
+}
+
+template<> inline typename traits< int32_t, sse_tag >::simd_type
+from_value< int32_t, sse_tag >( int32_t val )
+{
+    return _mm_set1_epi32( val );
+}
+
+template<> inline typename traits< int64_t, sse_tag >::simd_type
+from_value< int64_t, sse_tag >( int64_t val )
+{
+    return _mm_set1_epi64x( val );
+}
+
+template<> inline typename traits< float, sse_tag >::simd_type
+from_value< float, sse_tag >( float val )
+{
+    return _mm_set1_ps( val );
+}
+
+template<> inline typename traits< double, sse_tag >::simd_type
+from_value< double, sse_tag >( double val )
+{
+    return _mm_set1_pd( val );
+}
 
 } // namespace litesimd
 

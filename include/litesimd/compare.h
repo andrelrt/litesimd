@@ -23,6 +23,7 @@
 #ifndef LITESIMD_COMPARE_H
 #define LITESIMD_COMPARE_H
 
+#include <type_traits>
 #include "types.h"
 #include "arch/sse/compare.h"
 #include "arch/avx/compare.h"
@@ -41,24 +42,26 @@ greater_than_bitmask( typename traits< ValueType_T, Tag_T >::simd_type lhs,
             );
 }
 
-template< typename ValueType_T, typename Tag_T = default_tag >
+template< typename ValueType_T, typename Tag_T = default_tag,
+          class = std::enable_if_t< std::is_arithmetic< ValueType_T >::value > >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
 greater_than_bitmask( ValueType_T lhs,
                       typename traits< ValueType_T, Tag_T >::simd_type rhs )
 {
     return greater_than_bitmask< ValueType_T, Tag_T >(
-                traits< ValueType_T, Tag_T >::from_value( lhs ),
+                from_value< ValueType_T, Tag_T >( lhs ),
                 rhs );
 }
 
-template< typename ValueType_T, typename Tag_T = default_tag >
+template< typename ValueType_T, typename Tag_T = default_tag,
+          class = std::enable_if_t< std::is_arithmetic< ValueType_T >::value > >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
 greater_than_bitmask( typename traits< ValueType_T, Tag_T >::simd_type lhs,
                       ValueType_T rhs )
 {
     return greater_than_bitmask< ValueType_T, Tag_T >(
                 lhs,
-                traits< ValueType_T, Tag_T >::from_value( rhs ) );
+                from_value< ValueType_T, Tag_T >( rhs ) );
 }
 
 

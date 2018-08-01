@@ -84,14 +84,14 @@ TEST(SimdCompareTest, GreaterThanDefault)
 {
     ls::t_int32_simd cmp;
     int32_t* pCmp = reinterpret_cast<int32_t*>( &cmp );
-    int32_t val = 10;
+    int32_t val = 2;
     for( size_t i = 0; i < ls::int32_simd_size; ++i )
     {
         pCmp[ i ] = val;
-        val += 10;
+        val += 2;
     }
     ls::t_bitmask mask = 0;
-    val = 5;
+    val = 1;
 
     for( size_t i = 0; i < ls::int32_simd_size; ++i )
     {
@@ -99,9 +99,43 @@ TEST(SimdCompareTest, GreaterThanDefault)
             << "val: " << val
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::greater_than_bitmask( val, cmp );
-        val += 10;
+        EXPECT_EQ( mask, ls::greater_than_bitmask( val + 1, cmp ) )
+            << "val: " << val + 1
+            << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
+            << ls::greater_than_bitmask( val, cmp );
+        val += 2;
         mask <<= 4;
         mask |= 0xf;
     }
 }
 
+TEST(SimdCompareTest, GreaterThanDefaultSimd)
+{
+    ls::t_int32_simd cmp;
+    int32_t* pCmp = reinterpret_cast<int32_t*>( &cmp );
+    int32_t val = 2;
+    for( size_t i = 0; i < ls::int32_simd_size; ++i )
+    {
+        pCmp[ i ] = val;
+        val += 2;
+    }
+    ls::t_bitmask mask = 0;
+    val = 1;
+
+    for( size_t i = 0; i < ls::int32_simd_size; ++i )
+    {
+        auto simdVal = ls::from_value( val );
+        EXPECT_EQ( mask, ls::greater_than_bitmask< int32_t >( simdVal, cmp ) )
+            << "val: " << val
+            << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
+            << ls::greater_than_bitmask< int32_t >( simdVal, cmp );
+        simdVal = ls::from_value( val + 1 );
+        EXPECT_EQ( mask, ls::greater_than_bitmask< int32_t >( simdVal, cmp ) )
+            << "val: " << val + 1
+            << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
+            << ls::greater_than_bitmask< int32_t >( simdVal, cmp );
+        val += 2;
+        mask <<= 4;
+        mask |= 0xf;
+    }
+}
