@@ -20,11 +20,17 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_ARCH_TYPES_H
-#define LITESIMD_ARCH_TYPES_H
+#ifdef __SSE2__
 
-#include "tag.h"
-#include "sse/types.h"
-#include "avx/types.h"
+#ifndef LITESIMD_SSE_TAG_H
+#define LITESIMD_SSE_TAG_H
 
-#endif // LITESIMD_ARCH_TYPES_H
+namespace litesimd {
+
+struct sse_tag {};
+
+} // namespace litesimd
+
+#endif //LITESIMD_SSE_TAG_H
+
+#endif //__SSE2__
