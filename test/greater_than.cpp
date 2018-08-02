@@ -63,7 +63,7 @@ TYPED_TEST(SimdCompareTypes, GreaterThanTypedTest)
     typename ls::traits< type, tag >::bitmask_type mask = 0;
     val = 1;
 
-    for( size_t i = 0; i < size; ++i )
+    for( size_t i = 0; i < size+1; ++i )
     {
         EXPECT_EQ( mask, (ls::greater_than_bitmask< type, tag >( val, cmp )) )
             << "val: " << val
@@ -73,6 +73,16 @@ TYPED_TEST(SimdCompareTypes, GreaterThanTypedTest)
             << "val: " << val + 1
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::greater_than_bitmask< type, tag >( val, cmp );
+
+        EXPECT_EQ( i, (ls::greater_than_high_index< type, tag >( val, cmp )) )
+            << "val: " << val
+            << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
+            << ls::greater_than_high_index< type, tag >( val, cmp );
+        EXPECT_EQ( i, (ls::greater_than_high_index< type, tag >( val + 1, cmp )) )
+            << "val: " << val + 1
+            << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
+            << ls::greater_than_high_index< type, tag >( val, cmp );
+
         val += 2;
         mask <<= std::is_integral< type >::value ? sizeof(type) : 1;
         mask |= std::is_integral< type >::value ? (1 << sizeof(type)) - 1 : 1;
