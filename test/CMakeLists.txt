@@ -38,6 +38,8 @@ set_target_properties(libgtest PROPERTIES
 #    "IMPORTED_LINK_INTERFACE_LIBRARIES" "${CMAKE_THREAD_LIBS_INIT}"
 #)
 
+enable_testing()
+
 # Test project
 aux_source_directory(. SRC_LIST)
 add_executable(${PROJECT_NAME}
