@@ -31,41 +31,47 @@
 namespace litesimd {
 
 template<> inline typename traits< int8_t, avx_tag >::mask_type
-greater_than< int8_t, avx_tag >( __m256i lhs, __m256i rhs )
+greater_than< int8_t, avx_tag >( typename traits< int8_t, avx_tag >::simd_type lhs,
+                                 typename traits< int8_t, avx_tag >::simd_type rhs )
 {
-    return _mm256_cmpgt_epi8( lhs, rhs );
+    return _mm256_cmpgt_epi8( lhs._, rhs._ );
 }
 
 template<> inline typename traits< int16_t, avx_tag >::mask_type
-greater_than< int16_t, avx_tag >( __m256i lhs, __m256i rhs )
+greater_than< int16_t, avx_tag >( typename traits< int16_t, avx_tag >::simd_type lhs,
+                                  typename traits< int16_t, avx_tag >::simd_type rhs )
 {
-    return _mm256_cmpgt_epi16( lhs, rhs );
+    return _mm256_cmpgt_epi16( lhs._, rhs._ );
 }
 
 template<> inline typename traits< int32_t, avx_tag >::mask_type
-greater_than< int32_t, avx_tag >( __m256i lhs, __m256i rhs )
+greater_than< int32_t, avx_tag >( typename traits< int32_t, avx_tag >::simd_type lhs,
+                                  typename traits< int32_t, avx_tag >::simd_type rhs )
 {
-    return _mm256_cmpgt_epi32( lhs, rhs );
+    return _mm256_cmpgt_epi32( lhs._, rhs._ );
 }
 
 template<> inline typename traits< int64_t, avx_tag >::mask_type
-greater_than< int64_t, avx_tag >( __m256i lhs, __m256i rhs )
+greater_than< int64_t, avx_tag >( typename traits< int64_t, avx_tag >::simd_type lhs,
+                                  typename traits< int64_t, avx_tag >::simd_type rhs )
 {
-    return _mm256_cmpgt_epi64( lhs, rhs );
+    return _mm256_cmpgt_epi64( lhs._, rhs._ );
 }
 
 template<> inline typename traits< float, avx_tag >::mask_type
-greater_than< float, avx_tag >( __m256 lhs, __m256 rhs )
+greater_than< float, avx_tag >( typename traits< float, avx_tag >::simd_type lhs,
+                                typename traits< float, avx_tag >::simd_type rhs )
 {
     // Quietly ignore NaN
-    return _mm256_cmp_ps( lhs, rhs, _CMP_GT_OQ );
+    return _mm256_cmp_ps( lhs._, rhs._, _CMP_GT_OQ );
 }
 
 template<> inline typename traits< double, avx_tag >::mask_type
-greater_than< double, avx_tag >( __m256d lhs, __m256d rhs )
+greater_than< double, avx_tag >( typename traits< double, avx_tag >::simd_type lhs,
+                                 typename traits< double, avx_tag >::simd_type rhs )
 {
     // Quietly ignore NaN
-    return _mm256_cmp_pd( lhs, rhs, _CMP_GT_OQ );
+    return _mm256_cmp_pd( lhs._, rhs._, _CMP_GT_OQ );
 }
 
 template<> inline typename traits< int8_t, avx_tag >::bitmask_type

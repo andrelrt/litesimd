@@ -42,6 +42,14 @@ greater_than_bitmask( typename traits< ValueType_T, Tag_T >::simd_type lhs,
             );
 }
 
+template< typename SimdType_T, typename Tag_T = default_tag,
+          class = typename SimdType_T::simd_value_type >
+inline typename traits< typename SimdType_T::simd_value_type, Tag_T >::bitmask_type
+greater_than_bitmask( SimdType_T lhs, SimdType_T rhs )
+{
+    return greater_than_bitmask< typename SimdType_T::simd_value_type, Tag_T >( lhs, rhs );
+}
+
 template< typename ValueType_T, typename Tag_T = default_tag,
           class = std::enable_if_t< std::is_arithmetic< ValueType_T >::value > >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type

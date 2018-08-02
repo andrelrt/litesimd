@@ -125,15 +125,15 @@ TEST(SimdCompareTest, GreaterThanDefaultSimd)
     for( size_t i = 0; i < ls::int32_simd_size; ++i )
     {
         auto simdVal = ls::from_value( val );
-        EXPECT_EQ( mask, ls::greater_than_bitmask< int32_t >( simdVal, cmp ) )
+        EXPECT_EQ( mask, ls::greater_than_bitmask( simdVal, cmp ) )
             << "val: " << val
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
-            << ls::greater_than_bitmask< int32_t >( simdVal, cmp );
+            << ls::greater_than_bitmask( simdVal, cmp );
         simdVal = ls::from_value( val + 1 );
-        EXPECT_EQ( mask, ls::greater_than_bitmask< int32_t >( simdVal, cmp ) )
+        EXPECT_EQ( mask, ls::greater_than_bitmask( simdVal, cmp ) )
             << "val: " << val + 1
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
-            << ls::greater_than_bitmask< int32_t >( simdVal, cmp );
+            << ls::greater_than_bitmask( simdVal, cmp );
         val += 2;
         mask <<= 4;
         mask |= 0xf;

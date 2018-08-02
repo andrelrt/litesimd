@@ -31,39 +31,45 @@
 namespace litesimd {
 
 template<> inline typename traits< int8_t, sse_tag >::mask_type
-greater_than< int8_t, sse_tag >( __m128i lhs, __m128i rhs )
+greater_than< int8_t, sse_tag >( typename traits< int8_t, sse_tag >::simd_type lhs,
+                                 typename traits< int8_t, sse_tag >::simd_type rhs )
 {
-    return _mm_cmpgt_epi8( lhs, rhs );
+    return _mm_cmpgt_epi8( lhs._, rhs._ );
 }
 
 template<> inline typename traits< int16_t, sse_tag >::mask_type
-greater_than< int16_t, sse_tag >( __m128i lhs, __m128i rhs )
+greater_than< int16_t, sse_tag >( typename traits< int16_t, sse_tag >::simd_type lhs,
+                                  typename traits< int16_t, sse_tag >::simd_type rhs )
 {
-    return _mm_cmpgt_epi16( lhs, rhs );
+    return _mm_cmpgt_epi16( lhs._, rhs._ );
 }
 
 template<> inline typename traits< int32_t, sse_tag >::mask_type
-greater_than< int32_t, sse_tag >( __m128i lhs, __m128i rhs )
+greater_than< int32_t, sse_tag >( typename traits< int32_t, sse_tag >::simd_type lhs,
+                                  typename traits< int32_t, sse_tag >::simd_type rhs )
 {
-    return _mm_cmpgt_epi32( lhs, rhs );
+    return _mm_cmpgt_epi32( lhs._, rhs._ );
 }
 
 template<> inline typename traits< int64_t, sse_tag >::mask_type
-greater_than< int64_t, sse_tag >( __m128i lhs, __m128i rhs )
+greater_than< int64_t, sse_tag >( typename traits< int64_t, sse_tag >::simd_type lhs,
+                                  typename traits< int64_t, sse_tag >::simd_type rhs )
 {
-    return _mm_cmpgt_epi64( lhs, rhs );
+    return _mm_cmpgt_epi64( lhs._, rhs._ );
 }
 
 template<> inline typename traits< float, sse_tag >::mask_type
-greater_than< float, sse_tag >( __m128 lhs, __m128 rhs )
+greater_than< float, sse_tag >( typename traits< float, sse_tag >::simd_type lhs,
+                                typename traits< float, sse_tag >::simd_type rhs )
 {
-    return _mm_cmpgt_ps( lhs, rhs );
+    return _mm_cmpgt_ps( lhs._, rhs._ );
 }
 
 template<> inline typename traits< double, sse_tag >::mask_type
-greater_than< double, sse_tag >( __m128d lhs, __m128d rhs )
+greater_than< double, sse_tag >( typename traits< double, sse_tag >::simd_type lhs,
+                                 typename traits< double, sse_tag >::simd_type rhs )
 {
-    return _mm_cmpgt_pd( lhs, rhs );
+    return _mm_cmpgt_pd( lhs._, rhs._ );
 }
 
 template<> inline typename traits< int8_t, sse_tag >::bitmask_type
