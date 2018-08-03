@@ -26,87 +26,62 @@
 #define LITESIMD_SSE_COMPARE_H
 
 #include "../../types.h"
-#include "../compare.h"
+#include "../common/compare.h"
 
 namespace litesimd {
 
-template<> inline typename traits< int8_t, sse_tag >::mask_type
-greater_than< int8_t, sse_tag >( typename traits< int8_t, sse_tag >::simd_type lhs,
-                                 typename traits< int8_t, sse_tag >::simd_type rhs )
-{
-    return _mm_cmpgt_epi8( lhs._, rhs._ );
+// Mask to bitmask
+// ---------------------------------------------------------------------------------------
+#define DEF_MASK_TO_BITMASK( TYPE_T, CMD ) \
+template<> inline typename traits< TYPE_T, sse_tag >::bitmask_type \
+mask_to_bitmask< TYPE_T, sse_tag >( typename traits< TYPE_T, sse_tag >::mask_type mask ) { \
+    return CMD( mask ); \
 }
 
-template<> inline typename traits< int16_t, sse_tag >::mask_type
-greater_than< int16_t, sse_tag >( typename traits< int16_t, sse_tag >::simd_type lhs,
-                                  typename traits< int16_t, sse_tag >::simd_type rhs )
-{
-    return _mm_cmpgt_epi16( lhs._, rhs._ );
+DEF_MASK_TO_BITMASK( int8_t,  _mm_movemask_epi8 )
+DEF_MASK_TO_BITMASK( int16_t, _mm_movemask_epi8 )
+DEF_MASK_TO_BITMASK( int32_t, _mm_movemask_epi8 )
+DEF_MASK_TO_BITMASK( int64_t, _mm_movemask_epi8 )
+DEF_MASK_TO_BITMASK( float,   _mm_movemask_ps )
+DEF_MASK_TO_BITMASK( double,  _mm_movemask_pd )
+
+#undef DEF_MASK_TO_BITMASK
+
+// Greater than
+// ---------------------------------------------------------------------------------------
+#define DEF_GREATER_THAN( TYPE_T, CMD ) \
+template<> inline typename traits< TYPE_T, sse_tag >::mask_type \
+greater_than< TYPE_T, sse_tag >( typename traits< TYPE_T, sse_tag >::simd_type lhs, \
+                                 typename traits< TYPE_T, sse_tag >::simd_type rhs ) { \
+    return CMD( lhs._, rhs._ ); \
 }
 
-template<> inline typename traits< int32_t, sse_tag >::mask_type
-greater_than< int32_t, sse_tag >( typename traits< int32_t, sse_tag >::simd_type lhs,
-                                  typename traits< int32_t, sse_tag >::simd_type rhs )
-{
-    return _mm_cmpgt_epi32( lhs._, rhs._ );
+DEF_GREATER_THAN( int8_t,  _mm_cmpgt_epi8 )
+DEF_GREATER_THAN( int16_t, _mm_cmpgt_epi16 )
+DEF_GREATER_THAN( int32_t, _mm_cmpgt_epi32 )
+DEF_GREATER_THAN( int64_t, _mm_cmpgt_epi64 )
+DEF_GREATER_THAN( float,   _mm_cmpgt_ps )
+DEF_GREATER_THAN( double,  _mm_cmpgt_pd )
+
+#undef DEF_GREATER_THAN
+
+// Equals
+// ---------------------------------------------------------------------------------------
+#define DEF_EQUALS( TYPE_T, CMD ) \
+template<> inline typename traits< TYPE_T, sse_tag >::mask_type \
+equals< TYPE_T, sse_tag >( typename traits< TYPE_T, sse_tag >::simd_type lhs, \
+                           typename traits< TYPE_T, sse_tag >::simd_type rhs ) { \
+    return CMD( lhs._, rhs._ ); \
 }
 
-template<> inline typename traits< int64_t, sse_tag >::mask_type
-greater_than< int64_t, sse_tag >( typename traits< int64_t, sse_tag >::simd_type lhs,
-                                  typename traits< int64_t, sse_tag >::simd_type rhs )
-{
-    return _mm_cmpgt_epi64( lhs._, rhs._ );
-}
+DEF_EQUALS( int8_t,  _mm_cmpeq_epi8 )
+DEF_EQUALS( int16_t, _mm_cmpeq_epi16 )
+DEF_EQUALS( int32_t, _mm_cmpeq_epi32 )
+DEF_EQUALS( int64_t, _mm_cmpeq_epi64 )
+DEF_EQUALS( float,   _mm_cmpeq_ps )
+DEF_EQUALS( double,  _mm_cmpeq_pd )
 
-template<> inline typename traits< float, sse_tag >::mask_type
-greater_than< float, sse_tag >( typename traits< float, sse_tag >::simd_type lhs,
-                                typename traits< float, sse_tag >::simd_type rhs )
-{
-    return _mm_cmpgt_ps( lhs._, rhs._ );
-}
-
-template<> inline typename traits< double, sse_tag >::mask_type
-greater_than< double, sse_tag >( typename traits< double, sse_tag >::simd_type lhs,
-                                 typename traits< double, sse_tag >::simd_type rhs )
-{
-    return _mm_cmpgt_pd( lhs._, rhs._ );
-}
-
-template<> inline typename traits< int8_t, sse_tag >::bitmask_type
-mask_to_bitmask< int8_t, sse_tag >( typename traits< int8_t, sse_tag >::mask_type mask )
-{
-    return _mm_movemask_epi8( mask );
-}
-
-template<> inline typename traits< int16_t, sse_tag >::bitmask_type
-mask_to_bitmask< int16_t, sse_tag >( typename traits< int16_t, sse_tag >::mask_type mask )
-{
-    return _mm_movemask_epi8( mask );
-}
-
-template<> inline typename traits< int32_t, sse_tag >::bitmask_type
-mask_to_bitmask< int32_t, sse_tag >( typename traits< int32_t, sse_tag >::mask_type mask )
-{
-    return _mm_movemask_epi8( mask );
-}
-
-template<> inline typename traits< int64_t, sse_tag >::bitmask_type
-mask_to_bitmask< int64_t, sse_tag >( typename traits< int64_t, sse_tag >::mask_type mask )
-{
-    return _mm_movemask_epi8( mask );
-}
-
-template<> inline typename traits< float, sse_tag >::bitmask_type
-mask_to_bitmask< float, sse_tag >( typename traits< float, sse_tag >::mask_type mask )
-{
-    return _mm_movemask_ps( mask );
-}
-
-template<> inline typename traits< double, sse_tag >::bitmask_type
-mask_to_bitmask< double, sse_tag >( typename traits< double, sse_tag >::mask_type mask )
-{
-    return _mm_movemask_pd( mask );
-}
+#undef DEF_EQUALS
 
 } // namespace litesimd
 

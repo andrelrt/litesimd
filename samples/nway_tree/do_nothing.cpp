@@ -20,11 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_ARCH_COMPARE_H
-#define LITESIMD_ARCH_COMPARE_H
+#include <stdint.h> 
 
-#include "../types.h"
-#include "sse/compare.h"
-#include "avx/compare.h"
-
-#endif // LITESIMD_ARCH_COMPARE_H
+void do_nothing( int32_t )
+{
+}

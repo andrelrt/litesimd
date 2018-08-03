@@ -26,37 +26,42 @@
 #define LITESIMD_AVX_COMPARE_H
 
 #include "../../types.h"
-#include "../compare.h"
+#include "../common/compare.h"
 
 namespace litesimd {
 
-template<> inline typename traits< int8_t, avx_tag >::mask_type
-greater_than< int8_t, avx_tag >( typename traits< int8_t, avx_tag >::simd_type lhs,
-                                 typename traits< int8_t, avx_tag >::simd_type rhs )
-{
-    return _mm256_cmpgt_epi8( lhs._, rhs._ );
+// Mask to bitmask
+// ---------------------------------------------------------------------------------------
+#define DEF_MASK_TO_BITMASK( TYPE_T, CMD ) \
+template<> inline typename traits< TYPE_T, avx_tag >::bitmask_type \
+mask_to_bitmask< TYPE_T, avx_tag >( typename traits< TYPE_T, avx_tag >::mask_type mask ) { \
+    return CMD( mask ); \
 }
 
-template<> inline typename traits< int16_t, avx_tag >::mask_type
-greater_than< int16_t, avx_tag >( typename traits< int16_t, avx_tag >::simd_type lhs,
-                                  typename traits< int16_t, avx_tag >::simd_type rhs )
-{
-    return _mm256_cmpgt_epi16( lhs._, rhs._ );
+DEF_MASK_TO_BITMASK( int8_t,  _mm256_movemask_epi8 )
+DEF_MASK_TO_BITMASK( int16_t, _mm256_movemask_epi8 )
+DEF_MASK_TO_BITMASK( int32_t, _mm256_movemask_epi8 )
+DEF_MASK_TO_BITMASK( int64_t, _mm256_movemask_epi8 )
+DEF_MASK_TO_BITMASK( float,   _mm256_movemask_ps )
+DEF_MASK_TO_BITMASK( double,  _mm256_movemask_pd )
+
+#undef DEF_MASK_TO_BITMASK
+
+// Greater than
+// ---------------------------------------------------------------------------------------
+#define DEF_GREATER_THAN( TYPE_T, CMD ) \
+template<> inline typename traits< TYPE_T, avx_tag >::mask_type \
+greater_than< TYPE_T, avx_tag >( typename traits< TYPE_T, avx_tag >::simd_type lhs, \
+                                 typename traits< TYPE_T, avx_tag >::simd_type rhs ) { \
+    return CMD( lhs._, rhs._ ); \
 }
 
-template<> inline typename traits< int32_t, avx_tag >::mask_type
-greater_than< int32_t, avx_tag >( typename traits< int32_t, avx_tag >::simd_type lhs,
-                                  typename traits< int32_t, avx_tag >::simd_type rhs )
-{
-    return _mm256_cmpgt_epi32( lhs._, rhs._ );
-}
+DEF_GREATER_THAN( int8_t,  _mm256_cmpgt_epi8 )
+DEF_GREATER_THAN( int16_t, _mm256_cmpgt_epi16 )
+DEF_GREATER_THAN( int32_t, _mm256_cmpgt_epi32 )
+DEF_GREATER_THAN( int64_t, _mm256_cmpgt_epi64 )
 
-template<> inline typename traits< int64_t, avx_tag >::mask_type
-greater_than< int64_t, avx_tag >( typename traits< int64_t, avx_tag >::simd_type lhs,
-                                  typename traits< int64_t, avx_tag >::simd_type rhs )
-{
-    return _mm256_cmpgt_epi64( lhs._, rhs._ );
-}
+#undef DEF_GREATER_THAN
 
 template<> inline typename traits< float, avx_tag >::mask_type
 greater_than< float, avx_tag >( typename traits< float, avx_tag >::simd_type lhs,
@@ -74,40 +79,36 @@ greater_than< double, avx_tag >( typename traits< double, avx_tag >::simd_type l
     return _mm256_cmp_pd( lhs._, rhs._, _CMP_GT_OQ );
 }
 
-template<> inline typename traits< int8_t, avx_tag >::bitmask_type
-mask_to_bitmask< int8_t, avx_tag >( typename traits< int8_t, avx_tag >::mask_type mask )
-{
-    return _mm256_movemask_epi8( mask );
+// Equals
+// ---------------------------------------------------------------------------------------
+#define DEF_EQUALS( TYPE_T, CMD ) \
+template<> inline typename traits< TYPE_T, avx_tag >::mask_type \
+equals< TYPE_T, avx_tag >( typename traits< TYPE_T, avx_tag >::simd_type lhs, \
+                           typename traits< TYPE_T, avx_tag >::simd_type rhs ) { \
+    return CMD( lhs._, rhs._ ); \
 }
 
-template<> inline typename traits< int16_t, avx_tag >::bitmask_type
-mask_to_bitmask< int16_t, avx_tag >( typename traits< int16_t, avx_tag >::mask_type mask )
+DEF_EQUALS( int8_t,  _mm256_cmpeq_epi8 )
+DEF_EQUALS( int16_t, _mm256_cmpeq_epi16 )
+DEF_EQUALS( int32_t, _mm256_cmpeq_epi32 )
+DEF_EQUALS( int64_t, _mm256_cmpeq_epi64 )
+
+#undef DEF_EQUALS
+
+template<> inline typename traits< float, avx_tag >::mask_type
+equals< float, avx_tag >( typename traits< float, avx_tag >::simd_type lhs,
+                          typename traits< float, avx_tag >::simd_type rhs )
 {
-    return _mm256_movemask_epi8( mask );
+    // Quietly ignore NaN
+    return _mm256_cmp_ps( lhs._, rhs._, _CMP_EQ_OQ );
 }
 
-template<> inline typename traits< int32_t, avx_tag >::bitmask_type
-mask_to_bitmask< int32_t, avx_tag >( typename traits< int32_t, avx_tag >::mask_type mask )
+template<> inline typename traits< double, avx_tag >::mask_type
+equals< double, avx_tag >( typename traits< double, avx_tag >::simd_type lhs,
+                           typename traits< double, avx_tag >::simd_type rhs )
 {
-    return _mm256_movemask_epi8( mask );
-}
-
-template<> inline typename traits< int64_t, avx_tag >::bitmask_type
-mask_to_bitmask< int64_t, avx_tag >( typename traits< int64_t, avx_tag >::mask_type mask )
-{
-    return _mm256_movemask_epi8( mask );
-}
-
-template<> inline typename traits< float, avx_tag >::bitmask_type
-mask_to_bitmask< float, avx_tag >( typename traits< float, avx_tag >::mask_type mask )
-{
-    return _mm256_movemask_ps( mask );
-}
-
-template<> inline typename traits< double, avx_tag >::bitmask_type
-mask_to_bitmask< double, avx_tag >( typename traits< double, avx_tag >::mask_type mask )
-{
-    return _mm256_movemask_pd( mask );
+    // Quietly ignore NaN
+    return _mm256_cmp_pd( lhs._, rhs._, _CMP_EQ_OQ );
 }
 
 } // namespace litesimd

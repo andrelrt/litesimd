@@ -27,9 +27,9 @@
 #include <array>
 #include <boost/timer/timer.hpp>
 
-#include "litesimd/types.h"
-#include "litesimd/compare.h"
-#include "litesimd/helpers/containers.h"
+#include <litesimd/types.h>
+#include <litesimd/compare.h>
+#include <litesimd/helpers/containers.h>
 
 bool g_verbose = true;
 namespace ls = litesimd;
