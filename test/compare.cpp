@@ -66,26 +66,73 @@ TYPED_TEST(SimdCompareTypes, GreaterThanTypedTest)
     for( size_t i = 0; i < size+1; ++i )
     {
         EXPECT_EQ( mask, (ls::greater_than_bitmask< type, tag >( val, cmp )) )
-            << "val: " << val
+            << "val: " << (int) val
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::greater_than_bitmask< type, tag >( val, cmp );
         EXPECT_EQ( mask, (ls::greater_than_bitmask< type, tag >( val + 1, cmp )) )
-            << "val: " << val + 1
+            << "val: " << (int) val + 1
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::greater_than_bitmask< type, tag >( val, cmp );
 
         EXPECT_EQ( i, (ls::greater_than_high_index< type, tag >( val, cmp )) )
-            << "val: " << val
+            << "val: " << (int) val
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::greater_than_high_index< type, tag >( val, cmp );
         EXPECT_EQ( i, (ls::greater_than_high_index< type, tag >( val + 1, cmp )) )
-            << "val: " << val + 1
+            << "val: " << (int) val + 1
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::greater_than_high_index< type, tag >( val, cmp );
 
         val += 2;
         mask <<= std::is_integral< type >::value ? sizeof(type) : 1;
         mask |= std::is_integral< type >::value ? (1 << sizeof(type)) - 1 : 1;
+    }
+}
+
+TYPED_TEST(SimdCompareTypes, EqualsTypedTest)
+{
+    using type = typename TypeParam::first_type;
+    using tag = typename TypeParam::second_type;
+    using simd = typename ls::traits< type, tag >::simd_type;
+    constexpr size_t size = ls::traits< type, tag >::simd_size;
+
+    simd cmp;
+    type* pCmp = reinterpret_cast<type*>( &cmp );
+    type val = 2;
+
+    for( size_t i = 0; i < size; ++i )
+    {
+        pCmp[ i ] = val;
+        val += 2;
+    }
+
+    typename ls::traits< type, tag >::bitmask_type mask = 0;
+    val = 0;
+
+    for( size_t i = 0; i < size+1; ++i )
+    {
+        EXPECT_EQ( mask, (ls::equals_bitmask< type, tag >( val, cmp )) )
+            << "val: " << (int)val
+            << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
+            << ls::equals_bitmask< type, tag >( val, cmp );
+        EXPECT_EQ( 0u, (ls::equals_bitmask< type, tag >( val + 1, cmp )) )
+            << "val: " << (int)val + 1
+            << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
+            << ls::equals_bitmask< type, tag >( val, cmp );
+
+        EXPECT_EQ( i, (ls::equals_high_index< type, tag >( val, cmp )) )
+            << "val: " << (int) val
+            << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
+            << ls::equals_high_index< type, tag >( val, cmp );
+        EXPECT_EQ( 0u, (ls::equals_high_index< type, tag >( val + 1, cmp )) )
+            << "val: " << (int) val + 1
+            << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
+            << ls::equals_high_index< type, tag >( val, cmp );
+
+        val += 2;
+        mask <<= std::is_integral< type >::value ? sizeof(type) : 1;
+        if( i == 0 )
+            mask = std::is_integral< type >::value ? (1 << sizeof(type)) - 1 : 1;
     }
 }
 #endif //__SSE2__
