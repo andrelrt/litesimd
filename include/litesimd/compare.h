@@ -106,7 +106,7 @@ greater_than_bitmask( typename traits< ValueType_T, Tag_T >::simd_type lhs,
 }
 
 template< typename SimdType_T, typename Tag_T = default_tag,
-          class = typename SimdType_T::simd_value_type >
+          typename SimdType_T::simd_value_type* = nullptr >
 inline typename traits< typename SimdType_T::simd_value_type, Tag_T >::bitmask_type
 greater_than_bitmask( SimdType_T lhs, SimdType_T rhs )
 {
@@ -114,7 +114,7 @@ greater_than_bitmask( SimdType_T lhs, SimdType_T rhs )
 }
 
 template< typename ValueType_T, typename Tag_T = default_tag,
-          class = std::enable_if_t< std::is_arithmetic< ValueType_T >::value > >
+          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
 greater_than_bitmask( ValueType_T lhs,
                       typename traits< ValueType_T, Tag_T >::simd_type rhs )
@@ -125,7 +125,7 @@ greater_than_bitmask( ValueType_T lhs,
 }
 
 template< typename ValueType_T, typename Tag_T = default_tag,
-          class = std::enable_if_t< std::is_arithmetic< ValueType_T >::value > >
+          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
 greater_than_bitmask( typename traits< ValueType_T, Tag_T >::simd_type lhs,
                       ValueType_T rhs )
@@ -148,7 +148,7 @@ greater_than_high_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
 }
 
 template< typename SimdType_T, typename Tag_T = default_tag,
-          class = typename SimdType_T::simd_value_type >
+          typename SimdType_T::simd_value_type* = nullptr >
 inline typename traits< typename SimdType_T::simd_value_type, Tag_T >::bitmask_type
 greater_than_high_index( SimdType_T lhs, SimdType_T rhs )
 {
@@ -156,7 +156,7 @@ greater_than_high_index( SimdType_T lhs, SimdType_T rhs )
 }
 
 template< typename ValueType_T, typename Tag_T = default_tag,
-          class = std::enable_if_t< std::is_arithmetic< ValueType_T >::value > >
+          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
 greater_than_high_index( ValueType_T lhs,
                       typename traits< ValueType_T, Tag_T >::simd_type rhs )
@@ -167,7 +167,7 @@ greater_than_high_index( ValueType_T lhs,
 }
 
 template< typename ValueType_T, typename Tag_T = default_tag,
-          class = std::enable_if_t< std::is_arithmetic< ValueType_T >::value > >
+          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
 greater_than_high_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
                       ValueType_T rhs )
@@ -190,7 +190,7 @@ greater_than_low_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
 }
 
 template< typename SimdType_T, typename Tag_T = default_tag,
-          class = typename SimdType_T::simd_value_type >
+          typename SimdType_T::simd_value_type* = nullptr >
 inline typename traits< typename SimdType_T::simd_value_type, Tag_T >::bitmask_type
 greater_than_low_index( SimdType_T lhs, SimdType_T rhs )
 {
@@ -198,7 +198,7 @@ greater_than_low_index( SimdType_T lhs, SimdType_T rhs )
 }
 
 template< typename ValueType_T, typename Tag_T = default_tag,
-          class = std::enable_if_t< std::is_arithmetic< ValueType_T >::value > >
+          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
 greater_than_low_index( ValueType_T lhs,
                       typename traits< ValueType_T, Tag_T >::simd_type rhs )
@@ -209,7 +209,7 @@ greater_than_low_index( ValueType_T lhs,
 }
 
 template< typename ValueType_T, typename Tag_T = default_tag,
-          class = std::enable_if_t< std::is_arithmetic< ValueType_T >::value > >
+          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
 greater_than_low_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
                       ValueType_T rhs )
@@ -254,7 +254,7 @@ equals_bitmask( typename traits< ValueType_T, Tag_T >::simd_type lhs,
 }
 
 template< typename SimdType_T, typename Tag_T = default_tag,
-          class = typename SimdType_T::simd_value_type >
+          typename SimdType_T::simd_value_type* = nullptr >
 inline typename traits< typename SimdType_T::simd_value_type, Tag_T >::bitmask_type
 equals_bitmask( SimdType_T lhs, SimdType_T rhs )
 {
@@ -262,7 +262,7 @@ equals_bitmask( SimdType_T lhs, SimdType_T rhs )
 }
 
 template< typename ValueType_T, typename Tag_T = default_tag,
-          class = std::enable_if_t< std::is_arithmetic< ValueType_T >::value > >
+          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
 equals_bitmask( ValueType_T lhs,
                       typename traits< ValueType_T, Tag_T >::simd_type rhs )
@@ -273,7 +273,7 @@ equals_bitmask( ValueType_T lhs,
 }
 
 template< typename ValueType_T, typename Tag_T = default_tag,
-          class = std::enable_if_t< std::is_arithmetic< ValueType_T >::value > >
+          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
 equals_bitmask( typename traits< ValueType_T, Tag_T >::simd_type lhs,
                       ValueType_T rhs )
@@ -296,7 +296,7 @@ equals_high_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
 }
 
 template< typename SimdType_T, typename Tag_T = default_tag,
-          class = typename SimdType_T::simd_value_type >
+          typename SimdType_T::simd_value_type* = nullptr >
 inline typename traits< typename SimdType_T::simd_value_type, Tag_T >::bitmask_type
 equals_high_index( SimdType_T lhs, SimdType_T rhs )
 {
@@ -304,7 +304,7 @@ equals_high_index( SimdType_T lhs, SimdType_T rhs )
 }
 
 template< typename ValueType_T, typename Tag_T = default_tag,
-          class = std::enable_if_t< std::is_arithmetic< ValueType_T >::value > >
+          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
 equals_high_index( ValueType_T lhs,
                       typename traits< ValueType_T, Tag_T >::simd_type rhs )
@@ -315,7 +315,7 @@ equals_high_index( ValueType_T lhs,
 }
 
 template< typename ValueType_T, typename Tag_T = default_tag,
-          class = std::enable_if_t< std::is_arithmetic< ValueType_T >::value > >
+          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
 equals_high_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
                       ValueType_T rhs )
@@ -338,7 +338,7 @@ equals_low_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
 }
 
 template< typename SimdType_T, typename Tag_T = default_tag,
-          class = typename SimdType_T::simd_value_type >
+          typename SimdType_T::simd_value_type* = nullptr >
 inline typename traits< typename SimdType_T::simd_value_type, Tag_T >::bitmask_type
 equals_low_index( SimdType_T lhs, SimdType_T rhs )
 {
@@ -346,7 +346,7 @@ equals_low_index( SimdType_T lhs, SimdType_T rhs )
 }
 
 template< typename ValueType_T, typename Tag_T = default_tag,
-          class = std::enable_if_t< std::is_arithmetic< ValueType_T >::value > >
+          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
 equals_low_index( ValueType_T lhs,
                       typename traits< ValueType_T, Tag_T >::simd_type rhs )
@@ -357,7 +357,7 @@ equals_low_index( ValueType_T lhs,
 }
 
 template< typename ValueType_T, typename Tag_T = default_tag,
-          class = std::enable_if_t< std::is_arithmetic< ValueType_T >::value > >
+          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
 equals_low_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
                       ValueType_T rhs )

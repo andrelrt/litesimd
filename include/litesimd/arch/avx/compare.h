@@ -53,7 +53,7 @@ DEF_MASK_TO_BITMASK( double,  _mm256_movemask_pd )
 template<> inline typename traits< TYPE_T, avx_tag >::mask_type \
 greater_than< TYPE_T, avx_tag >( typename traits< TYPE_T, avx_tag >::simd_type lhs, \
                                  typename traits< TYPE_T, avx_tag >::simd_type rhs ) { \
-    return CMD( lhs._, rhs._ ); \
+    return CMD( lhs, rhs ); \
 }
 
 DEF_GREATER_THAN( int8_t,  _mm256_cmpgt_epi8 )
@@ -68,7 +68,7 @@ greater_than< float, avx_tag >( typename traits< float, avx_tag >::simd_type lhs
                                 typename traits< float, avx_tag >::simd_type rhs )
 {
     // Quietly ignore NaN
-    return _mm256_cmp_ps( lhs._, rhs._, _CMP_GT_OQ );
+    return _mm256_cmp_ps( lhs, rhs, _CMP_GT_OQ );
 }
 
 template<> inline typename traits< double, avx_tag >::mask_type
@@ -76,7 +76,7 @@ greater_than< double, avx_tag >( typename traits< double, avx_tag >::simd_type l
                                  typename traits< double, avx_tag >::simd_type rhs )
 {
     // Quietly ignore NaN
-    return _mm256_cmp_pd( lhs._, rhs._, _CMP_GT_OQ );
+    return _mm256_cmp_pd( lhs, rhs, _CMP_GT_OQ );
 }
 
 // Equals
@@ -85,7 +85,7 @@ greater_than< double, avx_tag >( typename traits< double, avx_tag >::simd_type l
 template<> inline typename traits< TYPE_T, avx_tag >::mask_type \
 equals< TYPE_T, avx_tag >( typename traits< TYPE_T, avx_tag >::simd_type lhs, \
                            typename traits< TYPE_T, avx_tag >::simd_type rhs ) { \
-    return CMD( lhs._, rhs._ ); \
+    return CMD( lhs, rhs ); \
 }
 
 DEF_EQUALS( int8_t,  _mm256_cmpeq_epi8 )
@@ -100,7 +100,7 @@ equals< float, avx_tag >( typename traits< float, avx_tag >::simd_type lhs,
                           typename traits< float, avx_tag >::simd_type rhs )
 {
     // Quietly ignore NaN
-    return _mm256_cmp_ps( lhs._, rhs._, _CMP_EQ_OQ );
+    return _mm256_cmp_ps( lhs, rhs, _CMP_EQ_OQ );
 }
 
 template<> inline typename traits< double, avx_tag >::mask_type
@@ -108,7 +108,7 @@ equals< double, avx_tag >( typename traits< double, avx_tag >::simd_type lhs,
                            typename traits< double, avx_tag >::simd_type rhs )
 {
     // Quietly ignore NaN
-    return _mm256_cmp_pd( lhs._, rhs._, _CMP_EQ_OQ );
+    return _mm256_cmp_pd( lhs, rhs, _CMP_EQ_OQ );
 }
 
 } // namespace litesimd

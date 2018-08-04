@@ -33,11 +33,17 @@ namespace litesimd {
 
 #define STRUCT_TRAITS_INT_SSE( INT_T ) \
 template<> struct traits< INT_T, sse_tag > { \
-    struct simd_type { __m128i _; typedef INT_T simd_value_type; }; \
+    struct simd_type { \
+        __m128i _; \
+        typedef INT_T simd_value_type; \
+        simd_type(){} \
+        simd_type(__m128i v):_(v){} \
+        operator __m128i() const { return _; } \
+    }; \
     typedef __m128i  mask_type; \
     typedef uint16_t bitmask_type; \
     constexpr static size_t simd_size = sizeof(simd_type)/sizeof(INT_T); \
-    static inline simd_type zero() { return {_mm_setzero_si128()}; } \
+    static inline simd_type zero() { return _mm_setzero_si128(); } \
 }
 STRUCT_TRAITS_INT_SSE( int8_t );
 STRUCT_TRAITS_INT_SSE( int16_t );
@@ -47,64 +53,76 @@ STRUCT_TRAITS_INT_SSE( int64_t );
 
 template<> struct traits< float, sse_tag >
 {
-    struct simd_type { __m128 _; typedef float simd_value_type; };
+    struct simd_type {
+        __m128 _;
+        typedef float simd_value_type;
+        simd_type(){}
+        simd_type(__m128 v):_(v){}
+        operator __m128() const { return _; }
+    };
     typedef __m128i  mask_type;
     typedef uint16_t bitmask_type;
     constexpr static size_t simd_size = sizeof(simd_type)/sizeof(float);
 
     static inline simd_type zero()
     {
-        return {_mm_setzero_ps()};
+        return _mm_setzero_ps();
     }
 };
 
 template<> struct traits< double, sse_tag >
 {
-    struct simd_type { __m128d _; typedef double simd_value_type; };
+    struct simd_type {
+        __m128d _;
+        typedef double simd_value_type;
+        simd_type(){}
+        simd_type(__m128d v):_(v){}
+        operator __m128d() const { return _; }
+    };
     typedef __m128i  mask_type;
     typedef uint16_t bitmask_type;
     constexpr static size_t simd_size = sizeof(simd_type)/sizeof(double);
 
     static inline simd_type zero()
     {
-        return {_mm_setzero_pd()};
+        return _mm_setzero_pd();
     }
 };
 
 template<> inline typename traits< int8_t, sse_tag >::simd_type
 from_value< int8_t, sse_tag >( int8_t val )
 {
-    return {_mm_set1_epi8( val )};
+    return _mm_set1_epi8( val );
 }
 
 template<> inline typename traits< int16_t, sse_tag >::simd_type
 from_value< int16_t, sse_tag >( int16_t val )
 {
-    return {_mm_set1_epi16( val )};
+    return _mm_set1_epi16( val );
 }
 
 template<> inline typename traits< int32_t, sse_tag >::simd_type
 from_value< int32_t, sse_tag >( int32_t val )
 {
-    return {_mm_set1_epi32( val )};
+    return _mm_set1_epi32( val );
 }
 
 template<> inline typename traits< int64_t, sse_tag >::simd_type
 from_value< int64_t, sse_tag >( int64_t val )
 {
-    return {_mm_set1_epi64x( val )};
+    return _mm_set1_epi64x( val );
 }
 
 template<> inline typename traits< float, sse_tag >::simd_type
 from_value< float, sse_tag >( float val )
 {
-    return {_mm_set1_ps( val )};
+    return _mm_set1_ps( val );
 }
 
 template<> inline typename traits< double, sse_tag >::simd_type
 from_value< double, sse_tag >( double val )
 {
-    return {_mm_set1_pd( val )};
+    return _mm_set1_pd( val );
 }
 
 } // namespace litesimd

@@ -53,7 +53,7 @@ DEF_MASK_TO_BITMASK( double,  _mm_movemask_pd )
 template<> inline typename traits< TYPE_T, sse_tag >::mask_type \
 greater_than< TYPE_T, sse_tag >( typename traits< TYPE_T, sse_tag >::simd_type lhs, \
                                  typename traits< TYPE_T, sse_tag >::simd_type rhs ) { \
-    return CMD( lhs._, rhs._ ); \
+    return CMD( lhs, rhs ); \
 }
 
 DEF_GREATER_THAN( int8_t,  _mm_cmpgt_epi8 )
@@ -71,7 +71,7 @@ DEF_GREATER_THAN( double,  _mm_cmpgt_pd )
 template<> inline typename traits< TYPE_T, sse_tag >::mask_type \
 equals< TYPE_T, sse_tag >( typename traits< TYPE_T, sse_tag >::simd_type lhs, \
                            typename traits< TYPE_T, sse_tag >::simd_type rhs ) { \
-    return CMD( lhs._, rhs._ ); \
+    return CMD( lhs, rhs ); \
 }
 
 DEF_EQUALS( int8_t,  _mm_cmpeq_epi8 )
