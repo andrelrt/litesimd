@@ -44,7 +44,6 @@ DEF_MASK_TO_BITMASK( int32_t, _mm_movemask_epi8 )
 DEF_MASK_TO_BITMASK( int64_t, _mm_movemask_epi8 )
 DEF_MASK_TO_BITMASK( float,   _mm_movemask_ps )
 DEF_MASK_TO_BITMASK( double,  _mm_movemask_pd )
-
 #undef DEF_MASK_TO_BITMASK
 
 // Greater than
@@ -62,7 +61,6 @@ DEF_GREATER_THAN( int32_t, _mm_cmpgt_epi32 )
 DEF_GREATER_THAN( int64_t, _mm_cmpgt_epi64 )
 DEF_GREATER_THAN( float,   _mm_cmpgt_ps )
 DEF_GREATER_THAN( double,  _mm_cmpgt_pd )
-
 #undef DEF_GREATER_THAN
 
 // Equals
@@ -80,8 +78,24 @@ DEF_EQUALS( int32_t, _mm_cmpeq_epi32 )
 DEF_EQUALS( int64_t, _mm_cmpeq_epi64 )
 DEF_EQUALS( float,   _mm_cmpeq_ps )
 DEF_EQUALS( double,  _mm_cmpeq_pd )
-
 #undef DEF_EQUALS
+
+// Blend ternary
+// ---------------------------------------------------------------------------------------
+#define DEF_BLEND( TYPE_T, BLEND_CMD ) \
+template<> inline typename traits< TYPE_T, sse_tag >::simd_type \
+blend< TYPE_T, sse_tag >( typename traits< TYPE_T, sse_tag >::mask_type mask, \
+                          typename traits< TYPE_T, sse_tag >::simd_type trueVal, \
+                          typename traits< TYPE_T, sse_tag >::simd_type falseVal ) { \
+    return BLEND_CMD( falseVal, trueVal, mask ); }
+
+DEF_BLEND( int8_t,  _mm_blendv_epi8 )
+DEF_BLEND( int16_t, _mm_blendv_epi8 )
+DEF_BLEND( int32_t, _mm_blendv_epi8 )
+DEF_BLEND( int64_t, _mm_blendv_epi8 )
+DEF_BLEND( float,   _mm_blendv_ps )
+DEF_BLEND( double,  _mm_blendv_pd )
+#undef DEF_BLEND
 
 } // namespace litesimd
 

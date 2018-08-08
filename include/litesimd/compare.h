@@ -73,13 +73,21 @@ bitmask_low_index( uint32_t bmask )
 
 // Greater than
 // ---------------------------------------------------------------------------------------
+template< typename SimdType_T, typename Tag_T = default_tag,
+          typename SimdType_T::simd_value_type* = nullptr >
+inline typename traits< typename SimdType_T::simd_value_type, Tag_T >::mask_type
+greater_than( SimdType_T lhs, SimdType_T rhs )
+{
+    return greater_than< typename SimdType_T::simd_value_type, Tag_T >( lhs, rhs );
+}
+
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline typename traits< ValueType_T, Tag_T >::mask_type
 greater_than( ValueType_T lhs,
               typename traits< ValueType_T, Tag_T >::simd_type rhs )
 {
     return greater_than< ValueType_T, Tag_T >(
-                  traits< ValueType_T, Tag_T >::from_value( lhs ),
+                  from_value< ValueType_T, Tag_T >( lhs ),
                   rhs );
 }
 
@@ -90,7 +98,7 @@ greater_than( typename traits< ValueType_T, Tag_T >::simd_type lhs,
 {
     return greater_than< ValueType_T, Tag_T >(
                   lhs,
-                  traits< ValueType_T, Tag_T >::from_value( rhs ) );
+                  from_value< ValueType_T, Tag_T >( rhs ) );
 }
 
 // Greater than bitmask
@@ -365,6 +373,30 @@ equals_low_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
     return equals_low_index< ValueType_T, Tag_T >(
                 lhs,
                 from_value< ValueType_T, Tag_T >( rhs ) );
+}
+
+// Blend ternary
+// ---------------------------------------------------------------------------------------
+template< typename ValueType_T, typename Tag_T = default_tag >
+typename traits< ValueType_T, Tag_T >::simd_type
+blend( typename traits< ValueType_T, Tag_T >::mask_type mask,
+       ValueType_T trueVal,
+       typename traits< ValueType_T, Tag_T >::simd_type falseVal )
+{
+    return blend< ValueType_T, Tag_T >( mask,
+                                      from_value< ValueType_T, Tag_T >( trueVal ),
+                                      falseVal );
+}
+
+template< typename ValueType_T, typename Tag_T = default_tag >
+typename traits< ValueType_T, Tag_T >::simd_type
+blend( typename traits< ValueType_T, Tag_T >::mask_type mask,
+       typename traits< ValueType_T, Tag_T >::simd_type trueVal,
+       ValueType_T falseVal )
+{
+    return blend< ValueType_T, Tag_T >( mask,
+                                      trueVal,
+                                      from_value< ValueType_T, Tag_T >( falseVal ) );
 }
 
 } // namespace litesimd

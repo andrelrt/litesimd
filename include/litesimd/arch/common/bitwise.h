@@ -20,49 +20,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_ARCH_COMMON_COMPARE_H
-#define LITESIMD_ARCH_COMMON_COMPARE_H
+#ifndef LITESIMD_ARCH_COMMON_BITWISE_H
+#define LITESIMD_ARCH_COMMON_BITWISE_H
 
 #include "../types.h"
 
 namespace litesimd {
 
-// Mask to bitmask
-// ---------------------------------------------------------------------------------------
-template< typename ValueType_T, typename Tag_T = default_tag >
-inline typename traits< ValueType_T, Tag_T >::bitmask_type
-mask_to_bitmask( typename traits< ValueType_T, Tag_T >::mask_type )
-{
-    return 0;
-}
-
-// Greater than
-// ---------------------------------------------------------------------------------------
-template< typename ValueType_T, typename Tag_T = default_tag >
-typename traits< ValueType_T, Tag_T >::mask_type
-greater_than( typename traits< ValueType_T, Tag_T >::simd_type,
-              typename traits< ValueType_T, Tag_T >::simd_type )
-{
-    return traits< ValueType_T, Tag_T >::zero();
-}
-
-// Equals
-// ---------------------------------------------------------------------------------------
-template< typename ValueType_T, typename Tag_T = default_tag >
-typename traits< ValueType_T, Tag_T >::mask_type
-equals( typename traits< ValueType_T, Tag_T >::simd_type,
-        typename traits< ValueType_T, Tag_T >::simd_type )
-{
-    return traits< ValueType_T, Tag_T >::zero();
-}
-
-// Blend ternary
+// Bit AND
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
 typename traits< ValueType_T, Tag_T >::simd_type
-blend( typename traits< ValueType_T, Tag_T >::mask_type,
-       typename traits< ValueType_T, Tag_T >::simd_type,
-       typename traits< ValueType_T, Tag_T >::simd_type )
+bit_and( typename traits< ValueType_T, Tag_T >::simd_type,
+         typename traits< ValueType_T, Tag_T >::simd_type )
 {
     return traits< ValueType_T, Tag_T >::zero();
 }
@@ -70,4 +40,4 @@ blend( typename traits< ValueType_T, Tag_T >::mask_type,
 
 } // namespace litesimd
 
-#endif // LITESIMD_ARCH_COMMON_COMPARE_H
+#endif // LITESIMD_ARCH_COMMON_BITWISE_H

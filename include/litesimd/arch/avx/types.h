@@ -60,7 +60,7 @@ template<> struct traits< float, avx_tag >
         simd_type(__m256 v):_(v){}
         operator __m256(){ return _; }
     };
-    typedef __m256i  mask_type;
+    typedef __m256   mask_type;
     typedef uint32_t bitmask_type;
     constexpr static size_t simd_size = sizeof(simd_type)/sizeof(float);
 
@@ -79,7 +79,7 @@ template<> struct traits< double, avx_tag >
         simd_type(__m256d v):_(v){}
         operator __m256d(){ return _; }
     };
-    typedef __m256i  mask_type;
+    typedef __m256d  mask_type;
     typedef uint32_t bitmask_type;
     constexpr static size_t simd_size = sizeof(simd_type)/sizeof(double);
 

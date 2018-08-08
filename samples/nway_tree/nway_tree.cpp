@@ -214,14 +214,9 @@ int main(int argc, char* /*argv*/[])
     }
     while( 1 )
     {
-        uint64_t base = bench< ls::aligned_vector< int32_t >, container_only,
-                             ls::sse_tag >( "lower_bound .", runSize, loop );
-
-        uint64_t index1 = bench< ls::aligned_vector< int32_t >, nway_tree,
-                               ls::sse_tag >( "index SSE ...", runSize, loop );
-
-        uint64_t index2 = bench< ls::aligned_vector< int32_t >, nway_tree,
-                               ls::avx_tag >( "index AVX ...", runSize, loop );
+        uint64_t base = bench< ls::aligned_vector< int32_t >, container_only, void >( "lower_bound .", runSize, loop );
+        uint64_t index1 = bench< ls::aligned_vector< int32_t >, nway_tree, ls::sse_tag >( "index SSE ...", runSize, loop );
+        uint64_t index2 = bench< ls::aligned_vector< int32_t >, nway_tree, ls::avx_tag >( "index AVX ...", runSize, loop );
 
         if( g_verbose )
         {

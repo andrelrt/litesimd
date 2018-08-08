@@ -111,6 +111,23 @@ equals< double, avx_tag >( typename traits< double, avx_tag >::simd_type lhs,
     return _mm256_cmp_pd( lhs, rhs, _CMP_EQ_OQ );
 }
 
+// Blend ternary
+// ---------------------------------------------------------------------------------------
+#define DEF_BLEND( TYPE_T, BLEND_CMD ) \
+template<> inline typename traits< TYPE_T, avx_tag >::simd_type \
+blend< TYPE_T, avx_tag >( typename traits< TYPE_T, avx_tag >::mask_type mask, \
+                          typename traits< TYPE_T, avx_tag >::simd_type trueVal, \
+                          typename traits< TYPE_T, avx_tag >::simd_type falseVal ) { \
+    return BLEND_CMD( falseVal, trueVal, mask ); }
+
+DEF_BLEND( int8_t,  _mm256_blendv_epi8 )
+DEF_BLEND( int16_t, _mm256_blendv_epi8 )
+DEF_BLEND( int32_t, _mm256_blendv_epi8 )
+DEF_BLEND( int64_t, _mm256_blendv_epi8 )
+DEF_BLEND( float,   _mm256_blendv_ps )
+DEF_BLEND( double,  _mm256_blendv_pd )
+#undef DEF_BLEND
+
 } // namespace litesimd
 
 #endif // LITESIMD_AVX_COMPARE_H
