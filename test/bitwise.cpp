@@ -21,43 +21,42 @@
 // SOFTWARE.
 
 #include <litesimd/types.h>
-#include <litesimd/arithmetic.h>
+#include <litesimd/bitwise.h>
 #include "gtest/gtest.h"
 
 namespace ls = litesimd;
 
-template <typename T> class ArithmeticTypedTest: public ::testing::Test {};
+template <typename T> class BitwiseTypedTest: public ::testing::Test {};
 
 using TestTypes = ::testing::Types<
 #ifdef __SSE2__
     std::pair<int8_t, ls::sse_tag>, std::pair<int16_t, ls::sse_tag>,
-    std::pair<int32_t, ls::sse_tag>, std::pair<int64_t, ls::sse_tag>,
-    std::pair<float, ls::sse_tag>, std::pair<double, ls::sse_tag>
+    std::pair<int32_t, ls::sse_tag>, std::pair<int64_t, ls::sse_tag>
 #ifdef __AVX2__
     , std::pair<int8_t, ls::avx_tag>, std::pair<int16_t, ls::avx_tag>,
-    std::pair<int32_t, ls::avx_tag>, std::pair<int64_t, ls::avx_tag>,
-    std::pair<float, ls::avx_tag>, std::pair<double, ls::avx_tag>
+    std::pair<int32_t, ls::avx_tag>, std::pair<int64_t, ls::avx_tag>
 #endif //__AVX2__
 #endif //__SSE2__
 >;
-TYPED_TEST_CASE(ArithmeticTypedTest, TestTypes);
+TYPED_TEST_CASE(BitwiseTypedTest, TestTypes);
 
 #ifdef __SSE2__
-TYPED_TEST(ArithmeticTypedTest, AddTypedTest)
+TYPED_TEST(BitwiseTypedTest, AndTypedTest)
 {
     using type = typename TypeParam::first_type;
     using tag = typename TypeParam::second_type;
     using simd = typename ls::traits< type, tag >::simd_type;
     constexpr size_t size = ls::traits< type, tag >::simd_size;
 
-    simd a = ls::from_value< type, tag >( 1 );
+    simd a = ls::from_value< type, tag >( 3 );
     simd b = ls::from_value< type, tag >( 2 );
-    simd c = ls::add< type, tag >( a, b );
+    simd c = ls::bit_and< type, tag >( a, b );
 
     type* pCmp = reinterpret_cast<type*>( &c );
     for( size_t i = 0; i < size; ++i )
     {
-        EXPECT_EQ( 3, pCmp[ i ] );
+        EXPECT_EQ( 2, pCmp[ i ] );
     }
 }
 #endif //__SSE2__
+
