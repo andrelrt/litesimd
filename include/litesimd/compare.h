@@ -26,6 +26,7 @@
 #include <type_traits>
 #include "types.h"
 #include "arch/compare.h"
+#include "detail/helper_macros.h"
 
 namespace litesimd {
 
@@ -73,33 +74,7 @@ bitmask_low_index( uint32_t bmask )
 
 // Greater than
 // ---------------------------------------------------------------------------------------
-template< typename SimdType_T, typename Tag_T = default_tag,
-          typename SimdType_T::simd_value_type* = nullptr >
-inline typename traits< typename SimdType_T::simd_value_type, Tag_T >::mask_type
-greater_than( SimdType_T lhs, SimdType_T rhs )
-{
-    return greater_than< typename SimdType_T::simd_value_type, Tag_T >( lhs, rhs );
-}
-
-template< typename ValueType_T, typename Tag_T = default_tag >
-inline typename traits< ValueType_T, Tag_T >::mask_type
-greater_than( ValueType_T lhs,
-              typename traits< ValueType_T, Tag_T >::simd_type rhs )
-{
-    return greater_than< ValueType_T, Tag_T >(
-                  from_value< ValueType_T, Tag_T >( lhs ),
-                  rhs );
-}
-
-template< typename ValueType_T, typename Tag_T = default_tag >
-inline typename traits< ValueType_T, Tag_T >::mask_type
-greater_than( typename traits< ValueType_T, Tag_T >::simd_type lhs,
-              ValueType_T rhs )
-{
-    return greater_than< ValueType_T, Tag_T >(
-                  lhs,
-                  from_value< ValueType_T, Tag_T >( rhs ) );
-}
+DEFINE_BINARY_FUNCTION_ADAPTORS( greater_than, mask_type )
 
 // Greater than bitmask
 // ---------------------------------------------------------------------------------------
@@ -113,35 +88,7 @@ greater_than_bitmask( typename traits< ValueType_T, Tag_T >::simd_type lhs,
             );
 }
 
-template< typename SimdType_T, typename Tag_T = default_tag,
-          typename SimdType_T::simd_value_type* = nullptr >
-inline typename traits< typename SimdType_T::simd_value_type, Tag_T >::bitmask_type
-greater_than_bitmask( SimdType_T lhs, SimdType_T rhs )
-{
-    return greater_than_bitmask< typename SimdType_T::simd_value_type, Tag_T >( lhs, rhs );
-}
-
-template< typename ValueType_T, typename Tag_T = default_tag,
-          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
-inline typename traits< ValueType_T, Tag_T >::bitmask_type
-greater_than_bitmask( ValueType_T lhs,
-                      typename traits< ValueType_T, Tag_T >::simd_type rhs )
-{
-    return greater_than_bitmask< ValueType_T, Tag_T >(
-                from_value< ValueType_T, Tag_T >( lhs ),
-                rhs );
-}
-
-template< typename ValueType_T, typename Tag_T = default_tag,
-          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
-inline typename traits< ValueType_T, Tag_T >::bitmask_type
-greater_than_bitmask( typename traits< ValueType_T, Tag_T >::simd_type lhs,
-                      ValueType_T rhs )
-{
-    return greater_than_bitmask< ValueType_T, Tag_T >(
-                lhs,
-                from_value< ValueType_T, Tag_T >( rhs ) );
-}
+DEFINE_BINARY_FUNCTION_ADAPTORS( greater_than_bitmask, bitmask_type )
 
 // Greater than high index
 // ---------------------------------------------------------------------------------------
@@ -155,35 +102,7 @@ greater_than_high_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
             );
 }
 
-template< typename SimdType_T, typename Tag_T = default_tag,
-          typename SimdType_T::simd_value_type* = nullptr >
-inline typename traits< typename SimdType_T::simd_value_type, Tag_T >::bitmask_type
-greater_than_high_index( SimdType_T lhs, SimdType_T rhs )
-{
-    return greater_than_high_index< typename SimdType_T::simd_value_type, Tag_T >( lhs, rhs );
-}
-
-template< typename ValueType_T, typename Tag_T = default_tag,
-          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
-inline typename traits< ValueType_T, Tag_T >::bitmask_type
-greater_than_high_index( ValueType_T lhs,
-                      typename traits< ValueType_T, Tag_T >::simd_type rhs )
-{
-    return greater_than_high_index< ValueType_T, Tag_T >(
-                from_value< ValueType_T, Tag_T >( lhs ),
-                rhs );
-}
-
-template< typename ValueType_T, typename Tag_T = default_tag,
-          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
-inline typename traits< ValueType_T, Tag_T >::bitmask_type
-greater_than_high_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
-                      ValueType_T rhs )
-{
-    return greater_than_high_index< ValueType_T, Tag_T >(
-                lhs,
-                from_value< ValueType_T, Tag_T >( rhs ) );
-}
+DEFINE_BINARY_FUNCTION_ADAPTORS( greater_than_high_index, bitmask_type )
 
 // Greater than low index
 // ---------------------------------------------------------------------------------------
@@ -197,57 +116,11 @@ greater_than_low_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
             );
 }
 
-template< typename SimdType_T, typename Tag_T = default_tag,
-          typename SimdType_T::simd_value_type* = nullptr >
-inline typename traits< typename SimdType_T::simd_value_type, Tag_T >::bitmask_type
-greater_than_low_index( SimdType_T lhs, SimdType_T rhs )
-{
-    return greater_than_low_index< typename SimdType_T::simd_value_type, Tag_T >( lhs, rhs );
-}
-
-template< typename ValueType_T, typename Tag_T = default_tag,
-          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
-inline typename traits< ValueType_T, Tag_T >::bitmask_type
-greater_than_low_index( ValueType_T lhs,
-                      typename traits< ValueType_T, Tag_T >::simd_type rhs )
-{
-    return greater_than_low_index< ValueType_T, Tag_T >(
-                from_value< ValueType_T, Tag_T >( lhs ),
-                rhs );
-}
-
-template< typename ValueType_T, typename Tag_T = default_tag,
-          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
-inline typename traits< ValueType_T, Tag_T >::bitmask_type
-greater_than_low_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
-                      ValueType_T rhs )
-{
-    return greater_than_low_index< ValueType_T, Tag_T >(
-                lhs,
-                from_value< ValueType_T, Tag_T >( rhs ) );
-}
+DEFINE_BINARY_FUNCTION_ADAPTORS( greater_than_low_index, bitmask_type )
 
 // Equals
 // ---------------------------------------------------------------------------------------
-template< typename ValueType_T, typename Tag_T = default_tag >
-inline typename traits< ValueType_T, Tag_T >::mask_type
-equals( ValueType_T lhs,
-        typename traits< ValueType_T, Tag_T >::simd_type rhs )
-{
-    return equals< ValueType_T, Tag_T >(
-           traits< ValueType_T, Tag_T >::from_value( lhs ),
-           rhs );
-}
-
-template< typename ValueType_T, typename Tag_T = default_tag >
-inline typename traits< ValueType_T, Tag_T >::mask_type
-equals( typename traits< ValueType_T, Tag_T >::simd_type lhs,
-        ValueType_T rhs )
-{
-    return equals< ValueType_T, Tag_T >(
-                  lhs,
-                  traits< ValueType_T, Tag_T >::from_value( rhs ) );
-}
+DEFINE_BINARY_FUNCTION_ADAPTORS( equals, mask_type )
 
 // Equals bitmask
 // ---------------------------------------------------------------------------------------
@@ -261,35 +134,7 @@ equals_bitmask( typename traits< ValueType_T, Tag_T >::simd_type lhs,
             );
 }
 
-template< typename SimdType_T, typename Tag_T = default_tag,
-          typename SimdType_T::simd_value_type* = nullptr >
-inline typename traits< typename SimdType_T::simd_value_type, Tag_T >::bitmask_type
-equals_bitmask( SimdType_T lhs, SimdType_T rhs )
-{
-    return equals_bitmask< typename SimdType_T::simd_value_type, Tag_T >( lhs, rhs );
-}
-
-template< typename ValueType_T, typename Tag_T = default_tag,
-          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
-inline typename traits< ValueType_T, Tag_T >::bitmask_type
-equals_bitmask( ValueType_T lhs,
-                      typename traits< ValueType_T, Tag_T >::simd_type rhs )
-{
-    return equals_bitmask< ValueType_T, Tag_T >(
-                from_value< ValueType_T, Tag_T >( lhs ),
-                rhs );
-}
-
-template< typename ValueType_T, typename Tag_T = default_tag,
-          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
-inline typename traits< ValueType_T, Tag_T >::bitmask_type
-equals_bitmask( typename traits< ValueType_T, Tag_T >::simd_type lhs,
-                      ValueType_T rhs )
-{
-    return equals_bitmask< ValueType_T, Tag_T >(
-                lhs,
-                from_value< ValueType_T, Tag_T >( rhs ) );
-}
+DEFINE_BINARY_FUNCTION_ADAPTORS( equals_bitmask, bitmask_type )
 
 // Equals high index
 // ---------------------------------------------------------------------------------------
@@ -303,35 +148,7 @@ equals_high_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
             );
 }
 
-template< typename SimdType_T, typename Tag_T = default_tag,
-          typename SimdType_T::simd_value_type* = nullptr >
-inline typename traits< typename SimdType_T::simd_value_type, Tag_T >::bitmask_type
-equals_high_index( SimdType_T lhs, SimdType_T rhs )
-{
-    return equals_high_index< typename SimdType_T::simd_value_type, Tag_T >( lhs, rhs );
-}
-
-template< typename ValueType_T, typename Tag_T = default_tag,
-          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
-inline typename traits< ValueType_T, Tag_T >::bitmask_type
-equals_high_index( ValueType_T lhs,
-                      typename traits< ValueType_T, Tag_T >::simd_type rhs )
-{
-    return equals_high_index< ValueType_T, Tag_T >(
-                from_value< ValueType_T, Tag_T >( lhs ),
-                rhs );
-}
-
-template< typename ValueType_T, typename Tag_T = default_tag,
-          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
-inline typename traits< ValueType_T, Tag_T >::bitmask_type
-equals_high_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
-                      ValueType_T rhs )
-{
-    return equals_high_index< ValueType_T, Tag_T >(
-                lhs,
-                from_value< ValueType_T, Tag_T >( rhs ) );
-}
+DEFINE_BINARY_FUNCTION_ADAPTORS( equals_high_index, bitmask_type )
 
 // Equals low index
 // ---------------------------------------------------------------------------------------
@@ -345,35 +162,7 @@ equals_low_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
             );
 }
 
-template< typename SimdType_T, typename Tag_T = default_tag,
-          typename SimdType_T::simd_value_type* = nullptr >
-inline typename traits< typename SimdType_T::simd_value_type, Tag_T >::bitmask_type
-equals_low_index( SimdType_T lhs, SimdType_T rhs )
-{
-    return equals_low_index< typename SimdType_T::simd_value_type, Tag_T >( lhs, rhs );
-}
-
-template< typename ValueType_T, typename Tag_T = default_tag,
-          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
-inline typename traits< ValueType_T, Tag_T >::bitmask_type
-equals_low_index( ValueType_T lhs,
-                      typename traits< ValueType_T, Tag_T >::simd_type rhs )
-{
-    return equals_low_index< ValueType_T, Tag_T >(
-                from_value< ValueType_T, Tag_T >( lhs ),
-                rhs );
-}
-
-template< typename ValueType_T, typename Tag_T = default_tag,
-          std::enable_if_t< std::is_arithmetic< ValueType_T >::value >* = nullptr >
-inline typename traits< ValueType_T, Tag_T >::bitmask_type
-equals_low_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
-                      ValueType_T rhs )
-{
-    return equals_low_index< ValueType_T, Tag_T >(
-                lhs,
-                from_value< ValueType_T, Tag_T >( rhs ) );
-}
+DEFINE_BINARY_FUNCTION_ADAPTORS( equals_low_index, bitmask_type )
 
 // Blend ternary
 // ---------------------------------------------------------------------------------------
@@ -384,8 +173,8 @@ blend( typename traits< ValueType_T, Tag_T >::mask_type mask,
        typename traits< ValueType_T, Tag_T >::simd_type falseVal )
 {
     return blend< ValueType_T, Tag_T >( mask,
-                                      from_value< ValueType_T, Tag_T >( trueVal ),
-                                      falseVal );
+                                        from_value< ValueType_T, Tag_T >( trueVal ),
+                                        falseVal );
 }
 
 template< typename ValueType_T, typename Tag_T = default_tag >
@@ -395,8 +184,8 @@ blend( typename traits< ValueType_T, Tag_T >::mask_type mask,
        ValueType_T falseVal )
 {
     return blend< ValueType_T, Tag_T >( mask,
-                                      trueVal,
-                                      from_value< ValueType_T, Tag_T >( falseVal ) );
+                                        trueVal,
+                                        from_value< ValueType_T, Tag_T >( falseVal ) );
 }
 
 } // namespace litesimd

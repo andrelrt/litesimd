@@ -26,33 +26,13 @@
 #include <type_traits>
 #include "types.h"
 #include "arch/bitwise.h"
+#include "detail/helper_macros.h"
 
 namespace litesimd {
 
 // Bit AND
 // ---------------------------------------------------------------------------------------
-template< typename SimdType_T, typename Tag_T = default_tag,
-          typename SimdType_T::simd_value_type* = nullptr >
-inline typename traits< typename SimdType_T::simd_value_type, Tag_T >::mask_type
-bit_and( SimdType_T lhs, SimdType_T rhs )
-{
-    return bit_and< typename SimdType_T::simd_value_type, Tag_T >( lhs, rhs );
-}
-
-template< typename ValueType_T, typename Tag_T = default_tag >
-inline typename traits< ValueType_T, Tag_T >::mask_type
-bit_and( ValueType_T lhs, typename traits< ValueType_T, Tag_T >::simd_type rhs )
-{
-    return bit_and< ValueType_T, Tag_T >( from_value< ValueType_T, Tag_T >( lhs ), rhs );
-}
-
-template< typename ValueType_T, typename Tag_T = default_tag >
-inline typename traits< ValueType_T, Tag_T >::mask_type
-bit_and( typename traits< ValueType_T, Tag_T >::simd_type lhs, ValueType_T rhs )
-{
-    return bit_and< ValueType_T, Tag_T >( lhs, from_value< ValueType_T, Tag_T >( rhs ) );
-}
-
+DEFINE_BINARY_FUNCTION_ADAPTORS( bit_and, simd_type )
 
 } // namespace litesimd
 

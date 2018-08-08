@@ -20,23 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_ARCH_COMMON_BITWISE_H
-#define LITESIMD_ARCH_COMMON_BITWISE_H
+#include <string>
 
-#include "../types.h"
-
-namespace litesimd {
-
-// Bit AND
-// ---------------------------------------------------------------------------------------
-template< typename ValueType_T, typename Tag_T = default_tag >
-typename traits< ValueType_T, Tag_T >::simd_type
-bit_and( typename traits< ValueType_T, Tag_T >::simd_type,
-         typename traits< ValueType_T, Tag_T >::simd_type )
+void do_nothing( const std::string& )
 {
-    return traits< ValueType_T, Tag_T >::zero();
 }
-
-} // namespace litesimd
-
-#endif // LITESIMD_ARCH_COMMON_BITWISE_H

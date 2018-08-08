@@ -20,23 +20,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_ARCH_COMMON_BITWISE_H
-#define LITESIMD_ARCH_COMMON_BITWISE_H
+#ifdef __SSE2__
 
-#include "../types.h"
+#ifndef LITESIMD_SSE_ARITHMETIC_H
+#define LITESIMD_SSE_ARITHMETIC_H
+
+#include "../../types.h"
+#include "../common/arithmetic.h"
 
 namespace litesimd {
 
-// Bit AND
+// Add
 // ---------------------------------------------------------------------------------------
-template< typename ValueType_T, typename Tag_T = default_tag >
-typename traits< ValueType_T, Tag_T >::simd_type
-bit_and( typename traits< ValueType_T, Tag_T >::simd_type,
-         typename traits< ValueType_T, Tag_T >::simd_type )
-{
-    return traits< ValueType_T, Tag_T >::zero();
-}
+#define DEF_ADD( TYPE_T, CMD ) \
+template<> inline typename traits< TYPE_T, sse_tag >::simd_type \
+add< TYPE_T, sse_tag >( typename traits< TYPE_T, sse_tag >::simd_type lhs, \
+                        typename traits< TYPE_T, sse_tag >::simd_type rhs ) { \
+    return CMD( lhs, rhs ); }
+
+DEF_ADD( int8_t,  _mm_add_epi8 )
+DEF_ADD( int16_t, _mm_add_epi16 )
+DEF_ADD( int32_t, _mm_add_epi32 )
+DEF_ADD( int64_t, _mm_add_epi64 )
+DEF_ADD( float,   _mm_add_ps )
+DEF_ADD( double,  _mm_add_pd )
+#undef DEF_ADD
 
 } // namespace litesimd
 
-#endif // LITESIMD_ARCH_COMMON_BITWISE_H
+#endif // LITESIMD_SSE_ARITHMETIC_H
+
+#endif //__SSE2__
+

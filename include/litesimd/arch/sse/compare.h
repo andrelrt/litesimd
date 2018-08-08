@@ -27,6 +27,7 @@
 
 #include "../../types.h"
 #include "../common/compare.h"
+#include "../../detail/helper_macros.h"
 
 namespace litesimd {
 

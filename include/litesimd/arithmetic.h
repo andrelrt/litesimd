@@ -20,23 +20,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_ARCH_COMMON_BITWISE_H
-#define LITESIMD_ARCH_COMMON_BITWISE_H
+#ifndef LITESIMD_ARITHMETIC_H
+#define LITESIMD_ARITHMETIC_H
 
-#include "../types.h"
+#include <type_traits>
+#include "types.h"
+#include "arch/arithmetic.h"
+#include "detail/helper_macros.h"
 
 namespace litesimd {
 
-// Bit AND
+// ADD
 // ---------------------------------------------------------------------------------------
-template< typename ValueType_T, typename Tag_T = default_tag >
-typename traits< ValueType_T, Tag_T >::simd_type
-bit_and( typename traits< ValueType_T, Tag_T >::simd_type,
-         typename traits< ValueType_T, Tag_T >::simd_type )
-{
-    return traits< ValueType_T, Tag_T >::zero();
-}
+DEFINE_BINARY_FUNCTION_ADAPTORS( add, simd_type )
+
 
 } // namespace litesimd
 
-#endif // LITESIMD_ARCH_COMMON_BITWISE_H
+#endif // LITESIMD_ARITHMETIC_H
+
