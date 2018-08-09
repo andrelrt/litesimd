@@ -20,11 +20,22 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_ARCH_BITWISE_H
-#define LITESIMD_ARCH_BITWISE_H
+#ifndef LITESIMD_ARCH_COMMON_SHUFFLE_H
+#define LITESIMD_ARCH_COMMON_SHUFFLE_H
 
 #include "../types.h"
-#include "sse/bitwise.h"
-#include "avx/bitwise.h"
 
-#endif // LITESIMD_ARCH_BITWISE_H
+namespace litesimd {
+
+// Low insert
+// ---------------------------------------------------------------------------------------
+template< typename ValueType_T, typename Tag_T = default_tag >
+typename traits< ValueType_T, Tag_T >::simd_type
+low_insert( typename traits< ValueType_T, Tag_T >::simd_type, ValueType_T = 0 )
+{
+    return traits< ValueType_T, Tag_T >::zero();
+}
+
+} // namespace litesimd
+
+#endif // LITESIMD_ARCH_COMMON_SHUFFLE_H

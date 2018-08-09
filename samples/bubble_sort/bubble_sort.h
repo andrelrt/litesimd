@@ -20,11 +20,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_ARCH_BITWISE_H
-#define LITESIMD_ARCH_BITWISE_H
+#ifndef SIMD_ALGORITHMS_BUBBLE_SORT_H
+#define SIMD_ALGORITHMS_BUBBLE_SORT_H
 
-#include "../types.h"
-#include "sse/bitwise.h"
-#include "avx/bitwise.h"
+#include <immintrin.h>
+#include <x86intrin.h>
+#include <algorithm>
+#include <iostream>
+#include <iomanip>
 
-#endif // LITESIMD_ARCH_BITWISE_H
+std::ostream& operator<<( std::ostream& out, __m128i val )
+{
+    uint32_t* pval = reinterpret_cast<uint32_t*>( &val );
+    out << std::hex << "("
+       << std::setw(8) << std::setfill('0') << pval[0] << ","
+       << std::setw(8) << std::setfill('0') << pval[1] << ","
+       << std::setw(8) << std::setfill('0') << pval[2] << ","
+       << std::setw(8) << std::setfill('0') << pval[3] << ")";
+    return out;
+}
+
+namespace simd_algorithms{
+namespace sort{
+
+
+}} // namespace simd_algoriths::bubble_sort
+
+#endif // SIMD_ALGORITHMS_BUBBLE_SORT_H
