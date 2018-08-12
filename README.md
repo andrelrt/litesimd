@@ -16,7 +16,66 @@ Any SIMD library typically covers a smaller scope than the total set of processo
 
 [WIP]
 
-## Examples
+## Example
+
+```cpp
+// Compiled with
+//
+// g++ -O3 -msse4.2 -I<path/to/litesimd/include> compare.cpp -o compare_sse
+
+#include <iostream>
+#include <litesimd/compare.h>
+#include <litesimd/helpers/iostrem.h>
+
+int main()
+{
+    namespace ls = litesimd;
+
+    // int32_t vector in default instruction set (SSE)
+    ls::t_int32_simd cmp;
+
+    // litesimd types are intrincs compatible
+    cmp = _mm_set_epi32( 40, 30, 20, 10 );
+
+    // With AVX2 looks similar
+    // cmp = _mm256_set_epi32( 80, 70, 60, 50, 40, 30, 20, 10 );
+
+    int32_t val = 5;
+
+    // int32_simd_size is how many int32_t fits on t_int32_simd
+    for( size_t i = 0; i <= ls::int32_simd_size; ++i )
+    {
+        // Compare 'val' against all cmp values
+        uint32_t mask = ls::greater_than_bitmask( val, cmp );
+
+        // Get the return bitmask and find the first item which val is greater
+        uint32_t index = ls::bitmask_high_index( mask );
+
+        if( index == 0 )
+        {
+            std::cout << "The value " << val
+                      << " is less than all values of " << cmp
+                      << std::endl;
+        }
+        else if( index == ls::int32_simd_size )
+        {
+            std::cout << "The value " << val
+                      << " is greater than all values of " << cmp
+                      << std::endl;
+        }
+        else
+        {
+            std::cout << "The value " << val
+                      << " is between itens " << index -1
+                      << " and " << index
+                      << " of " << cmp
+                      << std::endl;
+        }
+    }
+    return 0;
+}
+```
+
 
 ## Building samples and tests
 
