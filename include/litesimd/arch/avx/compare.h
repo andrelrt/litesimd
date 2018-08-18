@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifdef __AVX2__
-
 #ifndef LITESIMD_AVX_COMPARE_H
 #define LITESIMD_AVX_COMPARE_H
+
+#ifdef LITESIMD_HAS_AVX
 
 #include "../../types.h"
 #include "../common/compare.h"
@@ -130,6 +130,5 @@ DEF_BLEND( double,  _mm256_blendv_pd )
 
 } // namespace litesimd
 
+#endif // LITESIMD_HAS_AVX
 #endif // LITESIMD_AVX_COMPARE_H
-
-#endif //__AVX2__

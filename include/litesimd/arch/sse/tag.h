@@ -20,10 +20,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifdef __SSE2__
-
 #ifndef LITESIMD_SSE_TAG_H
 #define LITESIMD_SSE_TAG_H
+
+#include "common/arch.h"
+
+#ifdef LITESIMD_HAS_SSE
 
 namespace litesimd {
 
@@ -31,6 +33,7 @@ struct sse_tag {};
 
 } // namespace litesimd
 
-#endif //LITESIMD_SSE_TAG_H
 
-#endif //__SSE2__
+#endif //LITESIMD_HAS_SSE
+
+#endif //LITESIMD_SSE_TAG_H

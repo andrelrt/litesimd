@@ -28,15 +28,15 @@
 
 namespace litesimd {
 
-#if defined(__AVX2__)
+#if defined(LITESIMD_HAS_AVX)
 
     using default_tag = avx_tag;
 
-#elif defined(__SSE2__)
+#elif defined(LITESIMD_HAS_SSE)
 
     using default_tag = sse_tag;
 
-#endif //__SSE2__
+#endif //LITESIMD_HAS_SSE
 
 
 } // namespace litesimd

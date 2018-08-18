@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifdef __AVX2__
-
 #ifndef LITESIMD_AVX_SHUFFLE_H
 #define LITESIMD_AVX_SHUFFLE_H
+
+#ifdef LITESIMD_HAS_AVX
 
 #include "../../types.h"
 #include "../common/shuffle.h"
@@ -83,6 +83,5 @@ low_insert< int64_t, avx_tag >( typename traits< int64_t, avx_tag >::simd_type v
 
 } // namespace litesimd
 
+#endif // LITESIMD_HAS_AVX
 #endif // LITESIMD_AVX_SHUFFLE_H
-
-#endif //__AVX2__

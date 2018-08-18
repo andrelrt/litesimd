@@ -23,6 +23,7 @@
 #ifndef LITESIMD_COMPARE_H
 #define LITESIMD_COMPARE_H
 
+#include <immintrin.h>
 #include <type_traits>
 #include "types.h"
 #include "arch/compare.h"

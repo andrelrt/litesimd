@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifdef __SSE2__
-
 #ifndef LITESIMD_SSE_COMPARE_H
 #define LITESIMD_SSE_COMPARE_H
+
+#ifdef LITESIMD_HAS_SSE
 
 #include "../../types.h"
 #include "../common/compare.h"
@@ -100,6 +100,5 @@ DEF_BLEND( double,  _mm_blendv_pd )
 
 } // namespace litesimd
 
+#endif // LITESIMD_HAS_SSE
 #endif // LITESIMD_SSE_COMPARE_H
-
-#endif //__SSE2__

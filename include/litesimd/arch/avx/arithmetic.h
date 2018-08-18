@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifdef __AVX2__
-
 #ifndef LITESIMD_AVX_ARITHMETIC_H
 #define LITESIMD_AVX_ARITHMETIC_H
+
+#ifdef LITESIMD_HAS_AVX
 
 #include "../../types.h"
 #include "../common/arithmetic.h"
@@ -48,7 +48,5 @@ DEF_ADD( double,  _mm256_add_pd )
 
 } // namespace litesimd
 
+#endif // LITESIMD_HAS_AVX
 #endif // LITESIMD_AVX_ARITHMETIC_H
-
-#endif //__AVX2__
-

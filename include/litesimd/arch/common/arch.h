@@ -20,33 +20,35 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_AVX_BITWISE_H
-#define LITESIMD_AVX_BITWISE_H
+#ifndef LITESIMD_ARCH_COMMON_ARCH_H
+#define LITESIMD_ARCH_COMMON_ARCH_H
 
-#ifdef LITESIMD_HAS_AVX
+// Check windows
+#if defined(_WIN32)
+#define LITESIMD_HAS_SSE
 
-#include "../../types.h"
-#include "../common/bitwise.h"
+#if defined(__AVX2__)
+#define LITESIMD_HAS_AVX
+#endif //__AVX2__
 
-namespace litesimd {
+#endif //_WIN64
 
-// Bit AND
-// ---------------------------------------------------------------------------------------
-#define DEF_BIT_AND( TYPE_T, CMD ) \
-template<> inline typename traits< TYPE_T, avx_tag >::simd_type \
-bit_and< TYPE_T, avx_tag >( typename traits< TYPE_T, avx_tag >::simd_type lhs, \
-                            typename traits< TYPE_T, avx_tag >::simd_type rhs ) { \
-    return CMD( lhs, rhs ); }
+// Check GCC
+#if defined(__GNUC__)
+#if defined(__x86_64__)
+#define LITESIMD_HAS_SSE
 
-DEF_BIT_AND( int8_t,  _mm256_and_si256 )
-DEF_BIT_AND( int16_t, _mm256_and_si256 )
-DEF_BIT_AND( int32_t, _mm256_and_si256 )
-DEF_BIT_AND( int64_t, _mm256_and_si256 )
-DEF_BIT_AND( float,   _mm256_and_ps )
-DEF_BIT_AND( double,  _mm256_and_pd )
-#undef DEF_BIT_AND
+#if defined(__AVX2__)
+#define LITESIMD_HAS_AVX
+#endif //__AVX2__
 
-} // namespace litesimd
+#endif //__x86_64__
 
-#endif // LITESIMD_HAS_AVX
-#endif // LITESIMD_AVX_BITWISE_H
+#if defined(__ARM_ARCH_7__)
+#define LITESIMD_HAS_NEON
+#endif //__ARM_ARCH_7__
+
+#endif //__GNUC__
+
+
+#endif // LITESIMD_ARCH_COMMON_ARCH_H

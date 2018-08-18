@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifdef __AVX2__
-
 #ifndef LITESIMD_AVX_TYPES_H
 #define LITESIMD_AVX_TYPES_H
+
+#ifdef LITESIMD_HAS_AVX
 
 #include <immintrin.h>
 #include <type_traits>
@@ -127,6 +127,5 @@ from_value< double, avx_tag >( double val )
 
 } // namespace litesimd
 
+#endif //LITESIMD_HAS_AVX
 #endif //LITESIMD_AVX_TYPES_H
-
-#endif //__AVX2__

@@ -20,10 +20,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifdef __AVX2__
-
 #ifndef LITESIMD_AVX_TAG_H
 #define LITESIMD_AVX_TAG_H
+
+#include "common/arch.h"
+
+#ifdef LITESIMD_HAS_AVX
 
 namespace litesimd {
 
@@ -31,6 +33,6 @@ struct avx_tag {};
 
 } // namespace litesimd
 
-#endif //LITESIMD_AVX_TAG_H
+#endif //LITESIMD_HAS_AVX
 
-#endif //__AVX2__
+#endif //LITESIMD_AVX_TAG_H

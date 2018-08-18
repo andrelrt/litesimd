@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifdef __SSE2__
-
 #ifndef LITESIMD_SSE_ARITHMETIC_H
 #define LITESIMD_SSE_ARITHMETIC_H
+
+#ifdef LITESIMD_HAS_SSE
 
 #include "../../types.h"
 #include "../common/arithmetic.h"
@@ -48,7 +48,5 @@ DEF_ADD( double,  _mm_add_pd )
 
 } // namespace litesimd
 
+#endif // LITESIMD_HAS_SSE
 #endif // LITESIMD_SSE_ARITHMETIC_H
-
-#endif //__SSE2__
-

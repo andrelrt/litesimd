@@ -20,10 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifdef __SSE2__
-
 #ifndef LITESIMD_SSE_BITWISE_H
 #define LITESIMD_SSE_BITWISE_H
+
+#ifdef LITESIMD_HAS_SSE
 
 #include "../../types.h"
 #include "../common/bitwise.h"
@@ -48,6 +48,5 @@ DEF_BIT_AND( double,  _mm_and_pd )
 
 } // namespace litesimd
 
+#endif // LITESIMD_HAS_SSE
 #endif // LITESIMD_SSE_BITWISE_H
-
-#endif //__SSE2__

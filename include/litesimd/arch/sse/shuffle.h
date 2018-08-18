@@ -20,11 +20,12 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifdef __SSE2__
-
 #ifndef LITESIMD_SSE_SHUFFLE_H
 #define LITESIMD_SSE_SHUFFLE_H
 
+#ifdef LITESIMD_HAS_SSE
+
+#include <smmintrin.h>
 #include "../../types.h"
 #include "../common/shuffle.h"
 
@@ -74,6 +75,5 @@ low_insert< int64_t, sse_tag >( typename traits< int64_t, sse_tag >::simd_type v
 
 } // namespace litesimd
 
+#endif // LITESIMD_HAS_SSE
 #endif // LITESIMD_SSE_SHUFFLE_H
-
-#endif //__SSE2__
