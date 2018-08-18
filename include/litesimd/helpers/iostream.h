@@ -24,6 +24,7 @@
 #define LITESIMD_HELPERS_IOSTREAM_H
 
 #include <iostream>
+#include <iomanip>
 #include "../types.h"
 
 namespace litesimd {
@@ -35,15 +36,15 @@ std::ostream& operator<<( std::ostream& out, SimdType_T val )
 {
     auto pval = reinterpret_cast<typename SimdType_T::simd_value_type const*>( &val );
     constexpr size_t sz = sizeof(typename SimdType_T::simd_value_type);
+    constexpr size_t len = sizeof(SimdType_T) / sz;
 
     std::ios_base::fmtflags f( out.flags() );
 
-    out << std::hex
-        << "(" << std::setw(sz) << std::setfill('0') << pval[0];
+    out << "(" << pval[0];
 
-    for( size_t i = 1; i < SimdType_T::simd_size; ++i )
+    for( size_t i = 1; i < len; ++i )
     {
-        out << "," << std::setw(sz) << std::setfill('0') << pval[i];
+        out << ", " << pval[i];
     }
 
     out << ")";

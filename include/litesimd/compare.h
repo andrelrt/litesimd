@@ -24,6 +24,7 @@
 #define LITESIMD_COMPARE_H
 
 #include <immintrin.h>
+#include <intrin.h>
 #include <type_traits>
 #include "types.h"
 #include "arch/compare.h"
@@ -38,9 +39,13 @@ template< typename ValueType_T,
 inline size_t
 bitmask_high_index( uint32_t bmask )
 {
-    return (bmask == 0)
+    unsigned long index;
+    return (0 == _BitScanReverse( &index, bmask ))
         ? 0
-        : (_bit_scan_reverse( bmask ) + 1) / sizeof(ValueType_T);
+        : (index + 1) / sizeof(ValueType_T);
+//    return (bmask == 0)
+//        ? 0
+//        : (_bit_scan_reverse( bmask ) + 1) / sizeof(ValueType_T);
 }
 
 template< typename ValueType_T,
@@ -48,9 +53,13 @@ template< typename ValueType_T,
 inline size_t
 bitmask_low_index( uint32_t bmask )
 {
-    return (bmask == 0)
+    unsigned long index;
+    return (0 == _BitScanForward( &index, bmask ))
         ? 0
-        : (_bit_scan_forward( bmask ) + sizeof(ValueType_T)) / sizeof(ValueType_T);
+        : index / sizeof(ValueType_T) + 1;
+//    return (bmask == 0)
+//        ? 0
+//        : (_bit_scan_forward( bmask ) + sizeof(ValueType_T)) / sizeof(ValueType_T);
 }
 
 template< typename ValueType_T,
@@ -58,9 +67,13 @@ template< typename ValueType_T,
 inline size_t
 bitmask_high_index( uint32_t bmask )
 {
-    return (bmask == 0)
+    unsigned long index;
+    return (0 == _BitScanReverse( &index, bmask ))
         ? 0
-        : _bit_scan_reverse( bmask ) + 1;
+        : index + 1;
+//    return (bmask == 0)
+//        ? 0
+//        : _bit_scan_reverse( bmask ) + 1;
 }
 
 template< typename ValueType_T,
@@ -68,9 +81,13 @@ template< typename ValueType_T,
 inline size_t
 bitmask_low_index( uint32_t bmask )
 {
-    return (bmask == 0)
+    unsigned long index;
+    return (0 == _BitScanForward( &index, bmask ))
         ? 0
-        : _bit_scan_forward( bmask ) + 1;
+        : index + 1;
+//    return (bmask == 0)
+//        ? 0
+//        : _bit_scan_forward( bmask ) + 1;
 }
 
 // Greater than

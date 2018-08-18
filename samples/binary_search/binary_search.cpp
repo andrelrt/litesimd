@@ -269,15 +269,19 @@ int main(int argc, char* /*argv*/[])
     {
         uint64_t base =   bench< ls::aligned_vector< int32_t >, container_only, void >    ( "lower_bound ........", runSize, loop );
         uint64_t cache =  bench< ls::aligned_vector< int32_t >, index_cache, ls::sse_tag >( "index_cache SSE.....", runSize, loop );
+#ifdef LITESIMD_HAS_AVX
         uint64_t cache2 = bench< ls::aligned_vector< int32_t >, index_cache, ls::avx_tag >( "index_cache AVX.....", runSize, loop );
+#endif
 
         if( g_verbose )
         {
             uint64_t nocache =  bench< ls::aligned_vector< int32_t >, index_nocache, ls::sse_tag >( "index_nocache SSE...", runSize, loop );
-            uint64_t nocache2 = bench< ls::aligned_vector< int32_t >, index_nocache, ls::avx_tag >( "index_nocache AVX...", runSize, loop );
-
             uint64_t simdlb =  bench< ls::aligned_vector< int32_t >, container_simd_lb, ls::sse_tag >( "SIMD lower_bound SSE", runSize, loop );
+
+#ifdef LITESIMD_HAS_AVX
+            uint64_t nocache2 = bench< ls::aligned_vector< int32_t >, index_nocache, ls::avx_tag >( "index_nocache AVX...", runSize, loop );
             uint64_t simdlb2 = bench< ls::aligned_vector< int32_t >, container_simd_lb, ls::avx_tag >( "SIMD lower_bound AVX", runSize, loop );
+#endif
 
             std::cout
                       << std::endl << "Index Nocahe Speed up SSE.......: " << std::fixed << std::setprecision(2)
@@ -292,6 +296,7 @@ int main(int argc, char* /*argv*/[])
                       << std::endl << "Index Cache/Nocache Speed up SSE: " << std::fixed << std::setprecision(2)
                       << static_cast<float>(nocache)/static_cast<float>(cache) << "x"
 
+#ifdef LITESIMD_HAS_AVX
                       << std::endl << "Index Nocahe Speed up AVX.......: " << std::fixed << std::setprecision(2)
                       << static_cast<float>(base)/static_cast<float>(nocache2) << "x"
                       
@@ -300,15 +305,18 @@ int main(int argc, char* /*argv*/[])
                       
                       << std::endl << "SIMD lower_bound Speed up AVX...: " << std::fixed << std::setprecision(2)
                       << static_cast<float>(base)/static_cast<float>(simdlb2) << "x"
+#endif
                       
                       << std::endl << std::endl;
         }
         else
         {
             std::cout
-                << base << ","
-                << cache << ","
-                << cache2
+                << base
+                << "," << cache
+#ifdef LITESIMD_HAS_AVX
+                << "," << cache2
+#endif
                 << std::endl;
         }
     }

@@ -22,7 +22,7 @@
 
 // Compiled with
 //
-// g++ -std=c++14 -O3 -mavx2 -I<path/to/litesimd/include> compare.cpp -o compare_avx
+// g++ -std=c++14 -O3 -msse4.2 -I<path/to/litesimd/include> compare.cpp -o compare_avx
 
 #include <iostream>
 #include <litesimd/compare.h>
@@ -36,10 +36,10 @@ int main()
     ls::t_int32_simd cmp;
 
     // litesimd types are intrincs compatible
-    cmp = _mm256_set_epi32( 80, 70, 60, 50, 40, 30, 20, 10 );
+    cmp = _mm_set_epi32( 40, 30, 20, 10 );
 
-    // With SSE looks similar
-    // cmp = _mm_set_epi32( 40, 30, 20, 10 );
+    // With AVX looks similar
+    // cmp = _mm256_set_epi32( 80, 70, 60, 50, 40, 30, 20, 10 );
 
     int32_t val = 5;
 
@@ -50,7 +50,7 @@ int main()
         uint32_t mask = ls::greater_than_bitmask( val, cmp );
 
         // Get the return bitmask and find the first item which val is greater
-        uint32_t index = ls::bitmask_high_index( mask );
+        uint32_t index = ls::bitmask_high_index< int32_t >( mask );
 
         if( index == 0 )
         {
@@ -72,6 +72,8 @@ int main()
                       << " of " << cmp
                       << std::endl;
         }
+
+        val += 10;
     }
     return 0;
 }

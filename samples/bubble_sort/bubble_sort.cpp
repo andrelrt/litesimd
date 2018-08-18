@@ -222,10 +222,12 @@ int main(int argc, char* /*argv*/[])
                                 ls::sse_tag >( "SSE Bubble sort .", runSize, loop );
         uint64_t ssesort2 = bench< ls::aligned_vector< int32_t >, bubble2,
                                  ls::sse_tag >( "SSE Bubble2 sort ", runSize, loop );
+#ifdef LITESIMD_HAS_AVX
         uint64_t avxsort = bench< ls::aligned_vector< int32_t >, bubble,
                                 ls::avx_tag >( "AVX Bubble sort .", runSize, loop );
         uint64_t avxsort2 = bench< ls::aligned_vector< int32_t >, bubble2,
                                  ls::avx_tag >( "AVX Bubble2 sort ", runSize, loop );
+#endif
 
         if( g_verbose )
         {
@@ -239,23 +241,27 @@ int main(int argc, char* /*argv*/[])
                 << std::endl << "SSE2/SSE Speed up .: " << std::fixed << std::setprecision(2)
                 << static_cast<float>(ssesort)/static_cast<float>(ssesort2) << "x"
 
+#ifdef LITESIMD_HAS_AVX
                 << std::endl << "AVX Speed up ......: " << std::fixed << std::setprecision(2)
                 << static_cast<float>(bsort)/static_cast<float>(avxsort) << "x"
                 << std::endl << "AVX2 Speed up .....: " << std::fixed << std::setprecision(2)
                 << static_cast<float>(bsort)/static_cast<float>(avxsort2) << "x"
                 << std::endl << "AVX2/AVX Speed up .: " << std::fixed << std::setprecision(2)
                 << static_cast<float>(avxsort)/static_cast<float>(avxsort2) << "x"
+#endif
 
                 << std::endl << std::endl;
         }
         else
         {
             std::cout
-                << bsort << ","
-                << ssesort << ","
-                << ssesort2 << ","
-                << avxsort << ","
-                << avxsort2
+                << bsort
+                << "," << ssesort
+                << "," << ssesort2
+#ifdef LITESIMD_HAS_AVX
+                << "," << avxsort
+                << "," << avxsort2
+#endif
                 << std::endl;
         }
     }
