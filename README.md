@@ -21,7 +21,7 @@ Any SIMD library typically covers a smaller scope than the total set of processo
 ```cpp
 // Compiled with
 //
-// g++ -std=c++14 -O3 -msse4.2 -I<path/to/litesimd/include> compare.cpp -o compare_avx
+// g++ -std=c++14 -O3 -msse4.2 -I<path/to/litesimd/include> greater_than.cpp greater_than
 
 #include <iostream>
 #include <litesimd/compare.h>
