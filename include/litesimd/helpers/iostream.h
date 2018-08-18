@@ -20,20 +20,39 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_HELPERS_CONTAINERS_H
-#define LITESIMD_HELPERS_CONTAINERS_H
+#ifndef LITESIMD_HELPERS_IOSTREAM_H
+#define LITESIMD_HELPERS_IOSTREAM_H
 
-#include <vector>
-#include <boost/align/aligned_allocator.hpp>
+#include <iostream>
+#include "../types.h"
 
 namespace litesimd {
 
-// Aligned vector
-// ---------------------------------------------------------------------------------------
-template< typename Val_T >
-using aligned_vector = std::vector< Val_T, boost::alignment::aligned_allocator<Val_T, 64> >;
+// Stream Operators
+// -----------------------------------------------------------------------------
+template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
+std::ostream& operator<<( std::ostream& out, SimdType_T val )
+{
+    auto pval = reinterpret_cast<typename SimdType_T::simd_value_type const*>( &val );
+    constexpr size_t sz = sizeof(typename SimdType_T::simd_value_type);
 
+    std::ios_base::fmtflags f( out.flags() );
+
+    out << std::hex
+        << "(" << std::setw(sz) << std::setfill('0') << pval[0];
+
+    for( size_t i = 1; i < SimdType_T::simd_size; ++i )
+    {
+        out << "," << std::setw(sz) << std::setfill('0') << pval[i];
+    }
+
+    out << ")";
+
+    out.flags( f );
+
+    return out;
+}
 
 } // namespace litesimd
 
-#endif // LITESIMD_HELPERS_CONTAINERS_H
+#endif // LITESIMD_HELPERS_IOSTREAM_H
