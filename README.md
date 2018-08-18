@@ -21,28 +21,28 @@ Any SIMD library typically covers a smaller scope than the total set of processo
 ```cpp
 // Compiled with
 //
-// g++ -O3 -msse4.2 -I<path/to/litesimd/include> compare.cpp -o compare_sse
+// g++ -O3 -mavx2 -I<path/to/litesimd/include> compare.cpp -o compare_avx
 
 #include <iostream>
 #include <litesimd/compare.h>
-#include <litesimd/helpers/iostrem.h>
+#include <litesimd/helpers/iostream.h>
 
 int main()
 {
     namespace ls = litesimd;
 
-    // int32_t vector in default instruction set (SSE)
+    // int32_t vector in default instruction set (AVX2)
     ls::t_int32_simd cmp;
 
     // litesimd types are intrincs compatible
-    cmp = _mm_set_epi32( 40, 30, 20, 10 );
+    cmp = _mm256_set_epi32( 80, 70, 60, 50, 40, 30, 20, 10 );
 
-    // With AVX2 looks similar
-    // cmp = _mm256_set_epi32( 80, 70, 60, 50, 40, 30, 20, 10 );
+    // With SSE looks similar
+    // cmp = _mm_set_epi32( 40, 30, 20, 10 );
 
     int32_t val = 5;
 
-    // int32_simd_size is how many int32_t fits on t_int32_simd
+    // int32_simd_size is how many int32_t fits on t_int32_simd (8)
     for( size_t i = 0; i <= ls::int32_simd_size; ++i )
     {
         // Compare 'val' against all cmp values
