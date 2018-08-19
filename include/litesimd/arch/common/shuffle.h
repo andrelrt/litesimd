@@ -31,7 +31,7 @@ namespace litesimd {
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
 typename traits< ValueType_T, Tag_T >::simd_type
-low_insert( typename traits< ValueType_T, Tag_T >::simd_type, ValueType_T = 0 )
+high_insert( typename traits< ValueType_T, Tag_T >::simd_type, ValueType_T = 0 )
 {
     return traits< ValueType_T, Tag_T >::zero();
 }

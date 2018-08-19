@@ -95,7 +95,7 @@ public:
             auto cmp = *reinterpret_cast<simd_type*>( &cont[0] );
             for( size_t i = 0; i < end; ++i )
             {
-                cmp = ls::low_insert< value_type, TAG_T >( cmp, cont[ i + array_size ] );
+                cmp = ls::high_insert< value_type, TAG_T >( cmp, cont[ i + array_size ] );
                 uint32_t off = ls::greater_than_high_index< value_type, TAG_T >( cont[i], cmp );
 
                 if( off != 0 )
