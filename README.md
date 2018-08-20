@@ -31,25 +31,30 @@ int main()
 {
     namespace ls = litesimd;
 
-    // int32_t vector in default instruction set (AVX2)
+    // int32_t vector in default instruction set (SSE)
     ls::t_int32_simd cmp;
 
     // litesimd types are intrincs compatible
     cmp = _mm_set_epi32( 40, 30, 20, 10 );
 
-    // With AVX looks similar
-    // cmp = _mm256_set_epi32( 80, 70, 60, 50, 40, 30, 20, 10 );
-
     int32_t val = 5;
 
-    // int32_simd_size is how many int32_t fits on t_int32_simd (8)
+    // int32_simd_size is how many int32_t fits on t_int32_simd (4)
     for( size_t i = 0; i <= ls::int32_simd_size; ++i )
     {
         // Compare 'val' against all cmp values
-        uint32_t mask = ls::greater_than_bitmask( val, cmp );
+        uint32_t bitmask = ls::greater_than_bitmask( val, cmp );
 
-        // Get the return bitmask and find the first item which val is greater
-        uint32_t index = ls::bitmask_high_index< int32_t >( mask );
+        // As 'cmp' is sorted, we can use the bitmask to find the
+        // last item which 'val' is greater than
+        //
+        // Returns values between [0, ls::int32_simd_size]
+        uint32_t index = ls::bitmask_high_index< int32_t >( bitmask );
+
+        // greater_than_high_index could be called instead
+        // greater_than_bitmask + bitmask_high_index
+        //
+        // uint32_t index = ls::greater_than_high_index( val, cmp );
 
         if( index == 0 )
         {
@@ -66,7 +71,7 @@ int main()
         else
         {
             std::cout << "The value " << val
-                      << " is between itens " << index -1
+                      << " is between items " << index -1
                       << " and " << index
                       << " of " << cmp
                       << std::endl;
@@ -82,9 +87,9 @@ This will produce the follow output:
 ```
 $ ./greater_than
 The value 5 is less than all values of (10, 20, 30, 40)
-The value 15 is between itens 0 and 1 of (10, 20, 30, 40)
-The value 25 is between itens 1 and 2 of (10, 20, 30, 40)
-The value 35 is between itens 2 and 3 of (10, 20, 30, 40)
+The value 15 is between items 0 and 1 of (10, 20, 30, 40)
+The value 25 is between items 1 and 2 of (10, 20, 30, 40)
+The value 35 is between items 2 and 3 of (10, 20, 30, 40)
 The value 45 is greater than all values of (10, 20, 30, 40)
 ```
 
