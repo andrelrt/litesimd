@@ -37,7 +37,7 @@ namespace litesimd {
 template< typename ValueType_T,
           std::enable_if_t< std::is_integral< ValueType_T >::value >* = nullptr >
 inline size_t
-bitmask_high_index( uint32_t bmask )
+bitmask_last_index( uint32_t bmask )
 {
     unsigned long index;
     return (0 == _BitScanReverse( &index, bmask ))
@@ -51,7 +51,7 @@ bitmask_high_index( uint32_t bmask )
 template< typename ValueType_T,
           std::enable_if_t< std::is_integral< ValueType_T >::value >* = nullptr >
 inline size_t
-bitmask_low_index( uint32_t bmask )
+bitmask_first_index( uint32_t bmask )
 {
     unsigned long index;
     return (0 == _BitScanForward( &index, bmask ))
@@ -65,7 +65,7 @@ bitmask_low_index( uint32_t bmask )
 template< typename ValueType_T,
           std::enable_if_t< std::is_floating_point< ValueType_T >::value >* = nullptr >
 inline size_t
-bitmask_high_index( uint32_t bmask )
+bitmask_last_index( uint32_t bmask )
 {
     unsigned long index;
     return (0 == _BitScanReverse( &index, bmask ))
@@ -79,7 +79,7 @@ bitmask_high_index( uint32_t bmask )
 template< typename ValueType_T,
           std::enable_if_t< std::is_floating_point< ValueType_T >::value >* = nullptr >
 inline size_t
-bitmask_low_index( uint32_t bmask )
+bitmask_first_index( uint32_t bmask )
 {
     unsigned long index;
     return (0 == _BitScanForward( &index, bmask ))
@@ -112,29 +112,29 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( greater_than_bitmask, bitmask_type )
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
-greater_than_high_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
+greater_than_last_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
                          typename traits< ValueType_T, Tag_T >::simd_type rhs )
 {
-    return bitmask_high_index< ValueType_T >(
+    return bitmask_last_index< ValueType_T >(
                 greater_than_bitmask< ValueType_T, Tag_T >( lhs, rhs )
             );
 }
 
-DEFINE_BINARY_FUNCTION_ADAPTORS( greater_than_high_index, bitmask_type )
+DEFINE_BINARY_FUNCTION_ADAPTORS( greater_than_last_index, bitmask_type )
 
 // Greater than low index
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
-greater_than_low_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
+greater_than_first_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
                          typename traits< ValueType_T, Tag_T >::simd_type rhs )
 {
-    return bitmask_low_index< ValueType_T >(
+    return bitmask_first_index< ValueType_T >(
                 greater_than_bitmask< ValueType_T, Tag_T >( lhs, rhs )
             );
 }
 
-DEFINE_BINARY_FUNCTION_ADAPTORS( greater_than_low_index, bitmask_type )
+DEFINE_BINARY_FUNCTION_ADAPTORS( greater_than_first_index, bitmask_type )
 
 // Equals
 // ---------------------------------------------------------------------------------------
@@ -158,29 +158,29 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( equals_bitmask, bitmask_type )
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
-equals_high_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
+equals_last_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
                          typename traits< ValueType_T, Tag_T >::simd_type rhs )
 {
-    return bitmask_high_index< ValueType_T >(
+    return bitmask_last_index< ValueType_T >(
                 equals_bitmask< ValueType_T, Tag_T >( lhs, rhs )
             );
 }
 
-DEFINE_BINARY_FUNCTION_ADAPTORS( equals_high_index, bitmask_type )
+DEFINE_BINARY_FUNCTION_ADAPTORS( equals_last_index, bitmask_type )
 
 // Equals low index
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
-equals_low_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
+equals_first_index( typename traits< ValueType_T, Tag_T >::simd_type lhs,
                          typename traits< ValueType_T, Tag_T >::simd_type rhs )
 {
-    return bitmask_low_index< ValueType_T >(
+    return bitmask_first_index< ValueType_T >(
                 equals_bitmask< ValueType_T, Tag_T >( lhs, rhs )
             );
 }
 
-DEFINE_BINARY_FUNCTION_ADAPTORS( equals_low_index, bitmask_type )
+DEFINE_BINARY_FUNCTION_ADAPTORS( equals_first_index, bitmask_type )
 
 // Blend ternary
 // ---------------------------------------------------------------------------------------

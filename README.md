@@ -49,12 +49,12 @@ int main()
         // last item which 'val' is greater than
         //
         // Returns values between [0, ls::int32_simd_size]
-        uint32_t index = ls::bitmask_high_index< int32_t >( bitmask );
+        uint32_t index = ls::bitmask_last_index< int32_t >( bitmask );
 
-        // greater_than_high_index could be called instead
-        // greater_than_bitmask + bitmask_high_index
+        // greater_than_last_index could be called instead
+        // greater_than_bitmask + bitmask_last_index
         //
-        // uint32_t index = ls::greater_than_high_index( val, cmp );
+        // uint32_t index = ls::greater_than_last_index( val, cmp );
 
         if( index == 0 )
         {

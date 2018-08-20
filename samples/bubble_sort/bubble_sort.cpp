@@ -51,7 +51,7 @@ public:
             for( size_t i = 0; i < end; ++i )
             {
                 auto cmp = reinterpret_cast<simd_type*>( &cont[i+1] );
-                uint32_t off = ls::greater_than_high_index< value_type, TAG_T >( cont[i], *cmp );
+                uint32_t off = ls::greater_than_last_index< value_type, TAG_T >( cont[i], *cmp );
 
                 if( off != 0 )
                 {
@@ -96,7 +96,7 @@ public:
             for( size_t i = 0; i < end; ++i )
             {
                 cmp = ls::high_insert< value_type, TAG_T >( cmp, cont[ i + array_size ] );
-                uint32_t off = ls::greater_than_high_index< value_type, TAG_T >( cont[i], cmp );
+                uint32_t off = ls::greater_than_last_index< value_type, TAG_T >( cont[i], cmp );
 
                 if( off != 0 )
                 {

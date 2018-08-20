@@ -50,7 +50,7 @@ int main()
         uint32_t mask = ls::greater_than_bitmask( val, cmp );
 
         // Get the return bitmask and find the first item which val is greater
-        uint32_t index = ls::bitmask_high_index< int32_t >( mask );
+        uint32_t index = ls::bitmask_last_index< int32_t >( mask );
 
         if( index == 0 )
         {
