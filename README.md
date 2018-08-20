@@ -46,7 +46,7 @@ int main()
         uint32_t bitmask = ls::greater_than_bitmask( val, cmp );
 
         // As 'cmp' is sorted, we can use the bitmask to find the
-        // last item which 'val' is greater than
+        // last item which 'val' is greater
         //
         // Returns values between [0, ls::int32_simd_size]
         uint32_t index = ls::bitmask_last_index< int32_t >( bitmask );

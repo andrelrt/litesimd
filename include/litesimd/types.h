@@ -29,25 +29,22 @@
 
 namespace litesimd {
 
-using  t_int8_simd = typename traits<  int8_t, default_tag >::simd_type;
-using t_int16_simd = typename traits< int16_t, default_tag >::simd_type;
-using t_int32_simd = typename traits< int32_t, default_tag >::simd_type;
-using t_int64_simd = typename traits< int64_t, default_tag >::simd_type;
+using  t_int8_simd = simd_type<  int8_t, default_tag >;
+using t_int16_simd = simd_type< int16_t, default_tag >;
+using t_int32_simd = simd_type< int32_t, default_tag >;
+using t_int64_simd = simd_type< int64_t, default_tag >;
 
-constexpr static size_t  int8_simd_size = traits<  int8_t, default_tag >::simd_size;
-constexpr static size_t int16_simd_size = traits< int16_t, default_tag >::simd_size;
-constexpr static size_t int32_simd_size = traits< int32_t, default_tag >::simd_size;
-constexpr static size_t int64_simd_size = traits< int64_t, default_tag >::simd_size;
+constexpr static size_t  int8_simd_size = t_int8_simd::simd_size;
+constexpr static size_t int16_simd_size = t_int16_simd::simd_size;
+constexpr static size_t int32_simd_size = t_int32_simd::simd_size;
+constexpr static size_t int64_simd_size = t_int64_simd::simd_size;
 
 
-using t_float_simd  = typename traits<  float, default_tag >::simd_type;
-using t_double_simd = typename traits< double, default_tag >::simd_type;
+using t_float_simd  = simd_type<  float, default_tag >;
+using t_double_simd = simd_type< double, default_tag >;
 
-constexpr static size_t float_size  = traits<  float, default_tag >::simd_size;
-constexpr static size_t double_size = traits< double, default_tag >::simd_size;
-
-using t_mask_simd = typename traits< int8_t, default_tag >::mask_type;
-using t_bitmask = typename traits< int8_t, default_tag >::bitmask_type;
+constexpr static size_t float_simd_size  = t_float_simd::simd_size;
+constexpr static size_t double_simd_size = t_double_simd::simd_size;
 
 } // namespace litesimd
 

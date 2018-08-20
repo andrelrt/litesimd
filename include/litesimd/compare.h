@@ -98,8 +98,8 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( greater_than, mask_type )
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
-greater_than_bitmask( typename traits< ValueType_T, Tag_T >::simd_type lhs,
-                      typename traits< ValueType_T, Tag_T >::simd_type rhs )
+greater_than_bitmask( simd_type< ValueType_T, Tag_T > lhs,
+                      simd_type< ValueType_T, Tag_T > rhs )
 {
     return mask_to_bitmask< ValueType_T, Tag_T >(
                 greater_than< ValueType_T, Tag_T >( lhs, rhs )
@@ -144,8 +144,8 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( equals, mask_type )
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline typename traits< ValueType_T, Tag_T >::bitmask_type
-equals_bitmask( typename traits< ValueType_T, Tag_T >::simd_type lhs,
-                      typename traits< ValueType_T, Tag_T >::simd_type rhs )
+equals_bitmask( simd_type< ValueType_T, Tag_T > lhs,
+                      simd_type< ValueType_T, Tag_T > rhs )
 {
     return mask_to_bitmask< ValueType_T, Tag_T >(
                 equals< ValueType_T, Tag_T >( lhs, rhs )
@@ -185,10 +185,10 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( equals_first_index, bitmask_type )
 // Blend ternary
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
-typename traits< ValueType_T, Tag_T >::simd_type
-blend( typename traits< ValueType_T, Tag_T >::mask_type mask,
+simd_type< ValueType_T, Tag_T >
+blend( simd_type< ValueType_T, Tag_T > mask,
        ValueType_T trueVal,
-       typename traits< ValueType_T, Tag_T >::simd_type falseVal )
+       simd_type< ValueType_T, Tag_T > falseVal )
 {
     return blend< ValueType_T, Tag_T >( mask,
                                         from_value< ValueType_T, Tag_T >( trueVal ),
@@ -196,9 +196,9 @@ blend( typename traits< ValueType_T, Tag_T >::mask_type mask,
 }
 
 template< typename ValueType_T, typename Tag_T = default_tag >
-typename traits< ValueType_T, Tag_T >::simd_type
-blend( typename traits< ValueType_T, Tag_T >::mask_type mask,
-       typename traits< ValueType_T, Tag_T >::simd_type trueVal,
+simd_type< ValueType_T, Tag_T >
+blend( simd_type< ValueType_T, Tag_T > mask,
+       simd_type< ValueType_T, Tag_T > trueVal,
        ValueType_T falseVal )
 {
     return blend< ValueType_T, Tag_T >( mask,

@@ -35,7 +35,7 @@ namespace litesimd {
 // ---------------------------------------------------------------------------------------
 #define DEF_MASK_TO_BITMASK( TYPE_T, CMD ) \
 template<> inline typename traits< TYPE_T, sse_tag >::bitmask_type \
-mask_to_bitmask< TYPE_T, sse_tag >( typename traits< TYPE_T, sse_tag >::mask_type mask ) { \
+mask_to_bitmask< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > mask ) { \
     return CMD( mask ); \
 }
 
@@ -50,9 +50,9 @@ DEF_MASK_TO_BITMASK( double,  _mm_movemask_pd )
 // Greater than
 // ---------------------------------------------------------------------------------------
 #define DEF_GREATER_THAN( TYPE_T, CMD ) \
-template<> inline typename traits< TYPE_T, sse_tag >::mask_type \
-greater_than< TYPE_T, sse_tag >( typename traits< TYPE_T, sse_tag >::simd_type lhs, \
-                                 typename traits< TYPE_T, sse_tag >::simd_type rhs ) { \
+template<> inline simd_type< TYPE_T, sse_tag > \
+greater_than< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > lhs, \
+                                 simd_type< TYPE_T, sse_tag > rhs ) { \
     return CMD( lhs, rhs ); \
 }
 
@@ -67,9 +67,9 @@ DEF_GREATER_THAN( double,  _mm_cmpgt_pd )
 // Equals
 // ---------------------------------------------------------------------------------------
 #define DEF_EQUALS( TYPE_T, CMD ) \
-template<> inline typename traits< TYPE_T, sse_tag >::mask_type \
-equals< TYPE_T, sse_tag >( typename traits< TYPE_T, sse_tag >::simd_type lhs, \
-                           typename traits< TYPE_T, sse_tag >::simd_type rhs ) { \
+template<> inline simd_type< TYPE_T, sse_tag > \
+equals< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > lhs, \
+                           simd_type< TYPE_T, sse_tag > rhs ) { \
     return CMD( lhs, rhs ); \
 }
 
@@ -84,10 +84,10 @@ DEF_EQUALS( double,  _mm_cmpeq_pd )
 // Blend ternary
 // ---------------------------------------------------------------------------------------
 #define DEF_BLEND( TYPE_T, BLEND_CMD ) \
-template<> inline typename traits< TYPE_T, sse_tag >::simd_type \
-blend< TYPE_T, sse_tag >( typename traits< TYPE_T, sse_tag >::mask_type mask, \
-                          typename traits< TYPE_T, sse_tag >::simd_type trueVal, \
-                          typename traits< TYPE_T, sse_tag >::simd_type falseVal ) { \
+template<> inline simd_type< TYPE_T, sse_tag > \
+blend< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > mask, \
+                          simd_type< TYPE_T, sse_tag > trueVal, \
+                          simd_type< TYPE_T, sse_tag > falseVal ) { \
     return BLEND_CMD( falseVal, trueVal, mask ); }
 
 DEF_BLEND( int8_t,  _mm_blendv_epi8 )

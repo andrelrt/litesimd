@@ -20,33 +20,34 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_AVX_BITWISE_H
-#define LITESIMD_AVX_BITWISE_H
+#ifndef LITESIMD_ARCH_COMMON_TYPES_H
+#define LITESIMD_ARCH_COMMON_TYPES_H
 
-#ifdef LITESIMD_HAS_AVX
-
-#include "../../types.h"
-#include "../common/bitwise.h"
+#include "../../traits.h"
 
 namespace litesimd {
 
-// Bit AND
-// ---------------------------------------------------------------------------------------
-#define DEF_BIT_AND( TYPE_T, CMD ) \
-template<> inline simd_type< TYPE_T, avx_tag > \
-bit_and< TYPE_T, avx_tag >( simd_type< TYPE_T, avx_tag > lhs, \
-                            simd_type< TYPE_T, avx_tag > rhs ) { \
-    return CMD( lhs, rhs ); }
+template< typename Type_T, typename Tag_T = default_tag >
+class simd_type
+{
+public:
+    using simd_value_type = Type_T;
+    using simd_tag = Tag_T;
 
-DEF_BIT_AND( int8_t,  _mm256_and_si256 )
-DEF_BIT_AND( int16_t, _mm256_and_si256 )
-DEF_BIT_AND( int32_t, _mm256_and_si256 )
-DEF_BIT_AND( int64_t, _mm256_and_si256 )
-DEF_BIT_AND( float,   _mm256_and_ps )
-DEF_BIT_AND( double,  _mm256_and_pd )
-#undef DEF_BIT_AND
+    using inner_type = typename traits< simd_value_type, simd_tag >::simd_type;
+    constexpr static size_t simd_size = sizeof(simd_type) / sizeof(simd_value_type);
+
+    simd_type(){}
+    simd_type( inner_type v ):v_(v){}
+    operator inner_type() const { return v_; }
+
+private:
+    simd_type v_;
+};
+
+template< typename ValueType_T, typename Tag_T = default_tag >
+simd_type< ValueType_T, Tag_T > from_value( ValueType_T ){}
 
 } // namespace litesimd
 
-#endif // LITESIMD_HAS_AVX
-#endif // LITESIMD_AVX_BITWISE_H
+#endif // LITESIMD_ARCH_COMMON_TYPES_H

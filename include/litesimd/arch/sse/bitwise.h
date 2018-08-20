@@ -33,9 +33,9 @@ namespace litesimd {
 // Bit AND
 // ---------------------------------------------------------------------------------------
 #define DEF_BIT_AND( TYPE_T, CMD ) \
-template<> inline typename traits< TYPE_T, sse_tag >::simd_type \
-bit_and< TYPE_T, sse_tag >( typename traits< TYPE_T, sse_tag >::simd_type lhs, \
-                            typename traits< TYPE_T, sse_tag >::simd_type rhs ) { \
+template<> inline simd_type< TYPE_T, sse_tag > \
+bit_and< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > lhs, \
+                            simd_type< TYPE_T, sse_tag > rhs ) { \
     return CMD( lhs, rhs ); }
 
 DEF_BIT_AND( int8_t,  _mm_and_si128 )

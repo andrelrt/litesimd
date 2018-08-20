@@ -48,13 +48,13 @@ NAME( SimdType_T lhs, SimdType_T rhs ) { \
 #define DEFINE_BINARY_FUNCTION_LEFT_VALUE_ADAPTOR( NAME, RET_T ) \
 template< typename ValueType_T, typename Tag_T = default_tag > \
 inline typename traits< ValueType_T, Tag_T >::RET_T \
-NAME( ValueType_T lhs, typename traits< ValueType_T, Tag_T >::simd_type rhs ) { \
+NAME( ValueType_T lhs, simd_type< ValueType_T, Tag_T > rhs ) { \
     return NAME< ValueType_T, Tag_T >( from_value< ValueType_T, Tag_T >( lhs ), rhs ); }
 
 #define DEFINE_BINARY_FUNCTION_RIGHT_VALUE_ADAPTOR( NAME, RET_T ) \
 template< typename ValueType_T, typename Tag_T = default_tag > \
 inline typename traits< ValueType_T, Tag_T >::RET_T \
-NAME( typename traits< ValueType_T, Tag_T >::simd_type lhs, ValueType_T rhs ) { \
+NAME( simd_type< ValueType_T, Tag_T > lhs, ValueType_T rhs ) { \
     return NAME< ValueType_T, Tag_T >( lhs, from_value< ValueType_T, Tag_T >( rhs ) ); }
 
 #define DEFINE_BINARY_FUNCTION_ADAPTORS( NAME, RET_T ) \

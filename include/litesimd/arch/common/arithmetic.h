@@ -30,9 +30,9 @@ namespace litesimd {
 // Add
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
-typename traits< ValueType_T, Tag_T >::simd_type
-add( typename traits< ValueType_T, Tag_T >::simd_type,
-     typename traits< ValueType_T, Tag_T >::simd_type )
+simd_type< ValueType_T, Tag_T >
+add( simd_type< ValueType_T, Tag_T >,
+     simd_type< ValueType_T, Tag_T > )
 {
     return traits< ValueType_T, Tag_T >::zero();
 }

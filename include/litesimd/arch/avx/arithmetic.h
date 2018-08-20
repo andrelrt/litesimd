@@ -33,9 +33,9 @@ namespace litesimd {
 // Add
 // ---------------------------------------------------------------------------------------
 #define DEF_ADD( TYPE_T, CMD ) \
-template<> inline typename traits< TYPE_T, avx_tag >::simd_type \
-add< TYPE_T, avx_tag >( typename traits< TYPE_T, avx_tag >::simd_type lhs, \
-                        typename traits< TYPE_T, avx_tag >::simd_type rhs ) { \
+template<> inline simd_type< TYPE_T, avx_tag > \
+add< TYPE_T, avx_tag >( simd_type< TYPE_T, avx_tag > lhs, \
+                        simd_type< TYPE_T, avx_tag > rhs ) { \
     return CMD( lhs, rhs ); }
 
 DEF_ADD( int8_t,  _mm256_add_epi8 )

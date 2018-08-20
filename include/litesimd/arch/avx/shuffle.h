@@ -32,8 +32,8 @@ namespace litesimd {
 
 // Low insert
 // ---------------------------------------------------------------------------------------
-template<> inline typename traits< int8_t, avx_tag >::simd_type
-high_insert< int8_t, avx_tag >( typename traits< int8_t, avx_tag >::simd_type vec,
+template<> inline simd_type< int8_t, avx_tag >
+high_insert< int8_t, avx_tag >( simd_type< int8_t, avx_tag > vec,
                                int8_t val )
 {
     return _mm256_insert_epi8(
@@ -47,8 +47,8 @@ high_insert< int8_t, avx_tag >( typename traits< int8_t, avx_tag >::simd_type ve
                  (int)val, 31 );
 }
 
-template<> inline typename traits< int16_t, avx_tag >::simd_type
-high_insert< int16_t, avx_tag >( typename traits< int16_t, avx_tag >::simd_type vec,
+template<> inline simd_type< int16_t, avx_tag >
+high_insert< int16_t, avx_tag >( simd_type< int16_t, avx_tag > vec,
                                 int16_t val )
 {
     return _mm256_insert_epi16(
@@ -62,8 +62,8 @@ high_insert< int16_t, avx_tag >( typename traits< int16_t, avx_tag >::simd_type 
                  (int)val, 15 );
 }
 
-template<> inline typename traits< int32_t, avx_tag >::simd_type
-high_insert< int32_t, avx_tag >( typename traits< int32_t, avx_tag >::simd_type vec,
+template<> inline simd_type< int32_t, avx_tag >
+high_insert< int32_t, avx_tag >( simd_type< int32_t, avx_tag > vec,
                                 int32_t val )
 {
     return _mm256_insert_epi32(
@@ -72,8 +72,8 @@ high_insert< int32_t, avx_tag >( typename traits< int32_t, avx_tag >::simd_type 
                  val, 7 );
 }
 
-template<> inline typename traits< int64_t, avx_tag >::simd_type
-high_insert< int64_t, avx_tag >( typename traits< int64_t, avx_tag >::simd_type vec,
+template<> inline simd_type< int64_t, avx_tag >
+high_insert< int64_t, avx_tag >( simd_type< int64_t, avx_tag > vec,
                                 int64_t val )
 {
     return _mm256_insert_epi32(
