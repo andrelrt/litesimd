@@ -63,14 +63,55 @@ struct litesimd_boyer_moore_horspool
         {
             index[ find[ i ] ] = sz - 1 - i;
         }
-        const stype* start_find = reinterpret_cast<const stype*>( find.data() + find.size() - ssize );
-        size_t end = sz - find.size();
-        size_t send = find.size() / ssize;
-        for( size_t i = 0; i < end; ++i )
-        {
-            const stype* pos = start_find;
 
+        size_t simd_find_size = find.size() & ~(ssize-1);
+        size_t simd_find_rem = find.size() & (ssize-1);
+        size_t bitmask_all = (1 << (sizeof(ssize) >> 3)) -1;
+
+        const stype* simd_find = reinterpret_cast<const stype*>( find.data() + simd_find_rem );
+        size_t str_end = sz - find.size();
+
+        for( size_t i = 0; i < str_end; )
+        {
+            const stype* sstr = reinterpret_cast<const stype*>( str.data() + i );
+            const stype* sfind = simd_find;
+            bool found = true;
+            for( size_t j = simd_find_size -1; j >=0; --j )
+            {
+                auto bitmask = ls::equals_bitmask< int8_t, Tag_T >( sfind[ j ], sstr[ j ] );
+                if( bitmask != bitmask_all )
+                {
+                    const char* ss = reinterpret_cast< const char* >( sstr );
+                    found = false;
+
+                    auto idx = ls::bitmask_first_index( bitmask_all & ~bitmask );
+
+                    i += index[ ss[ idx ] ];
+
+                    break;
+                }
+            }
+
+            if( found )
+            {
+                size_t rem = simd_find_rem -1;
+                for( size_t j = i + rem; j >= i; --j, --rem )
+                {
+                    if( str[ j ] != find[ rem ] )
+                    {
+                        found = false;
+                        i += index[ str[ j ] ];
+                    }
+                }
+            }
+
+            if( found )
+                return i;
+
+            sstr = *reinterpret_cast<const stype*>( str.data() + i );
         }
+
+        return str.size();
     }
 };
 
