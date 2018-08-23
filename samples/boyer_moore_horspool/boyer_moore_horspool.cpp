@@ -24,12 +24,14 @@
 #include <iomanip>
 #include <algorithm>
 #include <numeric>
-#include <map>
+#include <array>
+#include <emmintrin.h>
 #include <boost/timer/timer.hpp>
-#include <boost/algorithm/boyer_moore_horspool.hpp>
+#include <boost/algorithm/searching/boyer_moore_horspool.hpp>
 
 #include <litesimd/types.h>
 #include <litesimd/compare.h>
+#include <litesimd/helpers/iostream.h>
 
 bool g_verbose = true;
 void do_nothing( size_t );
@@ -39,8 +41,9 @@ struct boost_searcher
 {
     size_t operator()( const std::string& str, const std::string& find )
     {
-        auto ret = boyer_moore_horspool_search( str.begin(), str.end(),
-                                                find.begin(), find.end() );
+        auto ret =
+            boost::algorithm::boyer_moore_horspool_search( str.begin(), str.end(),
+                                                           find.begin(), find.end() );
         if( ret.first == str.end() )
         {
             return str.size();
@@ -54,40 +57,55 @@ struct litesimd_boyer_moore_horspool
 {
     size_t operator()( const std::string& str, const std::string& find )
     {
-        using stype = ls::traits< int8_t, Tag_T >::simd_type;
+        using stype = typename ls::traits< int8_t, Tag_T >::simd_type;
         constexpr size_t ssize = ls::traits< int8_t, Tag_T >::simd_size;
         size_t sz = find.size();
         std::array< size_t, 256 > index;
         index.fill( sz );
         for( size_t i = 0; i < sz-1; ++i )
         {
-            index[ find[ i ] ] = sz - 1 - i;
+            index[ (+find[ i ] & 0xff) ] = sz - 1 - i;
         }
 
-        size_t simd_find_size = find.size() & ~(ssize-1);
-        size_t simd_find_rem = find.size() & (ssize-1);
-        size_t bitmask_all = (1 << (sizeof(ssize) >> 3)) -1;
+        size_t simd_find_size = sz / ssize;
+        size_t simd_find_rem = sz & (ssize-1);
+        size_t bitmask_all = (1ul << sizeof(stype)) -1;
+
+//        std::cout << "simd_find_size, simd_find_rem, bitmask_all: " << std::hex
+//                  << simd_find_size << ", " << simd_find_rem << ", " << bitmask_all << std::endl;
 
         const stype* simd_find = reinterpret_cast<const stype*>( find.data() + simd_find_rem );
-        size_t str_end = sz - find.size();
-
-        for( size_t i = 0; i < str_end; )
+        size_t str_end = str.size() - sz;
+//        std::cout << "std_end: " << str_end << std::endl;
+//        for( size_t i = 0; i < simd_find_size; ++i )
+//        {
+//            std::cout << "i, simd_find[ i ]: " << i << ", " << simd_find[ i ] << std::endl;
+//        }
+//
+//        std::cout << "i --------------------: 0" << std::endl;
+        for( size_t i = 0; i <= str_end; )
         {
             const stype* sstr = reinterpret_cast<const stype*>( str.data() + i );
-            const stype* sfind = simd_find;
             bool found = true;
-            for( size_t j = simd_find_size -1; j >=0; --j )
+            for( size_t j = simd_find_size -1; j > 0; --j )
             {
-                auto bitmask = ls::equals_bitmask< int8_t, Tag_T >( sfind[ j ], sstr[ j ] );
+                auto bitmask = ls::equals_bitmask< int8_t, Tag_T >( simd_find[ j ], _mm_loadu_si128( (__m128i*) sstr + j ) );
+//                std::cout << "bitmask: " << bitmask << std::endl;
                 if( bitmask != bitmask_all )
                 {
-                    const char* ss = reinterpret_cast< const char* >( sstr );
                     found = false;
+//                    std::cout << "j, simd_find != sstr: " << j << std::endl
+//                              << stype( _mm_loadu_si128( (__m128i*) simd_find + j ) ) << " != " << std::endl
+//                              << stype( _mm_loadu_si128( (__m128i*) sstr + j ) ) << std::endl;
 
-                    auto idx = ls::bitmask_first_index( bitmask_all & ~bitmask );
+                    const char* ss = reinterpret_cast< const char* >( sstr );
 
-                    i += index[ ss[ idx ] ];
+                    auto idx = sz - ls::bitmask_first_index< int8_t >( bitmask_all & ~bitmask );
+//                    std::cout << "idx, bitmask2: " << idx << ", " << (bitmask_all & ~bitmask) << std::endl;
 
+                    i += index[ (+ss[ idx ] & 0xff) ];
+//                    std::cout << "ss[ idx ], index: "
+//                              << (+ss[ idx ] & 0xff) << ", " << index[ (+ss[ idx ] & 0xff) ]  << std::endl;
                     break;
                 }
             }
@@ -108,7 +126,7 @@ struct litesimd_boyer_moore_horspool
             if( found )
                 return i;
 
-            sstr = *reinterpret_cast<const stype*>( str.data() + i );
+//            std::cout << "i --------------------: " << i << std::endl;
         }
 
         return str.size();
@@ -125,7 +143,7 @@ uint64_t bench( const std::string& name, size_t size, size_t seek, size_t loop )
     functor searcher;
 
     srand( 1 );
-    std::string str( size );
+    std::string str( size, ' ' );
     std::generate( str.begin(), str.end(), [](){ return 32 + rand() % 224; } );
     std::string find = str.substr( size - seek );
 
@@ -133,6 +151,7 @@ uint64_t bench( const std::string& name, size_t size, size_t seek, size_t loop )
     for( size_t j = 0; j < loop; ++j )
     {
         size_t pos = searcher( str, find );
+//        std::cout << "Pos: " << pos << std::endl;
         do_nothing( pos );
     }
     timer.stop();
@@ -155,28 +174,25 @@ int main(int argc, char* /*argv*/[])
     else
     {
         std::cout << std::hex << std::endl
-                  << "size: 0x" << std::setw(8) << std::setfill('0') << runSize << std::endl
+                  << "str size.: 0x" << std::setw(8) << std::setfill('0') << runSize << std::endl
                   << "seek size: 0x" << std::setw(8) << std::setfill('0') << seekSize << std::endl
                   << std::endl;
     }
-    while( 1 )
+//    while( 1 )
     {
-        uint64_t base = bench< cachesize_to_lower >( "Scalar ", runSize, seekSize, loop );
-        uint64_t sse = bench< to_lower< ls::sse_tag > >( "SSE ...", runSize, seekSize, loop );
-        uint64_t avx = bench< to_lower< ls::avx_tag > >( "AVX ...", runSize, seekSize, loop );
+        uint64_t sse = bench< litesimd_boyer_moore_horspool< ls::sse_tag > >( "SSE..", runSize, seekSize, loop );
+        uint64_t base = bench< boost_searcher >( "Boost", runSize, seekSize, loop );
+//        uint64_t avx = bench< litesimd_boyer_moore_horspool< ls::avx_tag > >( "AVX..", runSize, seekSize, loop );
 
 
         if( g_verbose )
         {
-            bench< std_to_lower >( "STD ...", runSize, seekSize, loop );
-            bench< autovec_to_lower >( "Autovec", runSize, seekSize, loop );
-            bench< default_simd_to_lower >( "Default", runSize, seekSize, loop );
             std::cout
                       << std::endl << "Index Speed up SSE.......: " << std::fixed << std::setprecision(2)
                       << static_cast<float>(base)/static_cast<float>(sse) << "x"
 
                       << std::endl << "Index Speed up AVX.......: " << std::fixed << std::setprecision(2)
-                      << static_cast<float>(base)/static_cast<float>(avx) << "x"
+ //                     << static_cast<float>(base)/static_cast<float>(avx) << "x"
 
                       << std::endl << std::endl;
         }
@@ -185,7 +201,7 @@ int main(int argc, char* /*argv*/[])
             std::cout
                 << base << ","
                 << sse << ","
-                << avx
+   //             << avx
                 << std::endl;
         }
     }

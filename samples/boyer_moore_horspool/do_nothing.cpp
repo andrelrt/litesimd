@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#include <stdint.h> 
+#include <cstddef>
 
-void do_nothing( int32_t )
+void do_nothing( size_t )
 {
 }
