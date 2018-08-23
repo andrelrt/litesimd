@@ -39,6 +39,7 @@ template<> struct traits< INT_T, avx_tag > { \
         simd_type(){} \
         simd_type(__m256i v):_(v){} \
         operator __m256i(){ return _; } \
+        simd_type& operator=(__m256i v) { _= v; return *this; } \
     }; \
     typedef __m256i  mask_type; \
     typedef uint32_t bitmask_type; \

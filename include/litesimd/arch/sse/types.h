@@ -39,6 +39,7 @@ template<> struct traits< INT_T, sse_tag > { \
         simd_type(){} \
         simd_type(__m128i v):_(v){} \
         operator __m128i() const { return _; } \
+        simd_type& operator=(__m128i v) { _= v; return *this; } \
     }; \
     typedef __m128i  mask_type; \
     typedef uint16_t bitmask_type; \

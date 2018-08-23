@@ -36,10 +36,10 @@ int main()
     ls::t_int32_simd cmp;
 
     // litesimd types are intrincs compatible
-    cmp = _mm_set_epi32( 40, 30, 20, 10 );
+    //cmp = _mm_set_epi32( 40, 30, 20, 10 );
 
     // With AVX looks similar
-    // cmp = _mm256_set_epi32( 80, 70, 60, 50, 40, 30, 20, 10 );
+    cmp = _mm256_set_epi32( 80, 70, 60, 50, 40, 30, 20, 10 );
 
     int32_t val = 5;
 

@@ -37,14 +37,15 @@ std::ostream& operator<<( std::ostream& out, SimdType_T val )
     auto pval = reinterpret_cast<typename SimdType_T::simd_value_type const*>( &val );
     constexpr size_t sz = sizeof(typename SimdType_T::simd_value_type);
     constexpr size_t len = sizeof(SimdType_T) / sz;
+    constexpr size_t mask = (1ul << (sz * 8)) -1;
 
     std::ios_base::fmtflags f( out.flags() );
 
-    out << "(" << pval[0];
+    out << "(" << (+pval[0] & mask);
 
     for( size_t i = 1; i < len; ++i )
     {
-        out << ", " << pval[i];
+        out << ", " << (+pval[i] & mask);
     }
 
     out << ")";

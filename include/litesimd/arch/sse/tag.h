@@ -23,7 +23,7 @@
 #ifndef LITESIMD_SSE_TAG_H
 #define LITESIMD_SSE_TAG_H
 
-#include "common/arch.h"
+#include "../common/arch.h"
 
 #ifdef LITESIMD_HAS_SSE
 
