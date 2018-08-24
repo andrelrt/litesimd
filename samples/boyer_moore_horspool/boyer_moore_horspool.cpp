@@ -25,17 +25,32 @@
 #include <algorithm>
 #include <numeric>
 #include <array>
+#include <algorithm>
 #include <emmintrin.h>
 #include <boost/timer/timer.hpp>
 #include <boost/algorithm/searching/boyer_moore_horspool.hpp>
 
 #include <litesimd/types.h>
 #include <litesimd/compare.h>
+#include <litesimd/algorithm.h>
 #include <litesimd/helpers/iostream.h>
 
 bool g_verbose = true;
 void do_nothing( size_t );
 namespace ls = litesimd;
+
+struct std_searcher
+{
+    size_t operator()( const std::string& str, const std::string& find )
+    {
+        auto ret = str.find( find );
+        if( ret == std::string::npos )
+        {
+            return str.size();
+        }
+        return ret;
+    }
+};
 
 struct boost_searcher
 {
@@ -59,23 +74,23 @@ struct litesimd_boyer_moore_horspool
     {
         using stype = typename ls::traits< int8_t, Tag_T >::simd_type;
         constexpr size_t ssize = ls::traits< int8_t, Tag_T >::simd_size;
-        size_t sz = find.size();
+        size_t find_size = find.size();
         std::array< size_t, 256 > index;
-        index.fill( sz );
-        for( size_t i = 0; i < sz-1; ++i )
+        index.fill( find_size );
+        for( size_t i = 0; i < find_size-1; ++i )
         {
-            index[ (+find[ i ] & 0xff) ] = sz - 1 - i;
+            index[ (+find[ i ] & 0xff) ] = find_size - 1 - i;
         }
 
-        size_t simd_find_size = sz / ssize;
-        size_t simd_find_rem = sz & (ssize-1);
+        size_t simd_find_size = find_size / ssize;
+        size_t simd_find_rem = find_size & (ssize-1);
         size_t bitmask_all = (1ul << sizeof(stype)) -1;
 
 //        std::cout << "simd_find_size, simd_find_rem, bitmask_all: " << std::hex
 //                  << simd_find_size << ", " << simd_find_rem << ", " << bitmask_all << std::endl;
 
         const stype* simd_find = reinterpret_cast<const stype*>( find.data() + simd_find_rem );
-        size_t str_end = str.size() - sz;
+        size_t str_end = str.size() - find_size;
 //        std::cout << "std_end: " << str_end << std::endl;
 //        for( size_t i = 0; i < simd_find_size; ++i )
 //        {
@@ -83,13 +98,14 @@ struct litesimd_boyer_moore_horspool
 //        }
 //
 //        std::cout << "i --------------------: 0" << std::endl;
+
         for( size_t i = 0; i <= str_end; )
         {
             const stype* sstr = reinterpret_cast<const stype*>( str.data() + i );
             bool found = true;
             for( size_t j = simd_find_size -1; j > 0; --j )
             {
-                auto bitmask = ls::equals_bitmask< int8_t, Tag_T >( simd_find[ j ], _mm_loadu_si128( (__m128i*) sstr + j ) );
+                auto bitmask = ls::equals_bitmask< int8_t, Tag_T >( simd_find[ j ], _mm_lddqu_si128( (__m128i*) sstr + j ) );
 //                std::cout << "bitmask: " << bitmask << std::endl;
                 if( bitmask != bitmask_all )
                 {
@@ -98,9 +114,10 @@ struct litesimd_boyer_moore_horspool
 //                              << stype( _mm_loadu_si128( (__m128i*) simd_find + j ) ) << " != " << std::endl
 //                              << stype( _mm_loadu_si128( (__m128i*) sstr + j ) ) << std::endl;
 
-                    const char* ss = reinterpret_cast< const char* >( sstr );
+                    const char* ss = reinterpret_cast< const char* >( sstr + j );
 
-                    auto idx = sz - ls::bitmask_first_index< int8_t >( bitmask_all & ~bitmask );
+                    auto idx = ssize - ls::bitmask_first_index< int8_t >( bitmask_all & ~bitmask );
+//                    if( idx != 0x1ff )
 //                    std::cout << "idx, bitmask2: " << idx << ", " << (bitmask_all & ~bitmask) << std::endl;
 
                     i += index[ (+ss[ idx ] & 0xff) ];
@@ -133,6 +150,86 @@ struct litesimd_boyer_moore_horspool
     }
 };
 
+template< typename ValueType_T >
+void for_each_index( size_t bitmask, std::function< bool(size_t) > func )
+{
+    while( bitmask != 0 )
+    {
+        size_t idx = ls::bitmask_first_index< ValueType_T >( bitmask );
+        if( !func( idx ) )
+            break;
+        bitmask &= ~(size_t(1) << idx);
+    }
+}
+
+template< typename Tag_T >
+struct litesimd_boyer_moore_horspool_tupinamba
+{
+    size_t operator()( const std::string& str, const std::string& find )
+    {
+        using stype = typename ls::traits< int8_t, Tag_T >::simd_type;
+        constexpr size_t ssize = ls::traits< int8_t, Tag_T >::simd_size;
+        size_t find_size = find.size();
+        std::array< size_t, 256 > index;
+        index.fill( find_size );
+        for( size_t i = 0; i < find_size-1; ++i )
+        {
+            index[ (+find[ i ] & 0xff) ] = find_size - 1 - i;
+        }
+
+        size_t simd_find_size = find_size / ssize;
+
+        stype simd_last = ls::from_value< int8_t, Tag_T >( find.back() );
+
+        const stype* simd_str = reinterpret_cast<const stype*>( str.data() );
+
+        for( size_t simd_idx = 0; simd_idx < simd_find_size; )
+        {
+            bool found = false;
+            size_t hit = 0;
+            size_t bitmask = ls::equals_bitmask< int8_t, Tag_T >( simd_last, simd_str[ simd_idx ] );
+            if( bitmask == 0 )
+            {
+                simd_idx += 1 + index[ +str[ simd_idx * ssize + ssize - 1 ] & 0xff ] / ssize;
+            }
+            else
+            {
+                size_t base_end = simd_idx * ssize + ssize;
+                for_each_index< int8_t >( bitmask, [&]( size_t check_idx ) -> bool
+                {
+                    size_t end_idx = base_end - check_idx;
+                    //size_t begin_idx = end_idx - find_size;
+                    size_t idx = end_idx;
+                    for( size_t i = find_size-1; i > 0; --i, --idx )
+                    {
+                        if( str[ idx ] != find[ i ] )
+                        {
+                            size_t skip = index[ +str[ end_idx ] & 0xff ];
+                            if( skip > ssize )
+                            {
+                                simd_idx += 1 + skip / ssize;
+                                // not found and it impossible for this simd has a hit
+                                return false;
+                            }
+                            // not found, but could have another hit on this simd
+                            return true;
+                        }
+                    }
+                    found = true;
+                    hit = end_idx - find_size;
+                    return false;
+                } );
+
+                if( found )
+                {
+                    return hit;
+                }
+            }
+        }
+        return str.size();
+    }
+};
+
 
 template< typename SEARCH_T >
 uint64_t bench( const std::string& name, size_t size, size_t seek, size_t loop )
@@ -144,14 +241,14 @@ uint64_t bench( const std::string& name, size_t size, size_t seek, size_t loop )
 
     srand( 1 );
     std::string str( size, ' ' );
-    std::generate( str.begin(), str.end(), [](){ return 32 + rand() % 224; } );
+    std::generate( str.begin(), str.end(), [](){ return 32 + rand() % 96; } );
     std::string find = str.substr( size - seek );
 
     timer.start();
     for( size_t j = 0; j < loop; ++j )
     {
         size_t pos = searcher( str, find );
-//        std::cout << "Pos: " << pos << std::endl;
+        std::cout << "Pos: " << pos << std::endl;
         do_nothing( pos );
     }
     timer.stop();
@@ -163,9 +260,9 @@ uint64_t bench( const std::string& name, size_t size, size_t seek, size_t loop )
 
 int main(int argc, char* /*argv*/[])
 {
-    constexpr size_t runSize = 0x00100001;
+    constexpr size_t runSize = 0x00100000;
     constexpr size_t seekSize = 0x200;
-    constexpr size_t loop = 10000;
+    constexpr size_t loop = 1; //10000;
     if( argc > 1 )
     {
         g_verbose = false;
@@ -181,7 +278,9 @@ int main(int argc, char* /*argv*/[])
 //    while( 1 )
     {
         uint64_t sse = bench< litesimd_boyer_moore_horspool< ls::sse_tag > >( "SSE..", runSize, seekSize, loop );
+        bench< litesimd_boyer_moore_horspool_tupinamba< ls::sse_tag > >( "SSE2.", runSize, seekSize, loop );
         uint64_t base = bench< boost_searcher >( "Boost", runSize, seekSize, loop );
+        bench< std_searcher >( "Std..", runSize, seekSize, loop );
 //        uint64_t avx = bench< litesimd_boyer_moore_horspool< ls::avx_tag > >( "AVX..", runSize, seekSize, loop );
 
 
