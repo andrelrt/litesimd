@@ -180,7 +180,7 @@ template<> int is_zero< ls::avx_tag >( typename ls::traits< int8_t, ls::avx_tag 
 
 
 template< typename Tag_T >
-struct litesimd_boyer_moore_horspool_tupinamba
+struct litesimd_boyer_moore_horspool2
 {
     size_t operator()( const std::string& str, const std::string& find )
     {
@@ -188,10 +188,10 @@ struct litesimd_boyer_moore_horspool_tupinamba
         constexpr size_t ssize = ls::traits< int8_t, Tag_T >::simd_size;
         size_t find_size = find.size();
         std::array< size_t, 256 > index;
-        index.fill( find_size );
+        index.fill( 1 + find_size / ssize );
         for( size_t i = 0; i < find_size-1; ++i )
         {
-            index[ (+find[ i ] & 0xff) ] = find_size - 1 - i;
+            index[ find[ i ] ] = 1+ (find_size - 1 - i)/ssize;
         }
 
         size_t simd_find_size = find_size / ssize;
@@ -201,44 +201,50 @@ struct litesimd_boyer_moore_horspool_tupinamba
 
         const stype* simd_str = reinterpret_cast<const stype*>( str.data() );
 
-        size_t base_end = simd_find_size * ssize;
         for( size_t simd_idx = simd_find_size -1; simd_idx < simd_str_size; )
         {
 //            std::cout << "simd_idx --------------------: " << simd_idx << std::endl;
 
             auto mask = ls::equals< int8_t, Tag_T >( simd_last, simd_str[ simd_idx ] );
-            //size_t bitmask = ls::equals_bitmask< int8_t, Tag_T >( simd_last, simd_str[ simd_idx ] );
-//            std::cout << "bitmask, simd_last, simd_str: "
-//                      << bitmask << ", " << simd_last << ", " << simd_str[ simd_idx ] << std::endl;
-//            if( bitmask == 0 )
+//            std::cout << "mask, simd_last, simd_str: "
+//                      << stype(mask) << ", " << simd_last << ", " << simd_str[ simd_idx ] << std::endl;
+
             if( is_zero< Tag_T >( mask ) )
             {
 //                std::cout << "str, index, simd_idx, next: "
-//                          << (+str[ simd_idx * ssize + ssize - 1 ] & 0xff) << ", "
-//                          << index[ +str[ simd_idx * ssize + ssize - 1 ] & 0xff ] << ", "
+//                          << +str[ base_end - 1 ] << ", "
+//                          << index[ str[ base_end - 1 ] ] << ", "
 //                          << simd_idx << ", "
-//                          << simd_idx + (1 + index[ +str[ simd_idx * ssize + ssize - 1 ] & 0xff ] / ssize)
+//                          << simd_idx + (1 + index[ str[ base_end - 1 ] ] / ssize)
 //                          << std::endl;
-                simd_idx += 1 + index[ +str[ base_end - 1 ] & 0xff ] / ssize;
+                size_t base_end = (simd_idx+1) * ssize;
+                simd_idx += index[ str[ base_end - 1 ] ];
             }
             else
             {
                 size_t bitmask = ls::mask_to_bitmask< int8_t, Tag_T >( mask );
                 size_t skip = 0;
+                size_t base_end = (simd_idx+1) * ssize;
                 do
                 {
                     size_t check_idx = ls::bitmask_first_index< int8_t >( bitmask );
 
                     bool found = true;
                     bool do_break = false;
-                    size_t end_idx = base_end - check_idx;
-                    size_t idx = end_idx;
+                    size_t end_idx = base_end - (ssize - check_idx);
+                    size_t idx = end_idx -1;
                     for( size_t i = find_size-1; i > 0; --i, --idx )
                     {
                         if( str[ idx ] != find[ i ] )
                         {
+//                            std::cout << "| base_end, check_idx | idx, i | str[idx] | find[i]: | "
+//                                      << base_end << ", " << check_idx << " | "
+//                                      << idx << ", " << i << " | "
+//                                      << +str[idx-1] << ", " << +str[idx] << ", " << +str[idx+1] << " | "
+//                                      << +find[i] << ", " << +find[i-1] << ", " << +find[i-2] << ", " << +find[i-3] << ", "
+//                                      << std::endl;
                             found = false;
-                            skip = index[ +str[ idx ] & 0xff ];
+                            skip = index[ str[ idx ] ];
                             do_break = ( skip > ssize ); // not found and it impossible for this simd has a hit
                             break;
                         }
@@ -253,9 +259,8 @@ struct litesimd_boyer_moore_horspool_tupinamba
                     bitmask &= ~(((size_t)1) << (check_idx-1));
                 } while( bitmask != 0 );
 
-                simd_idx += 1 + skip / ssize;
+                simd_idx += skip;
             }
-            base_end += ssize;
         }
         return str.size();
     }
@@ -306,11 +311,11 @@ int main(int argc, char* /*argv*/[])
                   << "seek size: 0x" << std::setw(8) << std::setfill('0') << seekSize << std::endl
                   << std::endl;
     }
-    while( 1 )
+//    while( 1 )
     {
         //bench< litesimd_boyer_moore_horspool< ls::sse_tag > >( "SSE..", runSize, seekSize, loop );
-        uint64_t sse = bench< litesimd_boyer_moore_horspool_tupinamba< ls::sse_tag > >( "SSE..", runSize, seekSize, loop );
-        uint64_t avx = bench< litesimd_boyer_moore_horspool_tupinamba< ls::avx_tag > >( "AVX..", runSize, seekSize, loop );
+        uint64_t sse = bench< litesimd_boyer_moore_horspool2< ls::sse_tag > >( "SSE..", runSize, seekSize, loop );
+//        uint64_t avx = bench< litesimd_boyer_moore_horspool2< ls::avx_tag > >( "AVX..", runSize, seekSize, loop );
         uint64_t base = bench< boost_searcher >( "Boost", runSize, seekSize, loop );
         bench< std_searcher >( "Std..", runSize, seekSize, loop );
 
@@ -322,7 +327,7 @@ int main(int argc, char* /*argv*/[])
                       << static_cast<float>(base)/static_cast<float>(sse) << "x"
 
                       << std::endl << "Index Speed up AVX.......: " << std::fixed << std::setprecision(2)
-                      << static_cast<float>(base)/static_cast<float>(avx) << "x"
+//                      << static_cast<float>(base)/static_cast<float>(avx) << "x"
 
                       << std::endl << std::endl;
         }
@@ -331,7 +336,7 @@ int main(int argc, char* /*argv*/[])
             std::cout
                 << base << ","
                 << sse << ","
-                << avx
+//                << avx
                 << std::endl;
         }
     }
