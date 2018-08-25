@@ -58,6 +58,11 @@ private:
     inner_type v_;
 };
 
+template< typename Type_T, typename Tag_T = default_tag >
+simd_type< Type_T, Tag_T > from_value( Type_T val )
+{
+    return simd_type< Type_T, Tag_T >( val );
+}
 
 using  t_int8_simd = simd_type<  int8_t, default_tag >;
 using t_int16_simd = simd_type< int16_t, default_tag >;
