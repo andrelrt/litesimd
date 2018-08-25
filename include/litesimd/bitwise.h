@@ -23,7 +23,6 @@
 #ifndef LITESIMD_BITWISE_H
 #define LITESIMD_BITWISE_H
 
-#include <type_traits>
 #include "types.h"
 #include "arch/bitwise.h"
 #include "detail/helper_macros.h"

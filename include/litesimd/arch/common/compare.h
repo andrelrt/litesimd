@@ -30,7 +30,7 @@ namespace litesimd {
 // Mask to bitmask
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
-inline typename traits< ValueType_T, Tag_T >::bitmask_type
+inline typename simd_type< ValueType_T, Tag_T >::bitmask_type
 mask_to_bitmask( simd_type< ValueType_T, Tag_T > )
 {
     return 0;
@@ -43,7 +43,7 @@ simd_type< ValueType_T, Tag_T >
 greater_than( simd_type< ValueType_T, Tag_T >,
               simd_type< ValueType_T, Tag_T > )
 {
-    return traits< ValueType_T, Tag_T >::zero();
+    return simd_type< ValueType_T, Tag_T >::zero();
 }
 
 // Equals
@@ -53,7 +53,7 @@ simd_type< ValueType_T, Tag_T >
 equals( simd_type< ValueType_T, Tag_T >,
         simd_type< ValueType_T, Tag_T > )
 {
-    return traits< ValueType_T, Tag_T >::zero();
+    return simd_type< ValueType_T, Tag_T >::zero();
 }
 
 // Blend ternary
@@ -64,7 +64,7 @@ blend( simd_type< ValueType_T, Tag_T >,
        simd_type< ValueType_T, Tag_T >,
        simd_type< ValueType_T, Tag_T > )
 {
-    return traits< ValueType_T, Tag_T >::zero();
+    return simd_type< ValueType_T, Tag_T >::zero();
 }
 
 

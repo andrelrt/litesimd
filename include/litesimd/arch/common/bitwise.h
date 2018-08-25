@@ -34,7 +34,7 @@ simd_type< ValueType_T, Tag_T >
 bit_and( simd_type< ValueType_T, Tag_T >,
          simd_type< ValueType_T, Tag_T > )
 {
-    return traits< ValueType_T, Tag_T >::zero();
+    return simd_type< ValueType_T, Tag_T >::zero();
 }
 
 } // namespace litesimd

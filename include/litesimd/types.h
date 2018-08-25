@@ -25,9 +25,39 @@
 
 #include <cstdint>
 #include "traits.h"
-#include "arch/types.h"
 
 namespace litesimd {
+
+template< typename Type_T, typename Tag_T = default_tag >
+class simd_type
+{
+    using simd_traits = traits< Type_T, Tag_T >;
+
+public:
+    using simd_value_type = Type_T;
+    using simd_tag = Tag_T;
+
+    using type = simd_type< simd_value_type, simd_tag >;
+    using inner_type = typename simd_traits::simd_type;
+    using bitmask_type = typename simd_traits::bitmask_type;
+    constexpr static size_t simd_size = sizeof(inner_type) / sizeof(simd_value_type);
+
+    simd_type(){}
+
+    // Implicit transformation from/to bare SIMD type
+    simd_type( inner_type v ) : v_(v) {}
+    operator inner_type() const { return v_; }
+
+    // Explicit transformation from value types
+    explicit simd_type( simd_value_type v ) : v_( simd_traits::from_value( v ) ) {}
+
+    static inline simd_type zero() { return simd_type( simd_traits::zero() ); }
+    static inline simd_type ones() { return simd_type( simd_traits::ones() ); }
+
+private:
+    inner_type v_;
+};
+
 
 using  t_int8_simd = simd_type<  int8_t, default_tag >;
 using t_int16_simd = simd_type< int16_t, default_tag >;
@@ -45,6 +75,8 @@ using t_double_simd = simd_type< double, default_tag >;
 
 constexpr static size_t float_simd_size  = t_float_simd::simd_size;
 constexpr static size_t double_simd_size = t_double_simd::simd_size;
+
+using t_bitmask = size_t;
 
 } // namespace litesimd
 

@@ -23,7 +23,6 @@
 #ifndef LITESIMD_SHUFFLE_H
 #define LITESIMD_SHUFFLE_H
 
-#include <type_traits>
 #include "types.h"
 #include "arch/shuffle.h"
 #include "detail/helper_macros.h"

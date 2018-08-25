@@ -20,11 +20,10 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_ARCH_TYPES_H
-#define LITESIMD_ARCH_TYPES_H
+#ifndef LITESIMD_ARCH_TRAITS_H
+#define LITESIMD_ARCH_TRAITS_H
 
-#include "tag.h"
-#include "sse/types.h"
-#include "avx/types.h"
+#include "sse/traits.h"
+#include "avx/traits.h"
 
-#endif // LITESIMD_ARCH_TYPES_H
+#endif // LITESIMD_ARCH_TRAITS_H

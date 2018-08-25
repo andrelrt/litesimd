@@ -66,8 +66,8 @@ struct to_lower
 {
     void operator()( std::string& str )
     {
-        constexpr static size_t array_size = ls::traits< int8_t, TAG_T >::simd_size;
-        using simd_type = typename ls::traits< int8_t, TAG_T >::simd_type;
+        constexpr static size_t array_size = ls::simd_type< int8_t, TAG_T >::simd_size;
+        using simd_type = typename ls::simd_type< int8_t, TAG_T >::simd_type;
 
         simd_type* data = (simd_type*) str.data();
 

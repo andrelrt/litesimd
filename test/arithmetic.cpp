@@ -47,11 +47,11 @@ TYPED_TEST(ArithmeticTypedTest, AddTypedTest)
 {
     using type = typename TypeParam::first_type;
     using tag = typename TypeParam::second_type;
-    using simd = typename ls::traits< type, tag >::simd_type;
-    constexpr size_t size = ls::traits< type, tag >::simd_size;
+    using simd = typename ls::simd_type< type, tag >::simd_type;
+    constexpr size_t size = ls::simd_type< type, tag >::simd_size;
 
-    simd a = ls::from_value< type, tag >( 1 );
-    simd b = ls::from_value< type, tag >( 2 );
+    simd a = ls::simd_type< type, tag >( 1 );
+    simd b = ls::simd_type< type, tag >( 2 );
     simd c = ls::add< type, tag >( a, b );
 
     type* pCmp = reinterpret_cast<type*>( &c );

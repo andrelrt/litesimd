@@ -120,8 +120,8 @@ public:
     }
 
 private:
-    constexpr static size_t array_size = ls::traits< value_type, TAG_T >::simd_size;
-    using simd_type = typename ls::traits< value_type, TAG_T >::simd_type;
+    constexpr static size_t array_size = ls::simd_type< value_type, TAG_T >::simd_size;
+    using simd_type = typename ls::simd_type< value_type, TAG_T >::simd_type;
 
     struct tree_level
     {

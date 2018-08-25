@@ -34,7 +34,7 @@ namespace litesimd {
 // Mask to bitmask
 // ---------------------------------------------------------------------------------------
 #define DEF_MASK_TO_BITMASK( TYPE_T, CMD ) \
-template<> inline typename traits< TYPE_T, sse_tag >::bitmask_type \
+template<> inline typename simd_type< TYPE_T, sse_tag >::bitmask_type \
 mask_to_bitmask< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > mask ) { \
     return CMD( mask ); \
 }

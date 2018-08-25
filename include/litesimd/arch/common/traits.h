@@ -1,3 +1,4 @@
+
 // MIT License
 //
 // Copyright (c) 2018 André Tupinambá
@@ -20,34 +21,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_ARCH_COMMON_TYPES_H
-#define LITESIMD_ARCH_COMMON_TYPES_H
+#ifndef LITESIMD_COMMON_TRAITS_H
+#define LITESIMD_COMMON_TRAITS_H
 
-#include "../../traits.h"
+#include "arch/tag.h"
 
 namespace litesimd {
 
-template< typename Type_T, typename Tag_T = default_tag >
-class simd_type
-{
-public:
-    using simd_value_type = Type_T;
-    using simd_tag = Tag_T;
-
-    using inner_type = typename traits< simd_value_type, simd_tag >::simd_type;
-    constexpr static size_t simd_size = sizeof(simd_type) / sizeof(simd_value_type);
-
-    simd_type(){}
-    simd_type( inner_type v ):v_(v){}
-    operator inner_type() const { return v_; }
-
-private:
-    simd_type v_;
-};
-
 template< typename ValueType_T, typename Tag_T = default_tag >
-simd_type< ValueType_T, Tag_T > from_value( ValueType_T ){}
+struct traits{};
 
 } // namespace litesimd
 
-#endif // LITESIMD_ARCH_COMMON_TYPES_H
+#endif //LITESIMD_COMMON_TRAITS_H

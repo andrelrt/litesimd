@@ -23,7 +23,6 @@
 #ifndef LITESIMD_ARITHMETIC_H
 #define LITESIMD_ARITHMETIC_H
 
-#include <type_traits>
 #include "types.h"
 #include "arch/arithmetic.h"
 #include "detail/helper_macros.h"
