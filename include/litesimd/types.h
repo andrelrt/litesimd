@@ -51,6 +51,9 @@ public:
     // Explicit transformation from value types
     explicit simd_type( simd_value_type v ) : v_( simd_traits::from_value( v ) ) {}
 
+    template< typename... Value_T >
+    simd_type( Value_T... v ) : v_( simd_traits::from_values( v... ) ) {}
+
     static inline simd_type zero() { return simd_type( simd_traits::zero() ); }
     static inline simd_type ones() { return simd_type( simd_traits::ones() ); }
 
