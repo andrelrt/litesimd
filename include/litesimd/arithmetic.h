@@ -31,7 +31,7 @@ namespace litesimd {
 
 // ADD
 // ---------------------------------------------------------------------------------------
-DEFINE_BINARY_FUNCTION_ADAPTORS( add, simd_type )
+DEFINE_BINARY_FUNCTION_ADAPTORS( add, type )
 
 
 } // namespace litesimd

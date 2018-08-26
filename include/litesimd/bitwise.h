@@ -31,7 +31,7 @@ namespace litesimd {
 
 // Bit AND
 // ---------------------------------------------------------------------------------------
-DEFINE_BINARY_FUNCTION_ADAPTORS( bit_and, simd_type )
+DEFINE_BINARY_FUNCTION_ADAPTORS( bit_and, type )
 
 } // namespace litesimd
 
