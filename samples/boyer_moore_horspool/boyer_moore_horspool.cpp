@@ -186,10 +186,10 @@ struct litesimd_boyer_moore_horspool2
     {
         using stype = typename ls::traits< int8_t, Tag_T >::simd_type;
         constexpr size_t ssize = ls::traits< int8_t, Tag_T >::simd_size;
-        size_t find_size = find.size();
-        std::array< size_t, 256 > index;
+        int32_t find_size = find.size();
+        std::array< int32_t, 256 > index;
         index.fill( 1 + find_size / ssize );
-        for( size_t i = 0; i < find_size-1; ++i )
+        for( int32_t i = 0; i < find_size-1; ++i )
         {
             index[ find[ i ] ] = 1+ (find_size - 1 - i)/ssize;
         }
@@ -280,14 +280,15 @@ uint64_t bench( const std::string& name, size_t size, size_t seek, size_t loop )
     std::generate( str.begin(), str.end(), [](){ return 32 + rand() % 96; } );
     std::string find = str.substr( size - seek );
 
+    size_t pos;
     timer.start();
     for( size_t j = 0; j < loop; ++j )
     {
-        size_t pos = searcher( str, find );
-//        std::cout << "Pos: " << pos << std::endl;
+        pos = searcher( str, find );
         do_nothing( pos );
     }
     timer.stop();
+    std::cout << "Pos: " << pos << std::endl;
     if( g_verbose )
         std::cout << "Search time " << name << ": " << timer.format();
 
@@ -311,11 +312,11 @@ int main(int argc, char* /*argv*/[])
                   << "seek size: 0x" << std::setw(8) << std::setfill('0') << seekSize << std::endl
                   << std::endl;
     }
-//    while( 1 )
+    while( 1 )
     {
         //bench< litesimd_boyer_moore_horspool< ls::sse_tag > >( "SSE..", runSize, seekSize, loop );
         uint64_t sse = bench< litesimd_boyer_moore_horspool2< ls::sse_tag > >( "SSE..", runSize, seekSize, loop );
-//        uint64_t avx = bench< litesimd_boyer_moore_horspool2< ls::avx_tag > >( "AVX..", runSize, seekSize, loop );
+        uint64_t avx = bench< litesimd_boyer_moore_horspool2< ls::avx_tag > >( "AVX..", runSize, seekSize, loop );
         uint64_t base = bench< boost_searcher >( "Boost", runSize, seekSize, loop );
         bench< std_searcher >( "Std..", runSize, seekSize, loop );
 
@@ -327,7 +328,7 @@ int main(int argc, char* /*argv*/[])
                       << static_cast<float>(base)/static_cast<float>(sse) << "x"
 
                       << std::endl << "Index Speed up AVX.......: " << std::fixed << std::setprecision(2)
-//                      << static_cast<float>(base)/static_cast<float>(avx) << "x"
+                      << static_cast<float>(base)/static_cast<float>(avx) << "x"
 
                       << std::endl << std::endl;
         }
@@ -336,7 +337,7 @@ int main(int argc, char* /*argv*/[])
             std::cout
                 << base << ","
                 << sse << ","
-//                << avx
+                << avx
                 << std::endl;
         }
     }
