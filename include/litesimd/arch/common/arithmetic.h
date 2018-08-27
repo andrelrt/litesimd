@@ -23,7 +23,7 @@
 #ifndef LITESIMD_ARCH_COMMON_ARITHMETIC_H
 #define LITESIMD_ARCH_COMMON_ARITHMETIC_H
 
-#include "../types.h"
+#include "../../types.h"
 
 namespace litesimd {
 

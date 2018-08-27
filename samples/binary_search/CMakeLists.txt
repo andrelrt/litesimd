@@ -15,4 +15,4 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     ${Boost_LIBRARIES}
 )
 
-target_compile_features(${PROJECT_NAME} PUBLIC cxx_std_11)
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)

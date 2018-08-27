@@ -47,7 +47,7 @@ TYPED_TEST(ArithmeticTypedTest, AddTypedTest)
 {
     using type = typename TypeParam::first_type;
     using tag = typename TypeParam::second_type;
-    using simd = typename ls::simd_type< type, tag >::simd_type;
+    using simd = ls::simd_type< type, tag >;
     constexpr size_t size = ls::simd_type< type, tag >::simd_size;
 
     simd a = ls::simd_type< type, tag >( 1 );

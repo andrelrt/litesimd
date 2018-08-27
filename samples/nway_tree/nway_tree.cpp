@@ -121,7 +121,7 @@ public:
 
 private:
     constexpr static size_t array_size = ls::simd_type< value_type, TAG_T >::simd_size;
-    using simd_type = typename ls::simd_type< value_type, TAG_T >::simd_type;
+    using simd_type = ls::simd_type< value_type, TAG_T >;
 
     struct tree_level
     {

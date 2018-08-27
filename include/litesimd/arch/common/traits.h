@@ -24,7 +24,7 @@
 #ifndef LITESIMD_COMMON_TRAITS_H
 #define LITESIMD_COMMON_TRAITS_H
 
-#include "arch/tag.h"
+#include "../tag.h"
 
 namespace litesimd {
 

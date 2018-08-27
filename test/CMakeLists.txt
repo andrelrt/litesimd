@@ -57,3 +57,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     ${Boost_LIBRARIES}
     libgtest
 )
+
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)

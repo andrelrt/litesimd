@@ -52,7 +52,8 @@ public:
     explicit simd_type( simd_value_type v ) : v_( simd_traits::from_value( v ) ) {}
 
     template< typename... Value_T >
-    simd_type( Value_T... v ) : v_( simd_traits::from_values( v... ) ) {}
+    simd_type( simd_value_type i, simd_value_type j, Value_T... v ) :
+        v_( simd_traits::from_values( i, j, v... ) ) {}
 
     static inline simd_type zero() { return simd_type( simd_traits::zero() ); }
     static inline simd_type ones() { return simd_type( simd_traits::ones() ); }
