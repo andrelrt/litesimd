@@ -174,6 +174,61 @@ template<> int is_zero< ls::avx_tag >( ls::simd_type< int8_t, ls::avx_tag > val 
     return _mm256_testz_si256( val, ls::simd_type< int8_t, ls::avx_tag >::ones() );
 }
 
+template< typename Value_T, typename Tag_T >
+inline Value_T bit_and( ls::simd_type< Value_T, Tag_T > ) { return 0; }
+
+template<> inline int32_t bit_and< int32_t, ls::sse_tag >( ls::simd_type< int32_t, ls::sse_tag > val )
+{
+    val = _mm_and_si128( val, _mm_shuffle_epi32( val, _MM_SHUFFLE( 3, 2, 3, 2 ) ) );
+    val = _mm_and_si128( val, _mm_shuffle_epi32( val, _MM_SHUFFLE( 1, 1, 1, 1 ) ) );
+    return _mm_cvtsi128_si32( val );
+}
+
+
+template< typename Value_T, typename Tag_T >
+inline Value_T max( ls::simd_type< Value_T, Tag_T > ) { return 0; }
+
+template< typename Value_T, typename Tag_T >
+inline ls::simd_type< Value_T, Tag_T >
+max( ls::simd_type< Value_T, Tag_T >, ls::simd_type< Value_T, Tag_T > ) { return 0; }
+
+template<> inline int32_t max< int32_t, ls::sse_tag >( ls::simd_type< int32_t, ls::sse_tag > val )
+{
+    val = _mm_max_epi32( val, _mm_shuffle_epi32( val, _MM_SHUFFLE( 3, 2, 3, 2 ) ) );
+    val = _mm_max_epi32( val, _mm_shuffle_epi32( val, _MM_SHUFFLE( 1, 1, 1, 1 ) ) );
+    return _mm_cvtsi128_si32( val );
+}
+
+template<> inline ls::simd_type< int32_t, ls::sse_tag >
+max< int32_t, ls::sse_tag >( ls::simd_type< int32_t, ls::sse_tag > lhs, ls::simd_type< int32_t, ls::sse_tag > rhs )
+{
+    return _mm_max_epi32( lhs, rhs );
+}
+
+
+template< typename Tag_T > int32_t index_max( const std::array< int32_t, 256 >&,
+                                              ls::simd_type< int8_t, Tag_T > ){ return 0; }
+
+template<> int32_t index_max< ls::sse_tag >( const std::array< int32_t, 256 >& table,
+                                             ls::simd_type< int8_t, ls::sse_tag > val )
+{
+    std::array< ls::simd_type< int32_t, ls::sse_tag >, 4 > simd_index;
+
+    simd_index[ 0 ] = _mm_cvtepi8_epi32( val );
+    simd_index[ 1 ] = _mm_cvtepi8_epi32( _mm_shuffle_epi32( val, _MM_SHUFFLE( 1, 1, 1, 1 ) ) );
+    simd_index[ 2 ] = _mm_cvtepi8_epi32( _mm_shuffle_epi32( val, _MM_SHUFFLE( 2, 2, 2, 2 ) ) );
+    simd_index[ 3 ] = _mm_cvtepi8_epi32( _mm_shuffle_epi32( val, _MM_SHUFFLE( 3, 3, 3, 3 ) ) );
+
+    simd_index[ 0 ] = _mm_i32gather_epi32( table.data(), simd_index[ 0 ], 4 );
+    simd_index[ 1 ] = _mm_i32gather_epi32( table.data(), simd_index[ 1 ], 4 );
+    simd_index[ 2 ] = _mm_i32gather_epi32( table.data(), simd_index[ 2 ], 4 );
+    simd_index[ 3 ] = _mm_i32gather_epi32( table.data(), simd_index[ 3 ], 4 );
+
+    return max< int32_t, ls::sse_tag >( max( max( simd_index[ 0 ], simd_index[ 1 ] ),
+                                             max( simd_index[ 2 ], simd_index[ 3 ] ) ) );
+}
+
+
 
 template< typename Tag_T >
 struct litesimd_boyer_moore_horspool2
@@ -197,8 +252,10 @@ struct litesimd_boyer_moore_horspool2
 
         const stype* simd_str = reinterpret_cast<const stype*>( str.data() );
 
+//        std::cout << "simd_idx: ";
         for( size_t simd_idx = simd_find_size -1; simd_idx < simd_str_size; )
         {
+//            std::cout << "(" << simd_idx << ",";
 //            std::cout << "simd_idx --------------------: " << simd_idx << std::endl;
 
             auto mask = ls::equals< int8_t, Tag_T >( simd_last, simd_str[ simd_idx ] );
@@ -213,12 +270,23 @@ struct litesimd_boyer_moore_horspool2
 //                          << simd_idx << ", "
 //                          << simd_idx + (1 + index[ str[ base_end - 1 ] ] / ssize)
 //                          << std::endl;
-                size_t base_end = (simd_idx+1) * ssize;
-                simd_idx += index[ str[ base_end - 1 ] ];
+//                size_t base_end = (simd_idx+1) * ssize;
+//                int32_t max = 0;
+//                for( size_t i = simd_idx * ssize; i < base_end; ++i )
+//                {
+//                    max = std::max( max, index[ str[ i ] ] );
+//                }
+//                simd_idx += max;
+
+                simd_idx += index_max( index, simd_str[ simd_idx ] );
+                //_mm_prefetch( (void*)(simd_str + simd_idx), _MM_HINT_T2 );
+                // simd_idx += index[ str[ base_end - 1 ] ];
+//                std::cout << "0), ";
             }
             else
             {
                 size_t bitmask = ls::mask_to_bitmask< int8_t, Tag_T >( mask );
+//                std::cout << bitmask << "), ";
                 size_t skip = 0;
                 size_t base_end = (simd_idx+1) * ssize;
                 do
@@ -258,6 +326,7 @@ struct litesimd_boyer_moore_horspool2
                 simd_idx += skip;
             }
         }
+//        std::cout << ": simd_idx" << std::endl;
         return str.size();
     }
 };
@@ -312,9 +381,9 @@ int main(int argc, char* /*argv*/[])
     {
         //bench< litesimd_boyer_moore_horspool< ls::sse_tag > >( "SSE..", runSize, seekSize, loop );
         uint64_t sse = bench< litesimd_boyer_moore_horspool2< ls::sse_tag > >( "SSE..", runSize, seekSize, loop );
-        uint64_t avx = bench< litesimd_boyer_moore_horspool2< ls::avx_tag > >( "AVX..", runSize, seekSize, loop );
+        //uint64_t avx = bench< litesimd_boyer_moore_horspool2< ls::avx_tag > >( "AVX..", runSize, seekSize, loop );
         uint64_t base = bench< boost_searcher >( "Boost", runSize, seekSize, loop );
-        bench< std_searcher >( "Std..", runSize, seekSize, loop );
+        //bench< std_searcher >( "Std..", runSize, seekSize, loop );
 
 
         if( g_verbose )
@@ -322,19 +391,19 @@ int main(int argc, char* /*argv*/[])
             std::cout
                       << std::endl << "Index Speed up SSE.......: " << std::fixed << std::setprecision(2)
                       << static_cast<float>(base)/static_cast<float>(sse) << "x"
-
-                      << std::endl << "Index Speed up AVX.......: " << std::fixed << std::setprecision(2)
-                      << static_cast<float>(base)/static_cast<float>(avx) << "x"
-
+//
+//                      << std::endl << "Index Speed up AVX.......: " << std::fixed << std::setprecision(2)
+//                      << static_cast<float>(base)/static_cast<float>(avx) << "x"
+//
                       << std::endl << std::endl;
         }
         else
         {
-            std::cout
-                << base << ","
-                << sse << ","
-                << avx
-                << std::endl;
+//            std::cout
+//                << base << ","
+//                << sse << ","
+//                << avx
+//                << std::endl;
         }
     }
     return 0;
