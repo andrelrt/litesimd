@@ -23,18 +23,18 @@
 #ifndef LITESIMD_ARCH_COMMON_BITWISE_H
 #define LITESIMD_ARCH_COMMON_BITWISE_H
 
-#include "../types.h"
+#include "../../types.h"
 
 namespace litesimd {
 
 // Bit AND
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
-typename traits< ValueType_T, Tag_T >::simd_type
-bit_and( typename traits< ValueType_T, Tag_T >::simd_type,
-         typename traits< ValueType_T, Tag_T >::simd_type )
+simd_type< ValueType_T, Tag_T >
+bit_and( simd_type< ValueType_T, Tag_T >,
+         simd_type< ValueType_T, Tag_T > )
 {
-    return traits< ValueType_T, Tag_T >::zero();
+    return simd_type< ValueType_T, Tag_T >::zero();
 }
 
 } // namespace litesimd

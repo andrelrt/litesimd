@@ -27,9 +27,9 @@
 #if defined(_WIN32)
 #define LITESIMD_HAS_SSE
 
-#if defined(__AVX2__)
+#if defined(__AVX__)
 #define LITESIMD_HAS_AVX
-#endif //__AVX2__
+#endif //__AVX__
 
 #endif //_WIN64
 
@@ -38,9 +38,9 @@
 #if defined(__x86_64__)
 #define LITESIMD_HAS_SSE
 
-#if defined(__AVX2__)
+#if defined(__AVX__)
 #define LITESIMD_HAS_AVX
-#endif //__AVX2__
+#endif //__AVX__
 
 #endif //__x86_64__
 

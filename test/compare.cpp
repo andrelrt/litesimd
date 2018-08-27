@@ -47,8 +47,8 @@ TYPED_TEST(SimdCompareTypes, GreaterThanTypedTest)
 {
     using type = typename TypeParam::first_type;
     using tag = typename TypeParam::second_type;
-    using simd = typename ls::traits< type, tag >::simd_type;
-    constexpr size_t size = ls::traits< type, tag >::simd_size;
+    using simd = ls::simd_type< type, tag >;
+    constexpr size_t size = ls::simd_type< type, tag >::simd_size;
 
     simd cmp;
     type* pCmp = reinterpret_cast<type*>( &cmp );
@@ -60,7 +60,7 @@ TYPED_TEST(SimdCompareTypes, GreaterThanTypedTest)
         val += 2;
     }
 
-    typename ls::traits< type, tag >::bitmask_type mask = 0;
+    typename ls::simd_type< type, tag >::bitmask_type mask = 0;
     val = 1;
 
     for( size_t i = 0; i < size+1; ++i )
@@ -93,8 +93,8 @@ TYPED_TEST(SimdCompareTypes, EqualsTypedTest)
 {
     using type = typename TypeParam::first_type;
     using tag = typename TypeParam::second_type;
-    using simd = typename ls::traits< type, tag >::simd_type;
-    constexpr size_t size = ls::traits< type, tag >::simd_size;
+    using simd = ls::simd_type< type, tag >;
+    constexpr size_t size = ls::simd_type< type, tag >::simd_size;
 
     simd cmp;
     type* pCmp = reinterpret_cast<type*>( &cmp );
@@ -106,7 +106,7 @@ TYPED_TEST(SimdCompareTypes, EqualsTypedTest)
         val += 2;
     }
 
-    typename ls::traits< type, tag >::bitmask_type mask = 0;
+    typename ls::simd_type< type, tag >::bitmask_type mask = 0;
     val = 0;
 
     for( size_t i = 0; i < size+1; ++i )

@@ -1,3 +1,4 @@
+
 // MIT License
 //
 // Copyright (c) 2018 André Tupinambá
@@ -20,19 +21,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_BITWISE_H
-#define LITESIMD_BITWISE_H
+#ifndef LITESIMD_COMMON_TRAITS_H
+#define LITESIMD_COMMON_TRAITS_H
 
-#include "types.h"
-#include "arch/bitwise.h"
-#include "detail/helper_macros.h"
+#include "../tag.h"
 
 namespace litesimd {
 
-// Bit AND
-// ---------------------------------------------------------------------------------------
-DEFINE_BINARY_FUNCTION_ADAPTORS( bit_and, type )
+template< typename ValueType_T, typename Tag_T = default_tag >
+struct traits{};
 
 } // namespace litesimd
 
-#endif // LITESIMD_BITWISE_H
+#endif //LITESIMD_COMMON_TRAITS_H

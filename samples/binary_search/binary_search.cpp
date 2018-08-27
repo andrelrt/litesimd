@@ -101,10 +101,10 @@ public:
     }
 
 private:
-    constexpr static size_t array_size = ls::traits< value_type, TAG_T >::simd_size;
+    constexpr static size_t array_size = ls::simd_type< value_type, TAG_T >::simd_size;
 
     const container_type& ref_;
-    typename ls::traits< value_type, TAG_T >::simd_type cmp_;
+    ls::simd_type< value_type, TAG_T > cmp_;
 };
 
 //any container smart_step
@@ -144,11 +144,11 @@ public:
     }
 
 private:
-    constexpr static size_t array_size = ls::traits< value_type, TAG_T >::simd_size;
+    constexpr static size_t array_size = ls::simd_type< value_type, TAG_T >::simd_size;
 
     const container_type& ref_;
     std::array< const_iterator, array_size + 2 > ranges_;
-    typename ls::traits< value_type, TAG_T >::simd_type cmp_;
+    ls::simd_type< value_type, TAG_T > cmp_;
 };
 
 template <class ForwardIterator, class T, typename TAG_T >
@@ -156,9 +156,9 @@ ForwardIterator lower_bound( ForwardIterator beg, ForwardIterator end, const T& 
 {
     using value_type     = typename std::iterator_traits< ForwardIterator >::value_type;
     using const_iterator = ForwardIterator;
-    using simd_type      = typename ls::traits< value_type, TAG_T >::simd_type;
+    using simd_type      = ls::simd_type< value_type, TAG_T >;
 
-    constexpr static size_t array_size = ls::traits< value_type, TAG_T >::simd_size;
+    constexpr static size_t array_size = ls::simd_type< value_type, TAG_T >::simd_size;
 
     size_t size = std::distance( beg, end );
     size_t step = size / (array_size + 1);

@@ -23,15 +23,15 @@
 #ifndef LITESIMD_ARCH_COMMON_SHUFFLE_H
 #define LITESIMD_ARCH_COMMON_SHUFFLE_H
 
-#include "../types.h"
+#include "../../types.h"
 
 namespace litesimd {
 
 // Low insert
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
-typename traits< ValueType_T, Tag_T >::simd_type
-high_insert( typename traits< ValueType_T, Tag_T >::simd_type, ValueType_T = 0 )
+simd_type< ValueType_T, Tag_T >
+high_insert( simd_type< ValueType_T, Tag_T >, ValueType_T = 0 )
 {
     return traits< ValueType_T, Tag_T >::zero();
 }

@@ -39,7 +39,7 @@ class bubble
 public:
 	using container_type = Cont_T;
     using value_type     = typename container_type::value_type;
-    using simd_type      = typename ls::traits< value_type, TAG_T >::simd_type;
+    using simd_type      = ls::simd_type< value_type, TAG_T >;
 
     void sort( container_type& cont )
     {
@@ -73,7 +73,7 @@ public:
     }
 
 private:
-    constexpr static size_t array_size = ls::traits< value_type, TAG_T >::simd_size;
+    constexpr static size_t array_size = ls::simd_type< value_type, TAG_T >::simd_size;
 };
 
 
@@ -83,7 +83,7 @@ class bubble2
 public:
 	using container_type = Cont_T;
     using value_type     = typename container_type::value_type;
-    using simd_type      = typename ls::traits< value_type, TAG_T >::simd_type;
+    using simd_type      = ls::simd_type< value_type, TAG_T >;
 
     void sort( container_type& cont )
     {
@@ -118,7 +118,7 @@ public:
     }
 
 private:
-    constexpr static size_t array_size = ls::traits< value_type, TAG_T >::simd_size;
+    constexpr static size_t array_size = ls::simd_type< value_type, TAG_T >::simd_size;
 };
 
 template< class Cont_T, typename TAG_T >

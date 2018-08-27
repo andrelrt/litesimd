@@ -72,8 +72,8 @@ struct boost_searcher
 //{
 //    size_t operator()( const std::string& str, const std::string& find )
 //    {
-//        using stype = typename ls::traits< int8_t, Tag_T >::simd_type;
-//        constexpr size_t ssize = ls::traits< int8_t, Tag_T >::simd_size;
+//        using stype = typename ls::simd_type< int8_t, Tag_T >::simd_type;
+//        constexpr size_t ssize = ls::simd_type< int8_t, Tag_T >::simd_size;
 //        size_t find_size = find.size();
 //        std::array< size_t, 256 > index;
 //        index.fill( find_size );
@@ -162,20 +162,16 @@ inline void for_each_index( size_t bitmask, std::function< bool(size_t) > func )
     }
 }
 
-template< typename Tag_T > int is_zero( typename ls::traits< int8_t, Tag_T >::simd_type ){ return false; }
+template< typename Tag_T > int is_zero( ls::simd_type< int8_t, Tag_T > ){ return 0; }
 
-template<> int is_zero< ls::sse_tag >( typename ls::traits< int8_t, ls::sse_tag >::simd_type val )
+template<> int is_zero< ls::sse_tag >( ls::simd_type< int8_t, ls::sse_tag > val )
 {
-    auto zero = _mm_setzero_si128();
-    auto ones = _mm_cmpeq_epi8( zero, zero );
-    return _mm_testz_si128( val, ones );
+    return _mm_testz_si128( val, ls::simd_type< int8_t, ls::sse_tag >::ones() );
 }
 
-template<> int is_zero< ls::avx_tag >( typename ls::traits< int8_t, ls::avx_tag >::simd_type val )
+template<> int is_zero< ls::avx_tag >( ls::simd_type< int8_t, ls::avx_tag > val )
 {
-    auto zero = _mm256_setzero_si256();
-    auto ones = _mm256_cmpeq_epi8( zero, zero );
-    return _mm256_testz_si256( val, ones );
+    return _mm256_testz_si256( val, ls::simd_type< int8_t, ls::avx_tag >::ones() );
 }
 
 
@@ -184,8 +180,8 @@ struct litesimd_boyer_moore_horspool2
 {
     size_t operator()( const std::string& str, const std::string& find )
     {
-        using stype = typename ls::traits< int8_t, Tag_T >::simd_type;
-        constexpr size_t ssize = ls::traits< int8_t, Tag_T >::simd_size;
+        using stype = ls::simd_type< int8_t, Tag_T >;
+        constexpr size_t ssize = ls::simd_type< int8_t, Tag_T >::simd_size;
         int32_t find_size = find.size();
         std::array< int32_t, 256 > index;
         index.fill( 1 + find_size / ssize );

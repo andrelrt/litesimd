@@ -25,16 +25,6 @@
 #define LITESIMD_TRAITS_H
 
 #include "arch/tag.h"
-
-namespace litesimd {
-
-template< typename ValueType_T, typename Tag_T = default_tag >
-struct traits { };
-
-template< typename ValueType_T, typename Tag_T = default_tag >
-typename traits< ValueType_T, Tag_T >::simd_type
-from_value( ValueType_T ){}
-
-} // namespace litesimd
+#include "arch/traits.h"
 
 #endif //LITESIMD_TRAITS_H

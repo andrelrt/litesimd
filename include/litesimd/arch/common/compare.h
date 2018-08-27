@@ -23,15 +23,15 @@
 #ifndef LITESIMD_ARCH_COMMON_COMPARE_H
 #define LITESIMD_ARCH_COMMON_COMPARE_H
 
-#include "../types.h"
+#include "../../types.h"
 
 namespace litesimd {
 
 // Mask to bitmask
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
-inline typename traits< ValueType_T, Tag_T >::bitmask_type
-mask_to_bitmask( typename traits< ValueType_T, Tag_T >::mask_type )
+inline typename simd_type< ValueType_T, Tag_T >::bitmask_type
+mask_to_bitmask( simd_type< ValueType_T, Tag_T > )
 {
     return 0;
 }
@@ -39,32 +39,32 @@ mask_to_bitmask( typename traits< ValueType_T, Tag_T >::mask_type )
 // Greater than
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
-typename traits< ValueType_T, Tag_T >::mask_type
-greater_than( typename traits< ValueType_T, Tag_T >::simd_type,
-              typename traits< ValueType_T, Tag_T >::simd_type )
+simd_type< ValueType_T, Tag_T >
+greater_than( simd_type< ValueType_T, Tag_T >,
+              simd_type< ValueType_T, Tag_T > )
 {
-    return traits< ValueType_T, Tag_T >::zero();
+    return simd_type< ValueType_T, Tag_T >::zero();
 }
 
 // Equals
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
-typename traits< ValueType_T, Tag_T >::mask_type
-equals( typename traits< ValueType_T, Tag_T >::simd_type,
-        typename traits< ValueType_T, Tag_T >::simd_type )
+simd_type< ValueType_T, Tag_T >
+equals( simd_type< ValueType_T, Tag_T >,
+        simd_type< ValueType_T, Tag_T > )
 {
-    return traits< ValueType_T, Tag_T >::zero();
+    return simd_type< ValueType_T, Tag_T >::zero();
 }
 
 // Blend ternary
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
-typename traits< ValueType_T, Tag_T >::simd_type
-blend( typename traits< ValueType_T, Tag_T >::mask_type,
-       typename traits< ValueType_T, Tag_T >::simd_type,
-       typename traits< ValueType_T, Tag_T >::simd_type )
+simd_type< ValueType_T, Tag_T >
+blend( simd_type< ValueType_T, Tag_T >,
+       simd_type< ValueType_T, Tag_T >,
+       simd_type< ValueType_T, Tag_T > )
 {
-    return traits< ValueType_T, Tag_T >::zero();
+    return simd_type< ValueType_T, Tag_T >::zero();
 }
 
 
