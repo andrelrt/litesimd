@@ -46,6 +46,62 @@ DEF_BIT_AND( float,   _mm256_and_ps )
 DEF_BIT_AND( double,  _mm256_and_pd )
 #undef DEF_BIT_AND
 
+// Horizontal bit AND
+// ---------------------------------------------------------------------------------------
+template<> inline int8_t
+bit_and< int8_t, avx_tag >( simd_type< int8_t, avx_tag > val )
+{
+    val = _mm256_and_si256( val, _mm256_shuffle_epi32( val, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+    val = _mm256_and_si256( val, _mm256_shuffle_epi32( val, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+    val = _mm256_and_si256( val, _mm256_permute4x64_epi64( val, _MM_SHUFFLE( 0, 0, 0, 2 ) ) );
+    val = _mm256_and_si256( val, _mm256_shufflelo_epi16( val, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+    val = _mm256_and_si256( val, _mm256_srli_epi16( val, 8 ) );
+    return (int8_t)_mm256_cvtsi256_si32( val );
+}
+
+template<> inline int16_t
+bit_and< int16_t, avx_tag >( simd_type< int16_t, avx_tag > val )
+{
+    val = _mm256_and_si256( val, _mm256_shuffle_epi32( val, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+    val = _mm256_and_si256( val, _mm256_shuffle_epi32( val, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+    val = _mm256_and_si256( val, _mm256_permute4x64_epi64( val, _MM_SHUFFLE( 0, 0, 0, 2 ) ) );
+    val = _mm256_and_si256( val, _mm256_shufflelo_epi16( val, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+    return (int16_t)_mm256_cvtsi256_si32( val );
+}
+
+template<> inline int32_t
+bit_and< int32_t, avx_tag >( simd_type< int32_t, avx_tag > val )
+{
+    val = _mm256_and_si256( val, _mm256_shuffle_epi32( val, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+    val = _mm256_and_si256( val, _mm256_shuffle_epi32( val, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+    val = _mm256_and_si256( val, _mm256_permute4x64_epi64( val, _MM_SHUFFLE( 0, 0, 0, 2 ) ) );
+    return _mm256_cvtsi256_si32( val );
+}
+
+template<> inline int64_t
+bit_and< int64_t, avx_tag >( simd_type< int64_t, avx_tag > val )
+{
+    val = _mm256_and_si256( val, _mm256_permute4x64_epi64( val, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+    val = _mm256_and_si256( val, _mm256_permute4x64_epi64( val, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+    return _mm256_extract_epi64( val, 0 );
+}
+
+template<> inline float
+bit_and< float, avx_tag >( simd_type< float, avx_tag > val )
+{
+    val = _mm256_and_ps( val, _mm256_shuffle_ps( val, val, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+    val = _mm256_and_ps( val, _mm256_shuffle_ps( val, val, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+    return _mm256_cvtss_f32( val );
+}
+
+template<> inline double
+bit_and< double, avx_tag >( simd_type< double, avx_tag > val )
+{
+    val = _mm256_and_pd( val, _mm256_shuffle_pd( val, val, _MM_SHUFFLE2( 0, 1 ) ) );
+    return _mm256_cvtsd_f64( val );
+}
+
+
 } // namespace litesimd
 
 #endif // LITESIMD_HAS_AVX

@@ -46,6 +46,57 @@ DEF_BIT_AND( float,   _mm_and_ps )
 DEF_BIT_AND( double,  _mm_and_pd )
 #undef DEF_BIT_AND
 
+// Horizontal bit AND
+// ---------------------------------------------------------------------------------------
+template<> inline int8_t
+bit_and< int8_t, sse_tag >( simd_type< int8_t, sse_tag > val )
+{
+    val = _mm_and_si128( val, _mm_shuffle_epi32( val, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+    val = _mm_and_si128( val, _mm_shuffle_epi32( val, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+    val = _mm_and_si128( val, _mm_shufflelo_epi16( val, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+    val = _mm_and_si128( val, _mm_srli_epi16( val, 8 ) );
+    return (int8_t)_mm_cvtsi128_si32( val );
+}
+
+template<> inline int16_t
+bit_and< int16_t, sse_tag >( simd_type< int16_t, sse_tag > val )
+{
+    val = _mm_and_si128( val, _mm_shuffle_epi32( val, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+    val = _mm_and_si128( val, _mm_shuffle_epi32( val, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+    val = _mm_and_si128( val, _mm_shufflelo_epi16( val, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+    return (int16_t)_mm_cvtsi128_si32( val );
+}
+
+template<> inline int32_t
+bit_and< int32_t, sse_tag >( simd_type< int32_t, sse_tag > val )
+{
+    val = _mm_and_si128( val, _mm_shuffle_epi32( val, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+    val = _mm_and_si128( val, _mm_shuffle_epi32( val, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+    return _mm_cvtsi128_si32( val );
+}
+
+template<> inline int64_t
+bit_and< int64_t, sse_tag >( simd_type< int64_t, sse_tag > val )
+{
+    val = _mm_and_si128( val, _mm_shuffle_epi32( val, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+    return _mm_cvtsi128_si64( val );
+}
+
+template<> inline float
+bit_and< float, sse_tag >( simd_type< float, sse_tag > val )
+{
+    val = _mm_and_ps( val, _mm_shuffle_ps( val, val, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+    val = _mm_and_ps( val, _mm_shuffle_ps( val, val, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+    return _mm_cvtss_f32( val );
+}
+
+template<> inline double
+bit_and< double, sse_tag >( simd_type< double, sse_tag > val )
+{
+    val = _mm_and_pd( val, _mm_shuffle_pd( val, val, _MM_SHUFFLE2( 0, 1 ) ) );
+    return _mm_cvtsd_f64( val );
+}
+
 } // namespace litesimd
 
 #endif // LITESIMD_HAS_SSE
