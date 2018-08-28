@@ -46,6 +46,7 @@ DEF_BIT_AND( float,   _mm256_and_ps )
 DEF_BIT_AND( double,  _mm256_and_pd )
 #undef DEF_BIT_AND
 
+#ifndef _WIN32
 // Horizontal bit AND
 // ---------------------------------------------------------------------------------------
 template<> inline int8_t
@@ -100,6 +101,7 @@ bit_and< double, avx_tag >( simd_type< double, avx_tag > val )
     val = _mm256_and_pd( val, _mm256_shuffle_pd( val, val, _MM_SHUFFLE2( 0, 1 ) ) );
     return _mm256_cvtsd_f64( val );
 }
+#endif // _WIN32
 
 
 } // namespace litesimd
