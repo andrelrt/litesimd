@@ -29,6 +29,7 @@
 
 #include <litesimd/types.h>
 #include <litesimd/compare.h>
+#include <litesimd/shuffle.h>
 #include <litesimd/helpers/containers.h>
 
 bool g_verbose = true;
@@ -70,11 +71,10 @@ public:
         size_t step = ref_.size() / (array_size + 1);
 
         const_iterator end = ref_.begin();
-        value_type* pCmp = reinterpret_cast< value_type* >( &cmp_ );
         for( size_t i = 0; i < array_size; ++i )
         {
             std::advance( end, step );
-            pCmp[i] = *end;
+            cmp_ = ls::high_insert( cmp_, *end );
         }
     }
 
@@ -123,14 +123,13 @@ public:
     {
         size_t step = ref_.size() / (array_size + 1);
 
-        value_type* pCmp = reinterpret_cast< value_type* >( &cmp_ );
         const_iterator it = ref_.begin();
         ranges_[ 0 ] = it;
         for( size_t i = 1; i <= array_size; ++i )
         {
             std::advance( it, step );
             ranges_[ i ] = it;
-            pCmp[i-1] = *it;
+            cmp_ = ls::high_insert( cmp_, *it );
         }
         ranges_[ array_size+1 ] = std::prev(ref_.end());
     }
@@ -166,11 +165,10 @@ ForwardIterator lower_bound( ForwardIterator beg, ForwardIterator end, const T& 
     // Create SIMD search key
     simd_type cmp;
     const_iterator it = beg;
-    value_type* pCmp = reinterpret_cast< value_type* >( &cmp );
     for( size_t i = 0; i < array_size; ++i )
     {
         std::advance( it, step );
-        pCmp[i] = *it;
+        cmp = ls::high_insert( cmp, *it );
     }
 
     // N-Way search
@@ -216,6 +214,98 @@ struct container_simd_lb
 private:
     const container_type& ref_;
 };
+
+template< typename Tag_T > ls::simd_type< int32_t, Tag_T >
+i32Gather( const int*, ls::simd_type< int32_t, Tag_T > ){}
+
+template<> ls::simd_type< int32_t, ls::sse_tag >
+i32Gather< ls::sse_tag >( const int* ptr, ls::simd_type< int32_t, ls::sse_tag > idx )
+{
+    return _mm_i32gather_epi32( ptr, idx, 4 );
+}
+
+template<> ls::simd_type< int32_t, ls::avx_tag >
+i32Gather< ls::avx_tag >( const int* ptr, ls::simd_type< int32_t, ls::avx_tag > idx )
+{
+    return _mm256_i32gather_epi32( ptr, idx, 4 );
+}
+
+template <class ForwardIterator, class T, typename TAG_T >
+ForwardIterator lower_bound2( ForwardIterator beg, ForwardIterator end, const T& key )
+{
+    using value_type = typename std::iterator_traits< ForwardIterator >::value_type;
+    using simd_type  = ls::simd_type< value_type, TAG_T >;
+
+    constexpr static size_t array_size = ls::simd_type< value_type, TAG_T >::simd_size;
+
+    size_t size = std::distance( beg, end );
+    if( size < 0x100 )
+    {
+        // Standard lower_bound on small sizes
+        return std::lower_bound( beg, end, key );
+    }
+
+    size_t step = size / (array_size + 1);
+
+    // Create SIMD index key
+    ls::simd_type< int32_t, TAG_T > indexes;
+    for( size_t i = 1; i <= array_size; ++i )
+    {
+        indexes = ls::high_insert( indexes, (int32_t)(step*i) );
+    }
+
+    // Create SIMD search key
+    simd_type cmp = i32Gather< TAG_T >( &(*beg), indexes );
+
+    // N-Way search
+    size_t i = ls::greater_than_last_index< value_type, TAG_T >( key, cmp );
+
+    // Recalculate iterators
+    auto it = beg;
+    std::advance( it, i * step );
+    decltype(it) itEnd;
+    if( i == array_size )
+    {
+        itEnd = end;
+    }
+    else
+    {
+        itEnd = it;
+        std::advance( itEnd, step + 1 );
+    }
+
+    return lower_bound2< ForwardIterator, T, TAG_T >( it, itEnd, key );
+}
+
+template< class Cont_T, typename TAG_T >
+struct container_simd_lb2
+{
+	using container_type = Cont_T;
+    using value_type     = typename container_type::value_type;
+    using const_iterator = typename container_type::const_iterator;
+
+    explicit container_simd_lb2( const container_type& ref ) : ref_( ref ){}
+    container_simd_lb2( container_simd_lb2&& ) = default;
+    container_simd_lb2( const container_simd_lb2& ) = default;
+    container_simd_lb2& operator=( container_simd_lb2&& ) = default;
+    container_simd_lb2& operator=( const container_simd_lb2& ) = default;
+
+    void build_index(){}
+
+    const_iterator find( const value_type& key )
+    {
+        auto first = lower_bound2< const_iterator,
+                                  value_type,
+                                  TAG_T>( ref_.begin(), ref_.end(), key );
+
+        return (first!=ref_.end() && !(key<*first)) ? first : ref_.end();
+    }
+private:
+    const container_type& ref_;
+};
+
+
+
 
 void do_nothing( int32_t );
 
@@ -277,10 +367,12 @@ int main(int argc, char* /*argv*/[])
         {
             uint64_t nocache =  bench< ls::aligned_vector< int32_t >, index_nocache, ls::sse_tag >( "index_nocache SSE...", runSize, loop );
             uint64_t simdlb =  bench< ls::aligned_vector< int32_t >, container_simd_lb, ls::sse_tag >( "SIMD lower_bound SSE", runSize, loop );
+            uint64_t simdlbv2 =  bench< ls::aligned_vector< int32_t >, container_simd_lb2, ls::sse_tag >( "SIMD lower_boundv2 SSE", runSize, loop );
 
 #ifdef LITESIMD_HAS_AVX
             uint64_t nocache2 = bench< ls::aligned_vector< int32_t >, index_nocache, ls::avx_tag >( "index_nocache AVX...", runSize, loop );
             uint64_t simdlb2 = bench< ls::aligned_vector< int32_t >, container_simd_lb, ls::avx_tag >( "SIMD lower_bound AVX", runSize, loop );
+            uint64_t simdlb2v2 = bench< ls::aligned_vector< int32_t >, container_simd_lb2, ls::avx_tag >( "SIMD lower_boundv2 AVX", runSize, loop );
 #endif
 
             std::cout
