@@ -230,6 +230,18 @@ i32Gather< ls::avx_tag >( const int* ptr, ls::simd_type< int32_t, ls::avx_tag > 
     return _mm256_i32gather_epi32( ptr, idx, 4 );
 }
 
+template< typename Tag_T > int is_zero( ls::simd_type< int32_t, Tag_T > ){ return 0; }
+
+template<> int is_zero< ls::sse_tag >( ls::simd_type< int32_t, ls::sse_tag > val )
+{
+    return _mm_testz_si128( val, ls::simd_type< int32_t, ls::sse_tag >::ones() );
+}
+
+template<> int is_zero< ls::avx_tag >( ls::simd_type< int32_t, ls::avx_tag > val )
+{
+    return _mm256_testz_si256( val, ls::simd_type< int32_t, ls::avx_tag >::ones() );
+}
+
 template <class ForwardIterator, class T, typename TAG_T >
 ForwardIterator lower_bound2( ForwardIterator beg, ForwardIterator end, const T& key )
 {
@@ -239,7 +251,7 @@ ForwardIterator lower_bound2( ForwardIterator beg, ForwardIterator end, const T&
     constexpr static size_t array_size = ls::simd_type< value_type, TAG_T >::simd_size;
 
     size_t size = std::distance( beg, end );
-    if( size < 0x40 )
+    if( size < 2 * array_size )
     {
         // Standard lower_bound on small sizes
         return std::lower_bound( beg, end, key );
@@ -260,12 +272,12 @@ ForwardIterator lower_bound2( ForwardIterator beg, ForwardIterator end, const T&
     // Create SIMD search key
     simd_type cmp = i32Gather< TAG_T >( start, indexes );
 
-    size_t eq = ls::equals_bitmask< value_type, TAG_T >( key, cmp );
+    auto eq = ls::equals< value_type, TAG_T >( key, cmp );
 
-    if( eq != 0 )
+    if( !is_zero< TAG_T >( eq ) )
     {
         auto it = beg;
-        std::advance( it, step * ls::bitmask_last_index< value_type >( eq ) );
+        std::advance( it, step * ls::bitmask_last_index< value_type >( ls::mask_to_bitmask< value_type, TAG_T >( eq ) ) );
         return it;
     }
 
@@ -339,7 +351,7 @@ uint64_t bench( const std::string& name, size_t size, size_t loop )
         {
             auto ret = index.find( i );
             do_nothing( *ret );
-//
+
 //            // Test if the retun value is correct
 //            if( ret == sorted.end() )
 //            {
