@@ -239,7 +239,7 @@ ForwardIterator lower_bound2( ForwardIterator beg, ForwardIterator end, const T&
     constexpr static size_t array_size = ls::simd_type< value_type, TAG_T >::simd_size;
 
     size_t size = std::distance( beg, end );
-    if( size < 0x100 )
+    if( size < 0x40 )
     {
         // Standard lower_bound on small sizes
         return std::lower_bound( beg, end, key );
@@ -247,15 +247,27 @@ ForwardIterator lower_bound2( ForwardIterator beg, ForwardIterator end, const T&
 
     size_t step = size / (array_size + 1);
 
+    const value_type* start = &(*beg);
     // Create SIMD index key
     ls::simd_type< int32_t, TAG_T > indexes;
     for( size_t i = 1; i <= array_size; ++i )
     {
+        // Preload SIMD search key values into processor cache
+        _mm_prefetch( start + (step*i), _MM_HINT_T0 );
         indexes = ls::high_insert( indexes, (int32_t)(step*i) );
     }
 
     // Create SIMD search key
-    simd_type cmp = i32Gather< TAG_T >( &(*beg), indexes );
+    simd_type cmp = i32Gather< TAG_T >( start, indexes );
+
+    size_t eq = ls::equals_bitmask< value_type, TAG_T >( key, cmp );
+
+    if( eq != 0 )
+    {
+        auto it = beg;
+        std::advance( it, step * ls::bitmask_last_index< value_type >( eq ) );
+        return it;
+    }
 
     // N-Way search
     size_t i = ls::greater_than_last_index< value_type, TAG_T >( key, cmp );
@@ -285,10 +297,6 @@ struct container_simd_lb2
     using const_iterator = typename container_type::const_iterator;
 
     explicit container_simd_lb2( const container_type& ref ) : ref_( ref ){}
-    container_simd_lb2( container_simd_lb2&& ) = default;
-    container_simd_lb2( const container_simd_lb2& ) = default;
-    container_simd_lb2& operator=( container_simd_lb2&& ) = default;
-    container_simd_lb2& operator=( const container_simd_lb2& ) = default;
 
     void build_index(){}
 
@@ -303,9 +311,6 @@ struct container_simd_lb2
 private:
     const container_type& ref_;
 };
-
-
-
 
 void do_nothing( int32_t );
 
@@ -329,10 +334,26 @@ uint64_t bench( const std::string& name, size_t size, size_t loop )
     timer.start();
     for( size_t j = 0; j < loop; ++j )
     {
+//        size_t cnt = 0;
         for( auto i : org )
         {
             auto ret = index.find( i );
             do_nothing( *ret );
+//
+//            // Test if the retun value is correct
+//            if( ret == sorted.end() )
+//            {
+//                std::cout << "end: 0x" << std::hex << i << ", i: 0x" << cnt << std::endl;
+//                break;
+//            }
+//            else
+//            {
+//                if( *ret != i )
+//                {
+//                    std::cout << *ret << "," << i << "-";
+//                }
+//            }
+//            ++cnt;
         }
     }
     timer.stop();
@@ -357,21 +378,21 @@ int main(int argc, char* /*argv*/[])
     }
     while( 1 )
     {
-        uint64_t base =   bench< ls::aligned_vector< int32_t >, container_only, void >    ( "lower_bound ........", runSize, loop );
-        uint64_t cache =  bench< ls::aligned_vector< int32_t >, index_cache, ls::sse_tag >( "index_cache SSE.....", runSize, loop );
+        uint64_t base =   bench< ls::aligned_vector< int32_t >, container_only, void >    ( "lower_bound ..........", runSize, loop );
+        uint64_t cache =  bench< ls::aligned_vector< int32_t >, index_cache, ls::sse_tag >( "index_cache SSE.......", runSize, loop );
 #ifdef LITESIMD_HAS_AVX
-        uint64_t cache2 = bench< ls::aligned_vector< int32_t >, index_cache, ls::avx_tag >( "index_cache AVX.....", runSize, loop );
+        uint64_t cache2 = bench< ls::aligned_vector< int32_t >, index_cache, ls::avx_tag >( "index_cache AVX.......", runSize, loop );
 #endif
 
         if( g_verbose )
         {
-            uint64_t nocache =  bench< ls::aligned_vector< int32_t >, index_nocache, ls::sse_tag >( "index_nocache SSE...", runSize, loop );
-            uint64_t simdlb =  bench< ls::aligned_vector< int32_t >, container_simd_lb, ls::sse_tag >( "SIMD lower_bound SSE", runSize, loop );
+            uint64_t nocache =  bench< ls::aligned_vector< int32_t >, index_nocache, ls::sse_tag >( "index_nocache SSE ....", runSize, loop );
+            uint64_t simdlb =  bench< ls::aligned_vector< int32_t >, container_simd_lb, ls::sse_tag >( "SIMD lower_bound SSE .", runSize, loop );
             uint64_t simdlbv2 =  bench< ls::aligned_vector< int32_t >, container_simd_lb2, ls::sse_tag >( "SIMD lower_boundv2 SSE", runSize, loop );
 
 #ifdef LITESIMD_HAS_AVX
-            uint64_t nocache2 = bench< ls::aligned_vector< int32_t >, index_nocache, ls::avx_tag >( "index_nocache AVX...", runSize, loop );
-            uint64_t simdlb2 = bench< ls::aligned_vector< int32_t >, container_simd_lb, ls::avx_tag >( "SIMD lower_bound AVX", runSize, loop );
+            uint64_t nocache2 = bench< ls::aligned_vector< int32_t >, index_nocache, ls::avx_tag >( "index_nocache AVX ....", runSize, loop );
+            uint64_t simdlb2 = bench< ls::aligned_vector< int32_t >, container_simd_lb, ls::avx_tag >( "SIMD lower_bound AVX .", runSize, loop );
             uint64_t simdlb2v2 = bench< ls::aligned_vector< int32_t >, container_simd_lb2, ls::avx_tag >( "SIMD lower_boundv2 AVX", runSize, loop );
 #endif
 
@@ -381,24 +402,30 @@ int main(int argc, char* /*argv*/[])
 
                       << std::endl << "Index Cache Speed up SSE........: " << std::fixed << std::setprecision(2)
                       << static_cast<float>(base)/static_cast<float>(cache) << "x"
-                      
+
                       << std::endl << "SIMD lower_bound Speed up SSE...: " << std::fixed << std::setprecision(2)
                       << static_cast<float>(base)/static_cast<float>(simdlb) << "x"
-                      
+
+                      << std::endl << "SIMD lower_boundv2 Speed up SSE.: " << std::fixed << std::setprecision(2)
+                      << static_cast<float>(base)/static_cast<float>(simdlbv2) << "x"
+
                       << std::endl << "Index Cache/Nocache Speed up SSE: " << std::fixed << std::setprecision(2)
                       << static_cast<float>(nocache)/static_cast<float>(cache) << "x"
 
 #ifdef LITESIMD_HAS_AVX
                       << std::endl << "Index Nocahe Speed up AVX.......: " << std::fixed << std::setprecision(2)
                       << static_cast<float>(base)/static_cast<float>(nocache2) << "x"
-                      
+
                       << std::endl << "Index Cache Speed up AVX........: " << std::fixed << std::setprecision(2)
                       << static_cast<float>(base)/static_cast<float>(cache2) << "x"
-                      
+
                       << std::endl << "SIMD lower_bound Speed up AVX...: " << std::fixed << std::setprecision(2)
                       << static_cast<float>(base)/static_cast<float>(simdlb2) << "x"
+
+                      << std::endl << "SIMD lower_boundv2 Speed up AVX.: " << std::fixed << std::setprecision(2)
+                      << static_cast<float>(base)/static_cast<float>(simdlb2v2) << "x"
 #endif
-                      
+
                       << std::endl << std::endl;
         }
         else
