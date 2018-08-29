@@ -251,7 +251,7 @@ ForwardIterator lower_bound2( ForwardIterator beg, ForwardIterator end, const T&
     constexpr static size_t array_size = ls::simd_type< value_type, TAG_T >::simd_size;
 
     size_t size = std::distance( beg, end );
-    if( size < 2 * array_size )
+    if( size < 0x20 )
     {
         // Standard lower_bound on small sizes
         return std::lower_bound( beg, end, key );
