@@ -24,6 +24,9 @@
 #define LITESIMD_COMPARE_H
 
 #include <immintrin.h>
+#ifdef _WIN32
+#include <intrin.h>
+#endif
 #include <type_traits>
 #include "types.h"
 #include "arch/compare.h"
@@ -38,13 +41,16 @@ template< typename ValueType_T,
 inline size_t
 bitmask_last_index( uint32_t bmask )
 {
-//    unsigned long index;
-//    return (0 == _BitScanReverse( &index, bmask ))
-//        ? 0
-//        : (index + 1) / sizeof(ValueType_T);
+#ifdef _WIN32
+    unsigned long index;
+    return (0 == _BitScanReverse( &index, bmask ))
+        ? 0
+        : (index + 1) / sizeof(ValueType_T);
+#else
     return (bmask == 0)
         ? 0
         : (_bit_scan_reverse( bmask ) + 1) / sizeof(ValueType_T);
+#endif
 }
 
 template< typename ValueType_T,
@@ -52,13 +58,16 @@ template< typename ValueType_T,
 inline size_t
 bitmask_first_index( uint32_t bmask )
 {
-//    unsigned long index;
-//    return (0 == _BitScanForward( &index, bmask ))
-//        ? 0
-//        : index / sizeof(ValueType_T) + 1;
+#ifdef _WIN32
+    unsigned long index;
+    return (0 == _BitScanForward( &index, bmask ))
+        ? 0
+        : index / sizeof(ValueType_T) + 1;
+#else
     return (bmask == 0)
         ? 0
         : _bit_scan_forward( bmask ) / sizeof(ValueType_T) + 1;
+#endif
 }
 
 template< typename ValueType_T,
@@ -66,13 +75,16 @@ template< typename ValueType_T,
 inline size_t
 bitmask_last_index( uint32_t bmask )
 {
-//    unsigned long index;
-//    return (0 == _BitScanReverse( &index, bmask ))
-//        ? 0
-//        : index + 1;
+#ifdef _WIN32
+    unsigned long index;
+    return (0 == _BitScanReverse( &index, bmask ))
+        ? 0
+        : index + 1;
+#else
     return (bmask == 0)
         ? 0
         : _bit_scan_reverse( bmask ) + 1;
+#endif
 }
 
 template< typename ValueType_T,
@@ -80,13 +92,16 @@ template< typename ValueType_T,
 inline size_t
 bitmask_first_index( uint32_t bmask )
 {
-//    unsigned long index;
-//    return (0 == _BitScanForward( &index, bmask ))
-//        ? 0
-//        : index + 1;
+#ifdef _WIN32
+    unsigned long index;
+    return (0 == _BitScanForward( &index, bmask ))
+        ? 0
+        : index + 1;
+#else
     return (bmask == 0)
         ? 0
         : _bit_scan_forward( bmask ) + 1;
+#endif
 }
 
 // Greater than
