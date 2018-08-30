@@ -29,7 +29,7 @@
 
 namespace litesimd {
 
-// ADD
+// Basic operations
 // ---------------------------------------------------------------------------------------
 DEFINE_BINARY_FUNCTION_ADAPTORS( add, type )
 
