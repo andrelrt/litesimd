@@ -29,9 +29,12 @@
 
 namespace litesimd {
 
-// Bit AND
+// Basic bitwise operations adaptors
 // ---------------------------------------------------------------------------------------
 DEFINE_BINARY_FUNCTION_ADAPTORS( bit_and, type )
+DEFINE_BINARY_FUNCTION_ADAPTORS( bit_or, type )
+DEFINE_BINARY_FUNCTION_ADAPTORS( bit_xor, type )
+DEFINE_BINARY_FUNCTION_ADAPTORS( bit_not, type )
 
 } // namespace litesimd
 

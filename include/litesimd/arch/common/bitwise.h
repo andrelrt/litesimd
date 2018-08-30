@@ -27,13 +27,34 @@
 
 namespace litesimd {
 
-// Bit AND
+// Basic bitwise operations
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline simd_type< ValueType_T, Tag_T >
 bit_and( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > )
 {
     return simd_type< ValueType_T, Tag_T >::zero();
+}
+
+template< typename ValueType_T, typename Tag_T = default_tag >
+inline simd_type< ValueType_T, Tag_T >
+bit_or( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > )
+{
+    return simd_type< ValueType_T, Tag_T >::zero();
+}
+
+template< typename ValueType_T, typename Tag_T = default_tag >
+inline simd_type< ValueType_T, Tag_T >
+bit_xor( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > )
+{
+    return simd_type< ValueType_T, Tag_T >::zero();
+}
+
+template< typename ValueType_T, typename Tag_T = default_tag >
+inline simd_type< ValueType_T, Tag_T >
+bit_not( simd_type< ValueType_T, Tag_T > val )
+{
+    return bit_xor( val, simd_type< ValueType_T, Tag_T >::ones() );
 }
 
 // Horizontal bit AND

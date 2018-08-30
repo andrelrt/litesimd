@@ -46,6 +46,38 @@ DEF_BIT_AND( float,   _mm256_and_ps )
 DEF_BIT_AND( double,  _mm256_and_pd )
 #undef DEF_BIT_AND
 
+// Bit OR
+// ---------------------------------------------------------------------------------------
+#define DEF_BIT_OR( TYPE_T, CMD ) \
+template<> inline simd_type< TYPE_T, avx_tag > \
+bit_or< TYPE_T, avx_tag >( simd_type< TYPE_T, avx_tag > lhs, \
+                           simd_type< TYPE_T, avx_tag > rhs ) { \
+    return CMD( lhs, rhs ); }
+
+DEF_BIT_OR( int8_t,  _mm256_or_si256 )
+DEF_BIT_OR( int16_t, _mm256_or_si256 )
+DEF_BIT_OR( int32_t, _mm256_or_si256 )
+DEF_BIT_OR( int64_t, _mm256_or_si256 )
+DEF_BIT_OR( float,   _mm256_or_ps )
+DEF_BIT_OR( double,  _mm256_or_pd )
+#undef DEF_BIT_OR
+
+// Bit XOR
+// ---------------------------------------------------------------------------------------
+#define DEF_BIT_XOR( TYPE_T, CMD ) \
+template<> inline simd_type< TYPE_T, avx_tag > \
+bit_xor< TYPE_T, avx_tag >( simd_type< TYPE_T, avx_tag > lhs, \
+                            simd_type< TYPE_T, avx_tag > rhs ) { \
+    return CMD( lhs, rhs ); }
+
+DEF_BIT_XOR( int8_t,  _mm256_xor_si256 )
+DEF_BIT_XOR( int16_t, _mm256_xor_si256 )
+DEF_BIT_XOR( int32_t, _mm256_xor_si256 )
+DEF_BIT_XOR( int64_t, _mm256_xor_si256 )
+DEF_BIT_XOR( float,   _mm256_xor_ps )
+DEF_BIT_XOR( double,  _mm256_xor_pd )
+#undef DEF_BIT_XOR
+
 #ifndef _WIN32
 // Horizontal bit AND
 // ---------------------------------------------------------------------------------------
