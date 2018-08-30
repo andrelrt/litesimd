@@ -91,6 +91,62 @@ struct to_lower
     }
 };
 
+template< typename TAG_T >
+void maskstore( ls::simd_type< int8_t, TAG_T >*,
+                ls::simd_type< int8_t, TAG_T >,
+                ls::simd_type< int8_t, TAG_T > ){}
+
+template<> void
+maskstore< ls::sse_tag >( ls::simd_type< int8_t, ls::sse_tag >* ptr,
+                          ls::simd_type< int8_t, ls::sse_tag > val,
+                          ls::simd_type< int8_t, ls::sse_tag > mask )
+{
+    _mm_maskmoveu_si128( val, mask, (char*)ptr );
+}
+
+template<> void
+maskstore< ls::avx_tag >( ls::simd_type< int8_t, ls::avx_tag >* ptr,
+                          ls::simd_type< int8_t, ls::avx_tag > val,
+                          ls::simd_type< int8_t, ls::avx_tag > mask )
+{
+    __m128i* ssePtr = reinterpret_cast<__m128i*>( ptr );
+    _mm_maskmoveu_si128( _mm256_extracti128_si256( val, 0 ),
+                         _mm256_extracti128_si256( mask, 0 ),
+                         (char*)ssePtr );
+    _mm_maskmoveu_si128( _mm256_extracti128_si256( val, 1 ),
+                         _mm256_extracti128_si256( mask, 1 ),
+                         (char*)(ssePtr + 1) );
+}
+
+template< typename TAG_T >
+struct maskmove_to_lower
+{
+    void operator()( std::string& str )
+    {
+        constexpr static size_t array_size = ls::simd_type< int8_t, TAG_T >::simd_size;
+        using simd_type = ls::simd_type< int8_t, TAG_T >;
+
+        simd_type* data = (simd_type*) str.data();
+
+        size_t sz = str.size() & ~(array_size-1);
+        for( size_t i = 0; i < sz; i += array_size )
+        {
+            maskstore< TAG_T >( data,
+                                ls::add< int8_t, TAG_T >( *data, 0x20 ),
+                                ls::bit_and< int8_t, TAG_T >(
+                                    ls::greater_than< int8_t, TAG_T >( *data, 'A'-1 ),
+                                    ls::greater_than< int8_t, TAG_T >( 'Z'+1, *data ) ) );
+            ++data;
+        }
+
+        size_t end = str.size();
+        for( size_t i = sz; i < end; ++i )
+        {
+            str[i] = ( 'A' <= str[i] && str[i] <= 'Z' ) ? str[i] + 0x20 : str[i];
+        }
+    }
+};
+
 struct std_to_lower
 {
     void operator()( std::string& str )
@@ -171,9 +227,10 @@ int main(int argc, char* /*argv*/[])
         uint64_t sse = bench< to_lower< ls::sse_tag > >( "SSE ...", runSize, loop );
         uint64_t avx = bench< to_lower< ls::avx_tag > >( "AVX ...", runSize, loop );
 
-
         if( g_verbose )
         {
+            bench< maskmove_to_lower< ls::sse_tag > >( "MM SSE ", runSize, loop );
+            bench< maskmove_to_lower< ls::avx_tag > >( "MM AVX ", runSize, loop );
             bench< std_to_lower >( "STD ...", runSize, loop );
             bench< autovec_to_lower >( "Autovec", runSize, loop );
             bench< default_simd_to_lower >( "Default", runSize, loop );
