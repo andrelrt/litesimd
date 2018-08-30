@@ -46,6 +46,57 @@ DEF_ADD( float,   _mm_add_ps )
 DEF_ADD( double,  _mm_add_pd )
 #undef DEF_ADD
 
+// Sub
+// ---------------------------------------------------------------------------------------
+#define DEF_SUB( TYPE_T, CMD ) \
+template<> inline simd_type< TYPE_T, sse_tag > \
+sub< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > lhs, \
+                        simd_type< TYPE_T, sse_tag > rhs ) { \
+    return CMD( lhs, rhs ); }
+
+DEF_SUB( int8_t,  _mm_sub_epi8 )
+DEF_SUB( int16_t, _mm_sub_epi16 )
+DEF_SUB( int32_t, _mm_sub_epi32 )
+DEF_SUB( int64_t, _mm_sub_epi64 )
+DEF_SUB( float,   _mm_sub_ps )
+DEF_SUB( double,  _mm_sub_pd )
+#undef DEF_SUB
+
+// MulLo
+// ---------------------------------------------------------------------------------------
+#define DEF_MULLO( TYPE_T, CMD ) \
+template<> inline simd_type< TYPE_T, sse_tag > \
+mullo< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > lhs, \
+                          simd_type< TYPE_T, sse_tag > rhs ) { \
+    return CMD( lhs, rhs ); }
+
+DEF_MULLO( int16_t, _mm_mullo_epi16 )
+DEF_MULLO( int32_t, _mm_mullo_epi32 )
+#undef DEF_MULLO
+
+// MulHi
+// ---------------------------------------------------------------------------------------
+#define DEF_MULHI( TYPE_T, CMD ) \
+template<> inline simd_type< TYPE_T, sse_tag > \
+mulhi< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > lhs, \
+                          simd_type< TYPE_T, sse_tag > rhs ) { \
+    return CMD( lhs, rhs ); }
+
+DEF_MULHI( int16_t, _mm_mulhi_epi16 )
+#undef DEF_MULHI
+
+// Div
+// ---------------------------------------------------------------------------------------
+#define DEF_DIV( TYPE_T, CMD ) \
+template<> inline simd_type< TYPE_T, sse_tag > \
+div< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > lhs, \
+                        simd_type< TYPE_T, sse_tag > rhs ) { \
+    return CMD( lhs, rhs ); }
+
+DEF_DIV( float,   _mm_div_ps )
+DEF_DIV( double,  _mm_div_pd )
+#undef DEF_DIV
+
 } // namespace litesimd
 
 #endif // LITESIMD_HAS_SSE

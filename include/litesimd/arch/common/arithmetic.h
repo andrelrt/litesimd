@@ -27,16 +27,20 @@
 
 namespace litesimd {
 
-// Add
+// Basic operations
 // ---------------------------------------------------------------------------------------
-template< typename ValueType_T, typename Tag_T = default_tag >
-simd_type< ValueType_T, Tag_T >
-add( simd_type< ValueType_T, Tag_T >,
-     simd_type< ValueType_T, Tag_T > )
-{
-    return simd_type< ValueType_T, Tag_T >::zero();
-}
+#define DEF_ARITH_BINARY( FUNC ) \
+template< typename ValueType_T, typename Tag_T = default_tag > \
+simd_type< ValueType_T, Tag_T > \
+FUNC( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ) { \
+    return simd_type< ValueType_T, Tag_T >::zero(); }
 
+DEF_ARITH_BINARY( add )
+DEF_ARITH_BINARY( sub )
+DEF_ARITH_BINARY( mullo )
+DEF_ARITH_BINARY( mulhi )
+DEF_ARITH_BINARY( div )
+#undef DEF_ARITH_BINARY
 
 } // namespace litesimd
 

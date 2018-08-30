@@ -32,6 +32,10 @@ namespace litesimd {
 // Basic operations
 // ---------------------------------------------------------------------------------------
 DEFINE_BINARY_FUNCTION_ADAPTORS( add, type )
+DEFINE_BINARY_FUNCTION_ADAPTORS( sub, type )
+DEFINE_BINARY_FUNCTION_ADAPTORS( mullo, type )
+DEFINE_BINARY_FUNCTION_ADAPTORS( mulhi, type )
+DEFINE_BINARY_FUNCTION_ADAPTORS( div, type )
 
 
 } // namespace litesimd
