@@ -196,30 +196,6 @@ equals_first_index( simd_type< ValueType_T, Tag_T > lhs,
 
 DEFINE_BINARY_FUNCTION_ADAPTORS( equals_first_index, bitmask_type )
 
-// Blend ternary
-// ---------------------------------------------------------------------------------------
-template< typename ValueType_T, typename Tag_T = default_tag >
-simd_type< ValueType_T, Tag_T >
-blend( simd_type< ValueType_T, Tag_T > mask,
-       ValueType_T trueVal,
-       simd_type< ValueType_T, Tag_T > falseVal )
-{
-    return blend< ValueType_T, Tag_T >( mask,
-                                        simd_type< ValueType_T, Tag_T >( trueVal ),
-                                        falseVal );
-}
-
-template< typename ValueType_T, typename Tag_T = default_tag >
-simd_type< ValueType_T, Tag_T >
-blend( simd_type< ValueType_T, Tag_T > mask,
-       simd_type< ValueType_T, Tag_T > trueVal,
-       ValueType_T falseVal )
-{
-    return blend< ValueType_T, Tag_T >( mask,
-                                        trueVal,
-                                        simd_type< ValueType_T, Tag_T >( falseVal ) );
-}
-
 } // namespace litesimd
 
 #endif // LITESIMD_COMPARE_H

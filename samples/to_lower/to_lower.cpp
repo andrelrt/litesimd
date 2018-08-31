@@ -30,6 +30,7 @@
 #include <litesimd/types.h>
 #include <litesimd/compare.h>
 #include <litesimd/bitwise.h>
+#include <litesimd/shuffle.h>
 #include <litesimd/arithmetic.h>
 
 bool g_verbose = true;

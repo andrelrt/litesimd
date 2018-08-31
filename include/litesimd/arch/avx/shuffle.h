@@ -81,6 +81,23 @@ high_insert< int64_t, avx_tag >( simd_type< int64_t, avx_tag > vec,
                  val, 3 );
 }
 
+// Blend
+// ---------------------------------------------------------------------------------------
+#define DEF_BLEND( TYPE_T, BLEND_CMD ) \
+template<> inline simd_type< TYPE_T, avx_tag > \
+blend< TYPE_T, avx_tag >( simd_type< TYPE_T, avx_tag > mask, \
+                          simd_type< TYPE_T, avx_tag > trueVal, \
+                          simd_type< TYPE_T, avx_tag > falseVal ) { \
+    return BLEND_CMD( falseVal, trueVal, mask ); }
+
+DEF_BLEND( int8_t,  _mm256_blendv_epi8 )
+DEF_BLEND( int16_t, _mm256_blendv_epi8 )
+DEF_BLEND( int32_t, _mm256_blendv_epi8 )
+DEF_BLEND( int64_t, _mm256_blendv_epi8 )
+DEF_BLEND( float,   _mm256_blendv_ps )
+DEF_BLEND( double,  _mm256_blendv_pd )
+#undef DEF_BLEND
+
 // Get
 // ---------------------------------------------------------------------------------------
 template< int index >

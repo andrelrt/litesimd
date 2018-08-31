@@ -34,6 +34,7 @@
 #include <litesimd/compare.h>
 #include <litesimd/shuffle.h>
 #include <litesimd/bitwise.h>
+#include <litesimd/algorithm.h>
 #include <litesimd/helpers/iostream.h>
 
 bool g_verbose = true;
@@ -163,27 +164,6 @@ template<> int is_zero< ls::avx_tag >( ls::simd_type< int8_t, ls::avx_tag > val 
     return _mm256_testz_si256( val, ls::simd_type< int8_t, ls::avx_tag >::ones() );
 }
 
-template< typename Value_T, typename Tag_T >
-inline Value_T max( ls::simd_type< Value_T, Tag_T > ) { return 0; }
-
-template< typename Value_T, typename Tag_T >
-inline ls::simd_type< Value_T, Tag_T >
-max( ls::simd_type< Value_T, Tag_T >, ls::simd_type< Value_T, Tag_T > ) { return 0; }
-
-template<> inline int32_t max< int32_t, ls::sse_tag >( ls::simd_type< int32_t, ls::sse_tag > val )
-{
-    val = _mm_max_epi32( val, _mm_shuffle_epi32( val, _MM_SHUFFLE( 3, 2, 3, 2 ) ) );
-    val = _mm_max_epi32( val, _mm_shuffle_epi32( val, _MM_SHUFFLE( 1, 1, 1, 1 ) ) );
-    return _mm_cvtsi128_si32( val );
-}
-
-template<> inline ls::simd_type< int32_t, ls::sse_tag >
-max< int32_t, ls::sse_tag >( ls::simd_type< int32_t, ls::sse_tag > lhs, ls::simd_type< int32_t, ls::sse_tag > rhs )
-{
-    return _mm_max_epi32( lhs, rhs );
-}
-
-
 template< typename Tag_T > int32_t index_max( const std::array< int32_t, 256 >&,
                                               ls::simd_type< int8_t, Tag_T > ){ return 0; }
 
@@ -202,8 +182,8 @@ template<> int32_t index_max< ls::sse_tag >( const std::array< int32_t, 256 >& t
     simd_index[ 2 ] = _mm_i32gather_epi32( table.data(), simd_index[ 2 ], 4 );
     simd_index[ 3 ] = _mm_i32gather_epi32( table.data(), simd_index[ 3 ], 4 );
 
-    return max< int32_t, ls::sse_tag >( max( max( simd_index[ 0 ], simd_index[ 1 ] ),
-                                             max( simd_index[ 2 ], simd_index[ 3 ] ) ) );
+    return ls::max< int32_t, ls::sse_tag >( ls::max( ls::max( simd_index[ 0 ], simd_index[ 1 ] ),
+                                                     ls::max( simd_index[ 2 ], simd_index[ 3 ] ) ) );
 }
 
 

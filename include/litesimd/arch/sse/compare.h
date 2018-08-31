@@ -81,23 +81,6 @@ DEF_EQUALS( float,   _mm_cmpeq_ps )
 DEF_EQUALS( double,  _mm_cmpeq_pd )
 #undef DEF_EQUALS
 
-// Blend ternary
-// ---------------------------------------------------------------------------------------
-#define DEF_BLEND( TYPE_T, BLEND_CMD ) \
-template<> inline simd_type< TYPE_T, sse_tag > \
-blend< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > mask, \
-                          simd_type< TYPE_T, sse_tag > trueVal, \
-                          simd_type< TYPE_T, sse_tag > falseVal ) { \
-    return BLEND_CMD( falseVal, trueVal, mask ); }
-
-DEF_BLEND( int8_t,  _mm_blendv_epi8 )
-DEF_BLEND( int16_t, _mm_blendv_epi8 )
-DEF_BLEND( int32_t, _mm_blendv_epi8 )
-DEF_BLEND( int64_t, _mm_blendv_epi8 )
-DEF_BLEND( float,   _mm_blendv_ps )
-DEF_BLEND( double,  _mm_blendv_pd )
-#undef DEF_BLEND
-
 } // namespace litesimd
 
 #endif // LITESIMD_HAS_SSE

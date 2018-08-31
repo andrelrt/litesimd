@@ -20,44 +20,29 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_ARCH_COMMON_SHUFFLE_H
-#define LITESIMD_ARCH_COMMON_SHUFFLE_H
+#ifndef LITESIMD_ARCH_COMMON_ALGORITHM_H
+#define LITESIMD_ARCH_COMMON_ALGORITHM_H
 
 #include "../../types.h"
 
 namespace litesimd {
 
-// Low insert
+// Min max
 // ---------------------------------------------------------------------------------------
-template< typename ValueType_T, typename Tag_T = default_tag >
-simd_type< ValueType_T, Tag_T >
-high_insert( simd_type< ValueType_T, Tag_T >, ValueType_T = 0 ){}
+template< typename Value_T, typename Tag_T > simd_type< Value_T, Tag_T >
+min( simd_type< Value_T, Tag_T >, simd_type< Value_T, Tag_T > ){}
 
-// Blend
+template< typename Value_T, typename Tag_T > simd_type< Value_T, Tag_T >
+max( simd_type< Value_T, Tag_T >, simd_type< Value_T, Tag_T > ){}
+
+// Horizontal min max
 // ---------------------------------------------------------------------------------------
-template< typename ValueType_T, typename Tag_T = default_tag >
-simd_type< ValueType_T, Tag_T >
-blend( simd_type< ValueType_T, Tag_T >,
-       simd_type< ValueType_T, Tag_T >,
-       simd_type< ValueType_T, Tag_T > )
-{
-    return simd_type< ValueType_T, Tag_T >::zero();
-}
+template< typename Value_T, typename Tag_T > Value_T
+min( simd_type< Value_T, Tag_T > ){}
 
-// Get Set
-// ---------------------------------------------------------------------------------------
-template< int index, typename ValueType_T, typename Tag_T = default_tag >
-struct get_functor
-{
-    ValueType_T operator()( simd_type< ValueType_T, Tag_T > ){}
-};
-
-template< int index, typename ValueType_T, typename Tag_T = default_tag >
-struct set_functor
-{
-    simd_type< ValueType_T, Tag_T > operator()( simd_type< ValueType_T, Tag_T >, ValueType_T ){}
-};
+template< typename Value_T, typename Tag_T > Value_T
+max( simd_type< Value_T, Tag_T > ){}
 
 } // namespace litesimd
 
-#endif // LITESIMD_ARCH_COMMON_SHUFFLE_H
+#endif // LITESIMD_ARCH_COMMON_ALGORITHM_H

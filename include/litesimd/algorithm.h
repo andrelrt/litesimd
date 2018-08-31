@@ -23,6 +23,8 @@
 #ifndef LITESIMD_ALGORITHM_H
 #define LITESIMD_ALGORITHM_H
 
+#include "arch/sse/algorithm.h"
+#include "arch/avx/algorithm.h"
 #include "algorithm/for_each.h"
 
 #endif // LITESIMD_ALGORITHM_H

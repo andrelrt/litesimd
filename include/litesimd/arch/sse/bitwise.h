@@ -81,52 +81,52 @@ DEF_BIT_XOR( double,  _mm_xor_pd )
 // Horizontal bit AND
 // ---------------------------------------------------------------------------------------
 template<> inline int8_t
-bit_and< int8_t, sse_tag >( simd_type< int8_t, sse_tag > val )
+bit_and< int8_t, sse_tag >( simd_type< int8_t, sse_tag > vec )
 {
-    val = _mm_and_si128( val, _mm_shuffle_epi32( val, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
-    val = _mm_and_si128( val, _mm_shuffle_epi32( val, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
-    val = _mm_and_si128( val, _mm_shufflelo_epi16( val, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
-    val = _mm_and_si128( val, _mm_srli_epi16( val, 8 ) );
-    return (int8_t)_mm_cvtsi128_si32( val );
+    vec = _mm_and_si128( vec, _mm_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+    vec = _mm_and_si128( vec, _mm_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+    vec = _mm_and_si128( vec, _mm_shufflelo_epi16( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+    vec = _mm_and_si128( vec, _mm_srli_epi16( vec, 8 ) );
+    return (int8_t)_mm_cvtsi128_si32( vec );
 }
 
 template<> inline int16_t
-bit_and< int16_t, sse_tag >( simd_type< int16_t, sse_tag > val )
+bit_and< int16_t, sse_tag >( simd_type< int16_t, sse_tag > vec )
 {
-    val = _mm_and_si128( val, _mm_shuffle_epi32( val, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
-    val = _mm_and_si128( val, _mm_shuffle_epi32( val, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
-    val = _mm_and_si128( val, _mm_shufflelo_epi16( val, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
-    return (int16_t)_mm_cvtsi128_si32( val );
+    vec = _mm_and_si128( vec, _mm_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+    vec = _mm_and_si128( vec, _mm_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+    vec = _mm_and_si128( vec, _mm_shufflelo_epi16( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+    return (int16_t)_mm_cvtsi128_si32( vec );
 }
 
 template<> inline int32_t
-bit_and< int32_t, sse_tag >( simd_type< int32_t, sse_tag > val )
+bit_and< int32_t, sse_tag >( simd_type< int32_t, sse_tag > vec )
 {
-    val = _mm_and_si128( val, _mm_shuffle_epi32( val, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
-    val = _mm_and_si128( val, _mm_shuffle_epi32( val, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
-    return _mm_cvtsi128_si32( val );
+    vec = _mm_and_si128( vec, _mm_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+    vec = _mm_and_si128( vec, _mm_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+    return _mm_cvtsi128_si32( vec );
 }
 
 template<> inline int64_t
-bit_and< int64_t, sse_tag >( simd_type< int64_t, sse_tag > val )
+bit_and< int64_t, sse_tag >( simd_type< int64_t, sse_tag > vec )
 {
-    val = _mm_and_si128( val, _mm_shuffle_epi32( val, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
-    return _mm_cvtsi128_si64( val );
+    vec = _mm_and_si128( vec, _mm_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+    return _mm_cvtsi128_si64( vec );
 }
 
 template<> inline float
-bit_and< float, sse_tag >( simd_type< float, sse_tag > val )
+bit_and< float, sse_tag >( simd_type< float, sse_tag > vec )
 {
-    val = _mm_and_ps( val, _mm_shuffle_ps( val, val, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
-    val = _mm_and_ps( val, _mm_shuffle_ps( val, val, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
-    return _mm_cvtss_f32( val );
+    vec = _mm_and_ps( vec, _mm_shuffle_ps( vec, vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+    vec = _mm_and_ps( vec, _mm_shuffle_ps( vec, vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+    return _mm_cvtss_f32( vec );
 }
 
 template<> inline double
-bit_and< double, sse_tag >( simd_type< double, sse_tag > val )
+bit_and< double, sse_tag >( simd_type< double, sse_tag > vec )
 {
-    val = _mm_and_pd( val, _mm_shuffle_pd( val, val, _MM_SHUFFLE2( 0, 1 ) ) );
-    return _mm_cvtsd_f64( val );
+    vec = _mm_and_pd( vec, _mm_shuffle_pd( vec, vec, _MM_SHUFFLE2( 0, 1 ) ) );
+    return _mm_cvtsd_f64( vec );
 }
 
 } // namespace litesimd

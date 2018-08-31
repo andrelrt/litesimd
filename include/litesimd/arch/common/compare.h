@@ -56,18 +56,6 @@ equals( simd_type< ValueType_T, Tag_T >,
     return simd_type< ValueType_T, Tag_T >::zero();
 }
 
-// Blend ternary
-// ---------------------------------------------------------------------------------------
-template< typename ValueType_T, typename Tag_T = default_tag >
-simd_type< ValueType_T, Tag_T >
-blend( simd_type< ValueType_T, Tag_T >,
-       simd_type< ValueType_T, Tag_T >,
-       simd_type< ValueType_T, Tag_T > )
-{
-    return simd_type< ValueType_T, Tag_T >::zero();
-}
-
-
 } // namespace litesimd
 
 #endif // LITESIMD_ARCH_COMMON_COMPARE_H
