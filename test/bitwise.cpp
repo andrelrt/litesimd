@@ -49,7 +49,7 @@ TYPED_TEST(BitwiseTypedTest, AndTypedTest)
     constexpr size_t size = ls::simd_type< type, tag >::simd_size;
 
     simd a = ls::simd_type< type, tag >( 3 );
-    simd b = ls::simd_type< type, tag >( 2 );
+    simd b = ls::simd_type< type, tag >( 6 );
     simd c = ls::bit_and< type, tag >( a, b );
 
     type* pCmp = reinterpret_cast<type*>( &c );
@@ -57,6 +57,94 @@ TYPED_TEST(BitwiseTypedTest, AndTypedTest)
     {
         EXPECT_EQ( 2, pCmp[ i ] );
     }
+
+    simd d = a & b;
+
+    type* pCmp = reinterpret_cast<type*>( &d );
+    for( size_t i = 0; i < size; ++i )
+    {
+        EXPECT_EQ( 2, pCmp[ i ] );
+    }
 }
+
+TYPED_TEST(BitwiseTypedTest, OrTypedTest)
+{
+    using type = typename TypeParam::first_type;
+    using tag = typename TypeParam::second_type;
+    using simd = ls::simd_type< type, tag >;
+    constexpr size_t size = ls::simd_type< type, tag >::simd_size;
+
+    simd a = ls::simd_type< type, tag >( 3 );
+    simd b = ls::simd_type< type, tag >( 6 );
+    simd c = ls::bit_or< type, tag >( a, b );
+
+    type* pCmp = reinterpret_cast<type*>( &c );
+    for( size_t i = 0; i < size; ++i )
+    {
+        EXPECT_EQ( 7, pCmp[ i ] );
+    }
+
+    simd d = a | b;
+
+    type* pCmp = reinterpret_cast<type*>( &d );
+    for( size_t i = 0; i < size; ++i )
+    {
+        EXPECT_EQ( 7, pCmp[ i ] );
+    }
+}
+
+TYPED_TEST(BitwiseTypedTest, XorTypedTest)
+{
+    using type = typename TypeParam::first_type;
+    using tag = typename TypeParam::second_type;
+    using simd = ls::simd_type< type, tag >;
+    constexpr size_t size = ls::simd_type< type, tag >::simd_size;
+
+    simd a = ls::simd_type< type, tag >( 3 );
+    simd b = ls::simd_type< type, tag >( 6 );
+    simd c = ls::bit_xor< type, tag >( a, b );
+
+    type* pCmp = reinterpret_cast<type*>( &c );
+    for( size_t i = 0; i < size; ++i )
+    {
+        EXPECT_EQ( 5, pCmp[ i ] );
+    }
+
+    simd d = a ^ b;
+
+    type* pCmp = reinterpret_cast<type*>( &d );
+    for( size_t i = 0; i < size; ++i )
+    {
+        EXPECT_EQ( 5, pCmp[ i ] );
+    }
+}
+
+TYPED_TEST(BitwiseTypedTest, NotTypedTest)
+{
+    using type = typename TypeParam::first_type;
+    using tag = typename TypeParam::second_type;
+    using simd = ls::simd_type< type, tag >;
+    constexpr size_t size = ls::simd_type< type, tag >::simd_size;
+
+    simd a = ls::simd_type< type, tag >( 3 );
+    simd c = ls::bit_not< type, tag >( a );
+
+    type* pCmp = reinterpret_cast<type*>( &c );
+    for( size_t i = 0; i < size; ++i )
+    {
+        EXPECT_EQ( static_cast<type>( ~3 ), pCmp[ i ] );
+    }
+
+    simd d = ~a;
+
+    type* pCmp = reinterpret_cast<type*>( &d );
+    for( size_t i = 0; i < size; ++i )
+    {
+        EXPECT_EQ( static_cast<type>( ~3 ), pCmp[ i ] );
+    }
+}
+
+
+
 #endif //__SSE2__
 
