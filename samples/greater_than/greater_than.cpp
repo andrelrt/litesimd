@@ -22,7 +22,7 @@
 
 // Compiled with
 //
-// g++ -std=c++14 -O3 -msse4.2 -I<path/to/litesimd/include> greater_than.cpp -o greater_than
+// g++ -std=c++14 -O3 -avx2 -I<path/to/litesimd/include> greater_than.cpp -o greater_than
 
 #include <iostream>
 #include <litesimd/compare.h>
@@ -36,9 +36,6 @@ int main()
     ls::t_int32_simd cmp;
 
     // litesimd types are intrincs compatible
-    //cmp = _mm_set_epi32( 40, 30, 20, 10 );
-
-    // With AVX looks similar
     cmp = _mm256_set_epi32( 80, 70, 60, 50, 40, 30, 20, 10 );
 
     int32_t val = 5;
@@ -46,19 +43,27 @@ int main()
     // int32_simd_size is how many int32_t fits on t_int32_simd (8)
     for( size_t i = 0; i <= ls::int32_simd_size; ++i )
     {
-        // Compare 'val' against all cmp values
+        // Compare 'val' against all 'cmp' values
         uint32_t mask = ls::greater_than_bitmask( val, cmp );
 
-        // Get the return bitmask and find the first item which val is greater
-        uint32_t index = ls::bitmask_last_index< int32_t >( mask );
+        // As 'cmp' is sorted, we can use the bitmask to find the
+        // last item which 'val' is greater
+        //
+        // Returns values between [-1, ls::int32_simd_size)
+        int index = ls::bitmask_last_index< int32_t >( mask );
+        
+        // greater_than_last_index could be called instead
+        // greater_than_bitmask + bitmask_last_index
+        //
+        // int index = ls::greater_than_last_index( val, cmp );
 
-        if( index == 0 )
+        if( index < 0 )
         {
             std::cout << "The value " << val
                       << " is less than all values of " << cmp
                       << std::endl;
         }
-        else if( index == ls::int32_simd_size )
+        else if( index == ls::int32_simd_size -1 )
         {
             std::cout << "The value " << val
                       << " is greater than all values of " << cmp
@@ -67,8 +72,8 @@ int main()
         else
         {
             std::cout << "The value " << val
-                      << " is between itens " << index -1
-                      << " and " << index
+                      << " is between items " << index
+                      << " and " << index + 1
                       << " of " << cmp
                       << std::endl;
         }

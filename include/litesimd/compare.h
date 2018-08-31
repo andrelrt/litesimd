@@ -38,69 +38,69 @@ namespace litesimd {
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T,
           std::enable_if_t< std::is_integral< ValueType_T >::value >* = nullptr >
-inline size_t
+inline int
 bitmask_last_index( uint32_t bmask )
 {
 #ifdef _WIN32
     unsigned long index;
     return (0 == _BitScanReverse( &index, bmask ))
-        ? 0
-        : (index + 1) / sizeof(ValueType_T);
+        ? -1
+        : index / sizeof(ValueType_T);
 #else
     return (bmask == 0)
-        ? 0
-        : (_bit_scan_reverse( bmask ) + 1) / sizeof(ValueType_T);
+        ? -1
+        : _bit_scan_reverse( bmask ) / sizeof(ValueType_T);
 #endif
 }
 
 template< typename ValueType_T,
           std::enable_if_t< std::is_integral< ValueType_T >::value >* = nullptr >
-inline size_t
+inline int
 bitmask_first_index( uint32_t bmask )
 {
 #ifdef _WIN32
     unsigned long index;
     return (0 == _BitScanForward( &index, bmask ))
-        ? 0
-        : index / sizeof(ValueType_T) + 1;
+        ? -1
+        : index / sizeof(ValueType_T);
 #else
     return (bmask == 0)
-        ? 0
-        : _bit_scan_forward( bmask ) / sizeof(ValueType_T) + 1;
+        ? -1
+        : _bit_scan_forward( bmask ) / sizeof(ValueType_T);
 #endif
 }
 
 template< typename ValueType_T,
           std::enable_if_t< std::is_floating_point< ValueType_T >::value >* = nullptr >
-inline size_t
+inline int
 bitmask_last_index( uint32_t bmask )
 {
 #ifdef _WIN32
     unsigned long index;
     return (0 == _BitScanReverse( &index, bmask ))
-        ? 0
-        : index + 1;
+        ? -1
+        : index;
 #else
     return (bmask == 0)
-        ? 0
-        : _bit_scan_reverse( bmask ) + 1;
+        ? -1
+        : _bit_scan_reverse( bmask );
 #endif
 }
 
 template< typename ValueType_T,
           std::enable_if_t< std::is_floating_point< ValueType_T >::value >* = nullptr >
-inline size_t
+inline int
 bitmask_first_index( uint32_t bmask )
 {
 #ifdef _WIN32
     unsigned long index;
     return (0 == _BitScanForward( &index, bmask ))
-        ? 0
-        : index + 1;
+        ? -1
+        : index;
 #else
     return (bmask == 0)
-        ? 0
-        : _bit_scan_forward( bmask ) + 1;
+        ? -1
+        : _bit_scan_forward( bmask );
 #endif
 }
 

@@ -49,14 +49,14 @@ int main()
         // last item which 'val' is greater
         //
         // Returns values between [-1, ls::int32_simd_size)
-        uint32_t index = ls::bitmask_last_index< int32_t >( bitmask );
+        int index = ls::bitmask_last_index< int32_t >( bitmask );
 
         // greater_than_last_index could be called instead
         // greater_than_bitmask + bitmask_last_index
         //
-        // uint32_t index = ls::greater_than_last_index( val, cmp );
+        // int index = ls::greater_than_last_index( val, cmp );
 
-        if( index == -1 )
+        if( index < 0 )
         {
             std::cout << "The value " << val
                       << " is less than all values of " << cmp

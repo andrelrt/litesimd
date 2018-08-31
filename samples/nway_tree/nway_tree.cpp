@@ -103,19 +103,19 @@ public:
         size_t idx = 0;
         for( auto&& level : tree_ )
         {
-            uint32_t li = ls::greater_than_last_index< value_type, TAG_T >( key, *level.get_simd( idx ) );
-            idx = idx * array_size + li;
+            int li = ls::greater_than_last_index< value_type, TAG_T >( key, *level.get_simd( idx ) );
+            idx = idx * array_size + li + 1;
         }
 
         const simd_type* cmp = reinterpret_cast< const simd_type* >( &ref_[ idx * array_size ] );
-        uint32_t off = ls::equals_last_index< value_type, TAG_T >( key, *cmp );
+        int off = ls::equals_last_index< value_type, TAG_T >( key, *cmp );
 
-        if( off == 0 )
+        if( off < 0 )
         {
             return ref_.end();
         }
         auto it = ref_.begin();
-        std::advance( it, idx * array_size + off - 1 );
+        std::advance( it, idx * array_size + off );
         return it;
     }
 

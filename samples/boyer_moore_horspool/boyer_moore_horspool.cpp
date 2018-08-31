@@ -117,7 +117,7 @@ struct boost_searcher
 //
 //                    const char* ss = reinterpret_cast< const char* >( sstr + j );
 //
-//                    auto idx = ssize - ls::bitmask_first_index< int8_t >( bitmask_all & ~bitmask );
+//                    auto idx = ssize - ls::bitmask_first_index< int8_t >( bitmask_all & ~bitmask ) +1;
 ////                    if( idx != 0x1ff )
 ////                    std::cout << "idx, bitmask2: " << idx << ", " << (bitmask_all & ~bitmask) << std::endl;
 //
@@ -150,18 +150,6 @@ struct boost_searcher
 //        return str.size();
 //    }
 //};
-
-template< typename ValueType_T >
-inline void for_each_index( size_t bitmask, std::function< bool(size_t) > func )
-{
-    while( bitmask != 0 )
-    {
-        size_t idx = ls::bitmask_first_index< ValueType_T >( bitmask );
-        if( !func( idx ) )
-            break;
-        bitmask &= ~(size_t(1) << (idx-1));
-    }
-}
 
 template< typename Tag_T > int is_zero( ls::simd_type< int8_t, Tag_T > ){ return 0; }
 
@@ -282,7 +270,7 @@ struct litesimd_boyer_moore_horspool2
                 size_t skip = 0;
                 do
                 {
-                    size_t check_idx = ls::bitmask_first_index< int8_t >( bitmask );
+                    size_t check_idx = ls::bitmask_first_index< int8_t >( bitmask ) + 1;
 
                     bool found = true;
                     bool do_break = false;
@@ -365,8 +353,8 @@ struct litesimd_masquerade_search
                     while( bitmask != 0 )
                     {
                         std::cout << bitmask << std::endl;
-                        size_t idx = ls::bitmask_first_index< int8_t >( bitmask ) -1;
-                        if( 0 == memcmp( str.data() + i * sizeof(int16_t) + idx, find.data(), find.size() ) )
+                        int idx = ls::bitmask_first_index< int8_t >( bitmask );
+                        if( 0 == memcmp( str.data() + i * sizeof(int16_t) + idx + 1, find.data(), find.size() ) )
                         {
                             return idx;
                         }

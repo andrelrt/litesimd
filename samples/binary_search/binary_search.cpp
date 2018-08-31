@@ -80,7 +80,7 @@ public:
 
     const_iterator find( const value_type& key ) const
     {
-        size_t i = ls::greater_than_last_index< value_type, TAG_T >( key, cmp_ );
+        size_t i = ls::greater_than_last_index< value_type, TAG_T >( key, cmp_ ) + 1;
         size_t step = ref_.size() / (array_size + 1);
 
         const_iterator beg = ref_.begin();
@@ -136,7 +136,7 @@ public:
 
     const_iterator find( const value_type& key ) const
     {
-        size_t i = ls::greater_than_last_index< value_type, TAG_T >( key, cmp_ );
+        size_t i = ls::greater_than_last_index< value_type, TAG_T >( key, cmp_ ) + 1;
         auto end = std::next( ranges_[ i + 1 ] );
         auto first = std::lower_bound( ranges_[ i ], end, key );
         return (first!=end && !(key<*first)) ? first : ref_.end();
@@ -172,7 +172,7 @@ ForwardIterator lower_bound( ForwardIterator beg, ForwardIterator end, const T& 
     }
 
     // N-Way search
-    size_t i = ls::greater_than_last_index< value_type, TAG_T >( key, cmp );
+    size_t i = ls::greater_than_last_index< value_type, TAG_T >( key, cmp ) + 1;
 
     // Recalculate iterators
     it = beg;
@@ -277,12 +277,13 @@ ForwardIterator lower_bound2( ForwardIterator beg, ForwardIterator end, const T&
     if( !is_zero< TAG_T >( eq ) )
     {
         auto it = beg;
-        std::advance( it, step * ls::bitmask_last_index< value_type >( ls::mask_to_bitmask< value_type, TAG_T >( eq ) ) );
+        std::advance( it, step * ( 1 + ls::bitmask_last_index< value_type >(
+                                     ls::mask_to_bitmask< value_type, TAG_T >( eq ) ) ) );
         return it;
     }
 
     // N-Way search
-    size_t i = ls::greater_than_last_index< value_type, TAG_T >( key, cmp );
+    size_t i = ls::greater_than_last_index< value_type, TAG_T >( key, cmp ) + 1;
 
     // Recalculate iterators
     auto it = beg;
