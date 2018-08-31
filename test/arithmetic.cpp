@@ -59,5 +59,40 @@ TYPED_TEST(ArithmeticTypedTest, AddTypedTest)
     {
         EXPECT_EQ( 3, pCmp[ i ] );
     }
+
+    simd d = a + b;
+
+    pCmp = reinterpret_cast<type*>( &d );
+    for( size_t i = 0; i < size; ++i )
+    {
+        EXPECT_EQ( 3, pCmp[ i ] );
+    }
 }
+
+TYPED_TEST(ArithmeticTypedTest, AddTypedTest)
+{
+    using type = typename TypeParam::first_type;
+    using tag = typename TypeParam::second_type;
+    using simd = ls::simd_type< type, tag >;
+    constexpr size_t size = ls::simd_type< type, tag >::simd_size;
+
+    simd a = ls::simd_type< type, tag >( 8 );
+    simd b = ls::simd_type< type, tag >( 3 );
+    simd c = ls::sub< type, tag >( a, b );
+
+    type* pCmp = reinterpret_cast<type*>( &c );
+    for( size_t i = 0; i < size; ++i )
+    {
+        EXPECT_EQ( 5, pCmp[ i ] );
+    }
+
+    simd d = a - b;
+
+    pCmp = reinterpret_cast<type*>( &d );
+    for( size_t i = 0; i < size; ++i )
+    {
+        EXPECT_EQ( 5, pCmp[ i ] );
+    }
+}
+
 #endif //__SSE2__
