@@ -125,7 +125,7 @@ private:
 
     struct tree_level
     {
-        ls::aligned_vector< value_type > keys_;
+        ls::vector< value_type > keys_;
 
         const simd_type* get_simd( size_t idx ) const
         {
@@ -142,7 +142,7 @@ private:
         }
     };
 
-    ls::aligned_vector< tree_level > tree_;
+    ls::vector< tree_level > tree_;
     const container_type& ref_;
 
     void build_index( const container_type& cont )
@@ -214,13 +214,13 @@ int main(int argc, char* /*argv*/[])
     }
     while( 1 )
     {
-        uint64_t base = bench< ls::aligned_vector< int32_t >, container_only, void >( "lower_bound .", runSize, loop );
-        uint64_t index1 = bench< ls::aligned_vector< int32_t >, nway_tree, ls::sse_tag >( "index SSE ...", runSize, loop );
-        uint64_t index2 = bench< ls::aligned_vector< int32_t >, nway_tree, ls::avx_tag >( "index AVX ...", runSize, loop );
+        uint64_t base = bench< ls::vector< int32_t >, container_only, void >( "lower_bound .", runSize, loop );
+        uint64_t index1 = bench< ls::vector< int32_t >, nway_tree, ls::sse_tag >( "index SSE ...", runSize, loop );
+        uint64_t index2 = bench< ls::vector< int32_t >, nway_tree, ls::avx_tag >( "index AVX ...", runSize, loop );
 
         if( g_verbose )
         {
-            bench< ls::aligned_vector< int32_t >, map_index, void >( "std::map ....", runSize, loop );
+            bench< ls::vector< int32_t >, map_index, void >( "std::map ....", runSize, loop );
 
             std::cout
                       << std::endl << "Index Speed up SSE.......: " << std::fixed << std::setprecision(2)

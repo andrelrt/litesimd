@@ -216,22 +216,22 @@ int main(int argc, char* /*argv*/[])
     }
     while( 1 )
     {
-        uint64_t bsort = bench< ls::aligned_vector< int32_t >, basic_bubble_sort,
+        uint64_t bsort = bench< ls::vector< int32_t >, basic_bubble_sort,
                               ls::sse_tag >( "Bubble sort .....", runSize, loop );
-        uint64_t ssesort = bench< ls::aligned_vector< int32_t >, bubble,
+        uint64_t ssesort = bench< ls::vector< int32_t >, bubble,
                                 ls::sse_tag >( "SSE Bubble sort .", runSize, loop );
-        uint64_t ssesort2 = bench< ls::aligned_vector< int32_t >, bubble2,
+        uint64_t ssesort2 = bench< ls::vector< int32_t >, bubble2,
                                  ls::sse_tag >( "SSE Bubble2 sort ", runSize, loop );
 #ifdef LITESIMD_HAS_AVX
-        uint64_t avxsort = bench< ls::aligned_vector< int32_t >, bubble,
+        uint64_t avxsort = bench< ls::vector< int32_t >, bubble,
                                 ls::avx_tag >( "AVX Bubble sort .", runSize, loop );
-        uint64_t avxsort2 = bench< ls::aligned_vector< int32_t >, bubble2,
+        uint64_t avxsort2 = bench< ls::vector< int32_t >, bubble2,
                                  ls::avx_tag >( "AVX Bubble2 sort ", runSize, loop );
 #endif
 
         if( g_verbose )
         {
-            bench< ls::aligned_vector< int32_t >, stl_sort, void >( "STL sort ........", runSize, loop );
+            bench< ls::vector< int32_t >, stl_sort, void >( "STL sort ........", runSize, loop );
 
             std::cout
                 << std::endl << "SSE Speed up ......: " << std::fixed << std::setprecision(2)

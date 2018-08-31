@@ -391,22 +391,22 @@ int main(int argc, char* /*argv*/[])
     }
     while( 1 )
     {
-        uint64_t base =   bench< ls::aligned_vector< int32_t >, container_only, void >    ( "lower_bound ..........", runSize, loop );
-        uint64_t cache =  bench< ls::aligned_vector< int32_t >, index_cache, ls::sse_tag >( "index_cache SSE.......", runSize, loop );
+        uint64_t base =   bench< ls::vector< int32_t >, container_only, void >    ( "lower_bound ..........", runSize, loop );
+        uint64_t cache =  bench< ls::vector< int32_t >, index_cache, ls::sse_tag >( "index_cache SSE.......", runSize, loop );
 #ifdef LITESIMD_HAS_AVX
-        uint64_t cache2 = bench< ls::aligned_vector< int32_t >, index_cache, ls::avx_tag >( "index_cache AVX.......", runSize, loop );
+        uint64_t cache2 = bench< ls::vector< int32_t >, index_cache, ls::avx_tag >( "index_cache AVX.......", runSize, loop );
 #endif
 
         if( g_verbose )
         {
-            uint64_t nocache =  bench< ls::aligned_vector< int32_t >, index_nocache, ls::sse_tag >( "index_nocache SSE ....", runSize, loop );
-            uint64_t simdlb =  bench< ls::aligned_vector< int32_t >, container_simd_lb, ls::sse_tag >( "SIMD lower_bound SSE .", runSize, loop );
-            uint64_t simdlbv2 =  bench< ls::aligned_vector< int32_t >, container_simd_lb2, ls::sse_tag >( "SIMD lower_boundv2 SSE", runSize, loop );
+            uint64_t nocache =  bench< ls::vector< int32_t >, index_nocache, ls::sse_tag >( "index_nocache SSE ....", runSize, loop );
+            uint64_t simdlb =  bench< ls::vector< int32_t >, container_simd_lb, ls::sse_tag >( "SIMD lower_bound SSE .", runSize, loop );
+            uint64_t simdlbv2 =  bench< ls::vector< int32_t >, container_simd_lb2, ls::sse_tag >( "SIMD lower_boundv2 SSE", runSize, loop );
 
 #ifdef LITESIMD_HAS_AVX
-            uint64_t nocache2 = bench< ls::aligned_vector< int32_t >, index_nocache, ls::avx_tag >( "index_nocache AVX ....", runSize, loop );
-            uint64_t simdlb2 = bench< ls::aligned_vector< int32_t >, container_simd_lb, ls::avx_tag >( "SIMD lower_bound AVX .", runSize, loop );
-            uint64_t simdlb2v2 = bench< ls::aligned_vector< int32_t >, container_simd_lb2, ls::avx_tag >( "SIMD lower_boundv2 AVX", runSize, loop );
+            uint64_t nocache2 = bench< ls::vector< int32_t >, index_nocache, ls::avx_tag >( "index_nocache AVX ....", runSize, loop );
+            uint64_t simdlb2 = bench< ls::vector< int32_t >, container_simd_lb, ls::avx_tag >( "SIMD lower_bound AVX .", runSize, loop );
+            uint64_t simdlb2v2 = bench< ls::vector< int32_t >, container_simd_lb2, ls::avx_tag >( "SIMD lower_boundv2 AVX", runSize, loop );
 #endif
 
             std::cout

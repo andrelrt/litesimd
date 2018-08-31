@@ -31,7 +31,7 @@ namespace litesimd {
 // Aligned vector
 // ---------------------------------------------------------------------------------------
 template< typename Val_T >
-using aligned_vector = std::vector< Val_T, boost::alignment::aligned_allocator<Val_T, 64> >;
+using vector = std::vector< Val_T, boost::alignment::aligned_allocator<Val_T, 64> >;
 
 
 } // namespace litesimd
