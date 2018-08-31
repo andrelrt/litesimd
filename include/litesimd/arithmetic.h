@@ -38,6 +38,22 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( mulhi, type )
 DEFINE_BINARY_FUNCTION_ADAPTORS( div, type )
 
 
+template< typename LHS, typename RHS, typename Tag_T = default_tag,
+          typename LHS::simd_value_type* = nullptr >
+LHS inline operator+( LHS lhs, RHS rhs ) { return add< LHS::simd_value_type, Tag_T >( lhs, rhs ); }
+
+template< typename LHS, typename RHS, typename Tag_T = default_tag,
+          typename RHS::simd_value_type* = nullptr >
+RHS inline operator+( LHS lhs, RHS rhs ) { return add< RHS::simd_value_type, Tag_T >( lhs, rhs ); }
+
+template< typename LHS, typename RHS, typename Tag_T = default_tag,
+          typename LHS::simd_value_type* = nullptr >
+LHS inline operator-( LHS lhs, RHS rhs ) { return sub< LHS::simd_value_type, Tag_T >( lhs, rhs ); }
+
+template< typename LHS, typename RHS, typename Tag_T = default_tag,
+          typename RHS::simd_value_type* = nullptr >
+RHS inline operator-( LHS lhs, RHS rhs ) { return sub< RHS::simd_value_type, Tag_T >( lhs, rhs ); }
+
 } // namespace litesimd
 
 #endif // LITESIMD_ARITHMETIC_H
