@@ -42,13 +42,13 @@ int main()
     // int32_simd_size is how many int32_t fits on t_int32_simd (4)
     for( size_t i = 0; i <= ls::int32_simd_size; ++i )
     {
-        // Compare 'val' against all cmp values
+        // Compare 'val' against all 'cmp' values
         uint32_t bitmask = ls::greater_than_bitmask( val, cmp );
 
         // As 'cmp' is sorted, we can use the bitmask to find the
         // last item which 'val' is greater
         //
-        // Returns values between [0, ls::int32_simd_size]
+        // Returns values between [-1, ls::int32_simd_size)
         uint32_t index = ls::bitmask_last_index< int32_t >( bitmask );
 
         // greater_than_last_index could be called instead
@@ -56,13 +56,13 @@ int main()
         //
         // uint32_t index = ls::greater_than_last_index( val, cmp );
 
-        if( index == 0 )
+        if( index == -1 )
         {
             std::cout << "The value " << val
                       << " is less than all values of " << cmp
                       << std::endl;
         }
-        else if( index == ls::int32_simd_size )
+        else if( index == ls::int32_simd_size -1 )
         {
             std::cout << "The value " << val
                       << " is greater than all values of " << cmp
@@ -71,8 +71,8 @@ int main()
         else
         {
             std::cout << "The value " << val
-                      << " is between items " << index -1
-                      << " and " << index
+                      << " is between items " << index
+                      << " and " << index + 1
                       << " of " << cmp
                       << std::endl;
         }
@@ -86,11 +86,11 @@ This will produce the follow output:
 
 ```
 $ ./greater_than
-The value 5 is less than all values of (10, 20, 30, 40)
-The value 15 is between items 0 and 1 of (10, 20, 30, 40)
-The value 25 is between items 1 and 2 of (10, 20, 30, 40)
-The value 35 is between items 2 and 3 of (10, 20, 30, 40)
-The value 45 is greater than all values of (10, 20, 30, 40)
+The value 5 is less than all values of (40, 30, 20, 10)
+The value 15 is between items 0 and 1 of (40, 30, 20, 10)
+The value 25 is between items 1 and 2 of (40, 30, 20, 10)
+The value 35 is between items 2 and 3 of (40, 30, 20, 10)
+The value 45 is greater than all values of (40, 30, 20, 10)
 ```
 
 ## Building samples and tests

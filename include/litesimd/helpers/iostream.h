@@ -26,28 +26,44 @@
 #include <iostream>
 #include <iomanip>
 #include "../types.h"
+#include "../shuffle.h"
 
 namespace litesimd {
+
+namespace {
+
+template< int index, typename SimdType_T >
+struct litesimd_internal_out
+{
+    void operator()( std::ostream& out, SimdType_T val )
+    {
+        out << get< index >( val ) << ", ";
+        litesimd_internal_out< index-1, SimdType_T >()( out, val );
+    }
+};
+
+template< typename SimdType_T >
+struct litesimd_internal_out< 0, SimdType_T >
+{
+    void operator()( std::ostream& out, SimdType_T val )
+    {
+        out << get< 0 >( val );
+    }
+};
+
+} // empty namespace
 
 // Stream Operators
 // -----------------------------------------------------------------------------
 template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
-std::ostream& operator<<( std::ostream& out, SimdType_T val )
+std::ostream& operator<<( std::ostream& out, SimdType_T vec )
 {
-    auto pval = reinterpret_cast<typename SimdType_T::simd_value_type const*>( &val );
-    constexpr size_t sz = sizeof(typename SimdType_T::simd_value_type);
-    constexpr size_t len = sizeof(SimdType_T) / sz;
-    constexpr size_t mask = (1ul << (sz * 8)) -1;
+    constexpr size_t len = SimdType_T::simd_size - 1;
 
     std::ios_base::fmtflags f( out.flags() );
 
-    out << "(" << (+pval[0] & mask);
-
-    for( size_t i = 1; i < len; ++i )
-    {
-        out << ", " << (+pval[i] & mask);
-    }
-
+    out << "(";
+    litesimd_internal_out< len, SimdType_T >()( out, vec );
     out << ")";
 
     out.flags( f );
