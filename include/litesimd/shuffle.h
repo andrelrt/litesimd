@@ -29,6 +29,27 @@
 
 namespace litesimd {
 
+// Get Set
+// ---------------------------------------------------------------------------------------
+template< int index, typename ValueType_T, typename Tag_T = default_tag >
+ValueType_T inline
+get( simd_type< ValueType_T, Tag_T > vec )
+{
+    static_assert( 0 <= index && index < simd_type< ValueType_T, Tag_T >::simd_size,
+                    "Index out of bounds" );
+
+    return get_functor< index, ValueType_T, Tag_T >()( vec );
+}
+
+template< int index, typename ValueType_T, typename Tag_T = default_tag >
+simd_type< ValueType_T, Tag_T > inline
+set( simd_type< ValueType_T, Tag_T > vec, ValueType_T val )
+{
+    static_assert( 0 <= index && index < simd_type< ValueType_T, Tag_T >::simd_size,
+                    "Index out of bounds" );
+
+    return set_functor< index, ValueType_T, Tag_T >()( vec, val );
+}
 
 } // namespace litesimd
 

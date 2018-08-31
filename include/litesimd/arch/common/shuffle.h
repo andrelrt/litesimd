@@ -31,10 +31,21 @@ namespace litesimd {
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
 simd_type< ValueType_T, Tag_T >
-high_insert( simd_type< ValueType_T, Tag_T >, ValueType_T = 0 )
+high_insert( simd_type< ValueType_T, Tag_T >, ValueType_T = 0 ){}
+
+// Get Set
+// ---------------------------------------------------------------------------------------
+template< int index, typename ValueType_T, typename Tag_T = default_tag >
+struct get_functor
 {
-    return traits< ValueType_T, Tag_T >::zero();
-}
+    ValueType_T operator()( simd_type< ValueType_T, Tag_T > ){}
+};
+
+template< int index, typename ValueType_T, typename Tag_T = default_tag >
+struct set_functor
+{
+    simd_type< ValueType_T, Tag_T > operator()( simd_type< ValueType_T, Tag_T >, ValueType_T ){}
+};
 
 } // namespace litesimd
 

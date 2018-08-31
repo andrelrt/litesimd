@@ -38,7 +38,7 @@ high_insert< int8_t, avx_tag >( simd_type< int8_t, avx_tag > vec,
 {
     return _mm256_insert_epi8(
                  _mm256_insert_epi8(
-                       _mm256_shuffle_epi8( vec, 
+                       _mm256_shuffle_epi8( vec,
                              _mm256_set_epi8( 15, 15, 14, 13, 12, 11, 10, 9,
                                                8,  7,  6,  5,  4,  3,  2, 1,
                                               15, 15, 14, 13, 12, 11, 10, 9,
@@ -53,7 +53,7 @@ high_insert< int16_t, avx_tag >( simd_type< int16_t, avx_tag > vec,
 {
     return _mm256_insert_epi16(
                  _mm256_insert_epi16(
-                       _mm256_shuffle_epi8( vec, 
+                       _mm256_shuffle_epi8( vec,
                              _mm256_set_epi8( 15, 15, 15, 14, 13, 12, 11, 10,
                                                9,  8,  7,  6,  5,  4,  3, 2,
                                               15, 15, 15, 14, 13, 12, 11, 10,
@@ -67,7 +67,7 @@ high_insert< int32_t, avx_tag >( simd_type< int32_t, avx_tag > vec,
                                 int32_t val )
 {
     return _mm256_insert_epi32(
-                 _mm256_permutevar8x32_epi32( vec, 
+                 _mm256_permutevar8x32_epi32( vec,
                         _mm256_set_epi32( 7, 7, 6, 5, 4, 3, 2, 1 ) ),
                  val, 7 );
 }
@@ -80,6 +80,131 @@ high_insert< int64_t, avx_tag >( simd_type< int64_t, avx_tag > vec,
                  _mm256_permute4x64_epi64( vec, _MM_SHUFFLE( 3, 3, 2, 1 ) ),
                  val, 3 );
 }
+
+// Get
+// ---------------------------------------------------------------------------------------
+template< int index >
+struct get_functor< index, int8_t, avx_tag >
+{
+    int8_t inline operator()( simd_type< int8_t, avx_tag > vec )
+    {
+        return _mm256_extract_epi8( vec, index );
+    }
+};
+
+template< int index >
+struct get_functor< index, int16_t, avx_tag >
+{
+    int16_t inline operator()( simd_type< int16_t, avx_tag > vec )
+    {
+        return _mm256_extract_epi16( vec, index );
+    }
+};
+
+template< int index >
+struct get_functor< index, int32_t, avx_tag >
+{
+    int32_t inline operator()( simd_type< int32_t, avx_tag > vec )
+    {
+        return _mm256_extract_epi32( vec, index );
+    }
+};
+
+template< int index >
+struct get_functor< index, int64_t, avx_tag >
+{
+    int64_t inline operator()( simd_type< int64_t, avx_tag > vec )
+    {
+        return _mm256_extract_epi64( vec, index );
+    }
+};
+
+template< int index >
+struct get_functor< index, float, avx_tag >
+{
+    float inline operator()( simd_type< float, avx_tag > vec )
+    {
+        return _mm_extract_ps( _mm256_extractf128_ps( vec, index >> 2 ),
+                               index & 3 );
+    }
+};
+
+template< int index >
+struct get_functor< index, double, avx_tag >
+{
+    double inline operator()( simd_type< double, avx_tag > vec )
+    {
+        return _mm256_cvtsd_f64( _mm256_shuffle_pd( vec, vec, _MM_SHUFFLE2( index, index ) ) );
+    }
+};
+
+// Set
+// ---------------------------------------------------------------------------------------
+template< int index >
+struct set_functor< index, int8_t, avx_tag >
+{
+    simd_type< int8_t, avx_tag > inline
+    operator()( simd_type< int8_t, avx_tag > vec, int8_t val )
+    {
+        return _mm256_insert_epi8( vec, val, index );
+    }
+};
+
+template< int index >
+struct set_functor< index, int16_t, avx_tag >
+{
+    simd_type< int16_t, avx_tag > inline
+    operator()( simd_type< int16_t, avx_tag > vec, int16_t val )
+    {
+        return _mm256_insert_epi16( vec, val, index );
+    }
+};
+
+template< int index >
+struct set_functor< index, int32_t, avx_tag >
+{
+    simd_type< int32_t, avx_tag > inline
+    operator()( simd_type< int32_t, avx_tag > vec, int32_t val )
+    {
+        return _mm256_insert_epi32( vec, val, index );
+    }
+};
+
+template< int index >
+struct set_functor< index, int64_t, avx_tag >
+{
+    simd_type< int64_t, avx_tag > inline
+    operator()( simd_type< int64_t, avx_tag > vec, int64_t val )
+    {
+        return _mm256_insert_epi64( vec, val, index );
+    }
+};
+
+template< int index >
+struct set_functor< index, float, avx_tag >
+{
+    simd_type< float, avx_tag > inline
+    operator()( simd_type< float, avx_tag > vec, float val )
+    {
+        auto mask = _mm256_cmpeq_epi32( _mm256_set1_epi32( index ),
+                                        _mm256_set_epi32( 7, 6, 5, 4, 3, 2, 1, 0 ) );
+
+        return _mm256_blendv_ps( vec, _mm256_set1_ps( val ), mask );
+    }
+};
+
+template< int index >
+struct set_functor< index, double, avx_tag >
+{
+    simd_type< double, avx_tag > inline
+    operator()( simd_type< double, avx_tag > vec, double val )
+    {
+        auto mask = _mm256_cmpeq_epi64( _mm256_set1_epi64x( index ),
+                                        _mm256_set_epi64x( 3, 2, 1, 0 ) );
+
+        return _mm256_blendv_pd( vec, _mm256_set1_pd( val ), mask );
+    }
+};
 
 } // namespace litesimd
 
