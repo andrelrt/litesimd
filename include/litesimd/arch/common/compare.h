@@ -40,7 +40,7 @@ mask_to_bitmask( simd_type< ValueType_T, Tag_T > )
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
 simd_type< ValueType_T, Tag_T >
-greater_than( simd_type< ValueType_T, Tag_T >,
+greater( simd_type< ValueType_T, Tag_T >,
               simd_type< ValueType_T, Tag_T > )
 {
     return simd_type< ValueType_T, Tag_T >::zero();

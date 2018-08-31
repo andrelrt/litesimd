@@ -22,7 +22,7 @@
 
 // Compiled with
 //
-// g++ -std=c++14 -O3 -avx2 -I<path/to/litesimd/include> greater_than.cpp -o greater_than
+// g++ -std=c++14 -O3 -avx2 -I<path/to/litesimd/include> greater.cpp -o greater
 
 #include <iostream>
 #include <litesimd/compare.h>
@@ -44,7 +44,7 @@ int main()
     for( size_t i = 0; i <= ls::int32_simd_size; ++i )
     {
         // Compare 'val' against all 'cmp' values
-        uint32_t mask = ls::greater_than_bitmask( val, cmp );
+        uint32_t mask = ls::greater_bitmask( val, cmp );
 
         // As 'cmp' is sorted, we can use the bitmask to find the
         // last item which 'val' is greater
@@ -52,10 +52,10 @@ int main()
         // Returns values between [-1, ls::int32_simd_size)
         int index = ls::bitmask_last_index< int32_t >( mask );
         
-        // greater_than_last_index could be called instead
-        // greater_than_bitmask + bitmask_last_index
+        // greater_last_index could be called instead
+        // greater_bitmask + bitmask_last_index
         //
-        // int index = ls::greater_than_last_index( val, cmp );
+        // int index = ls::greater_last_index( val, cmp );
 
         if( index < 0 )
         {

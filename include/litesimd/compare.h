@@ -106,49 +106,49 @@ bitmask_first_index( uint32_t bmask )
 
 // Greater than
 // ---------------------------------------------------------------------------------------
-DEFINE_BINARY_FUNCTION_ADAPTORS( greater_than, type )
+DEFINE_BINARY_FUNCTION_ADAPTORS( greater, type )
 
 // Greater than bitmask
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline typename simd_type< ValueType_T, Tag_T >::bitmask_type
-greater_than_bitmask( simd_type< ValueType_T, Tag_T > lhs,
+greater_bitmask( simd_type< ValueType_T, Tag_T > lhs,
                       simd_type< ValueType_T, Tag_T > rhs )
 {
     return mask_to_bitmask< ValueType_T, Tag_T >(
-                greater_than< ValueType_T, Tag_T >( lhs, rhs )
+                greater< ValueType_T, Tag_T >( lhs, rhs )
             );
 }
 
-DEFINE_BINARY_FUNCTION_ADAPTORS( greater_than_bitmask, bitmask_type )
+DEFINE_BINARY_FUNCTION_ADAPTORS( greater_bitmask, bitmask_type )
 
 // Greater than high index
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline typename simd_type< ValueType_T, Tag_T >::bitmask_type
-greater_than_last_index( simd_type< ValueType_T, Tag_T > lhs,
+greater_last_index( simd_type< ValueType_T, Tag_T > lhs,
                          simd_type< ValueType_T, Tag_T > rhs )
 {
     return bitmask_last_index< ValueType_T >(
-                greater_than_bitmask< ValueType_T, Tag_T >( lhs, rhs )
+                greater_bitmask< ValueType_T, Tag_T >( lhs, rhs )
             );
 }
 
-DEFINE_BINARY_FUNCTION_ADAPTORS( greater_than_last_index, bitmask_type )
+DEFINE_BINARY_FUNCTION_ADAPTORS( greater_last_index, bitmask_type )
 
 // Greater than low index
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline typename simd_type< ValueType_T, Tag_T >::bitmask_type
-greater_than_first_index( simd_type< ValueType_T, Tag_T > lhs,
+greater_first_index( simd_type< ValueType_T, Tag_T > lhs,
                          simd_type< ValueType_T, Tag_T > rhs )
 {
     return bitmask_first_index< ValueType_T >(
-                greater_than_bitmask< ValueType_T, Tag_T >( lhs, rhs )
+                greater_bitmask< ValueType_T, Tag_T >( lhs, rhs )
             );
 }
 
-DEFINE_BINARY_FUNCTION_ADAPTORS( greater_than_first_index, bitmask_type )
+DEFINE_BINARY_FUNCTION_ADAPTORS( greater_first_index, bitmask_type )
 
 // Equals
 // ---------------------------------------------------------------------------------------

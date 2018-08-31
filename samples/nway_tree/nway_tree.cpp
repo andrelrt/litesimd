@@ -103,7 +103,7 @@ public:
         size_t idx = 0;
         for( auto&& level : tree_ )
         {
-            int li = ls::greater_than_last_index< value_type, TAG_T >( key, *level.get_simd( idx ) );
+            int li = ls::greater_last_index< value_type, TAG_T >( key, *level.get_simd( idx ) );
             idx = idx * array_size + li + 1;
         }
 

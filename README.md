@@ -21,7 +21,7 @@ Any SIMD library typically covers a smaller scope than the total set of processo
 ```cpp
 // Compiled with
 //
-// g++ -std=c++14 -O3 -msse4.2 -I<path/to/litesimd/include> greater_than.cpp -o greater_than
+// g++ -std=c++14 -O3 -msse4.2 -I<path/to/litesimd/include> greater.cpp -o greater
 
 #include <iostream>
 #include <litesimd/compare.h>
@@ -43,7 +43,7 @@ int main()
     for( size_t i = 0; i <= ls::int32_simd_size; ++i )
     {
         // Compare 'val' against all 'cmp' values
-        uint32_t bitmask = ls::greater_than_bitmask( val, cmp );
+        uint32_t bitmask = ls::greater_bitmask( val, cmp );
 
         // As 'cmp' is sorted, we can use the bitmask to find the
         // last item which 'val' is greater
@@ -51,10 +51,10 @@ int main()
         // Returns values between [-1, ls::int32_simd_size)
         int index = ls::bitmask_last_index< int32_t >( bitmask );
 
-        // greater_than_last_index could be called instead
-        // greater_than_bitmask + bitmask_last_index
+        // greater_last_index could be called instead
+        // greater_bitmask + bitmask_last_index
         //
-        // int index = ls::greater_than_last_index( val, cmp );
+        // int index = ls::greater_last_index( val, cmp );
 
         if( index < 0 )
         {
@@ -85,7 +85,7 @@ int main()
 This will produce the follow output:
 
 ```
-$ ./greater_than
+$ ./greater
 The value 5 is less than all values of (40, 30, 20, 10)
 The value 15 is between items 0 and 1 of (40, 30, 20, 10)
 The value 25 is between items 1 and 2 of (40, 30, 20, 10)

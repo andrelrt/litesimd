@@ -51,7 +51,7 @@ DEF_MASK_TO_BITMASK( double,  _mm256_movemask_pd )
 // ---------------------------------------------------------------------------------------
 #define DEF_GREATER_THAN( TYPE_T, CMD ) \
 template<> inline simd_type< TYPE_T, avx_tag > \
-greater_than< TYPE_T, avx_tag >( simd_type< TYPE_T, avx_tag > lhs, \
+greater< TYPE_T, avx_tag >( simd_type< TYPE_T, avx_tag > lhs, \
                                  simd_type< TYPE_T, avx_tag > rhs ) { \
     return CMD( lhs, rhs ); \
 }
@@ -64,7 +64,7 @@ DEF_GREATER_THAN( int64_t, _mm256_cmpgt_epi64 )
 #undef DEF_GREATER_THAN
 
 template<> inline simd_type< float, avx_tag >
-greater_than< float, avx_tag >( simd_type< float, avx_tag > lhs,
+greater< float, avx_tag >( simd_type< float, avx_tag > lhs,
                                 simd_type< float, avx_tag > rhs )
 {
     // Quietly ignore NaN
@@ -72,7 +72,7 @@ greater_than< float, avx_tag >( simd_type< float, avx_tag > lhs,
 }
 
 template<> inline simd_type< double, avx_tag >
-greater_than< double, avx_tag >( simd_type< double, avx_tag > lhs,
+greater< double, avx_tag >( simd_type< double, avx_tag > lhs,
                                  simd_type< double, avx_tag > rhs )
 {
     // Quietly ignore NaN

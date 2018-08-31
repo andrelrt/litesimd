@@ -51,7 +51,7 @@ DEF_MASK_TO_BITMASK( double,  _mm_movemask_pd )
 // ---------------------------------------------------------------------------------------
 #define DEF_GREATER_THAN( TYPE_T, CMD ) \
 template<> inline simd_type< TYPE_T, sse_tag > \
-greater_than< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > lhs, \
+greater< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > lhs, \
                                  simd_type< TYPE_T, sse_tag > rhs ) { \
     return CMD( lhs, rhs ); \
 }

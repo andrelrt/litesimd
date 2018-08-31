@@ -47,8 +47,8 @@ struct default_simd_to_lower
         {
             *data = ls::blend< int8_t >(
                         ls::bit_and< int8_t >(
-                            ls::greater_than( *data, int8_t('A'-1) ),
-                            ls::greater_than( int8_t('Z'+1), *data ) ),
+                            ls::greater( *data, int8_t('A'-1) ),
+                            ls::greater( int8_t('Z'+1), *data ) ),
                         ls::add( *data, int8_t(0x20) ),
                         *data );
             ++data;
@@ -77,8 +77,8 @@ struct to_lower
         {
             *data = ls::blend< int8_t, TAG_T >(
                         ls::bit_and< int8_t, TAG_T >(
-                            ls::greater_than< int8_t, TAG_T >( *data, 'A'-1 ),
-                            ls::greater_than< int8_t, TAG_T >( 'Z'+1, *data ) ),
+                            ls::greater< int8_t, TAG_T >( *data, 'A'-1 ),
+                            ls::greater< int8_t, TAG_T >( 'Z'+1, *data ) ),
                         ls::add< int8_t, TAG_T >( *data, 0x20 ),
                         *data );
             ++data;
@@ -135,8 +135,8 @@ struct maskmove_to_lower
             maskstore< TAG_T >( data,
                                 ls::add< int8_t, TAG_T >( *data, 0x20 ),
                                 ls::bit_and< int8_t, TAG_T >(
-                                    ls::greater_than< int8_t, TAG_T >( *data, 'A'-1 ),
-                                    ls::greater_than< int8_t, TAG_T >( 'Z'+1, *data ) ) );
+                                    ls::greater< int8_t, TAG_T >( *data, 'A'-1 ),
+                                    ls::greater< int8_t, TAG_T >( 'Z'+1, *data ) ) );
             ++data;
         }
 
