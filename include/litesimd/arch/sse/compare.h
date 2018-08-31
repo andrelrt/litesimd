@@ -68,7 +68,7 @@ DEF_GREATER_THAN( double,  _mm_cmpgt_pd )
 // ---------------------------------------------------------------------------------------
 #define DEF_EQUALS( TYPE_T, CMD ) \
 template<> inline simd_type< TYPE_T, sse_tag > \
-equals< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > lhs, \
+equal_to< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > lhs, \
                            simd_type< TYPE_T, sse_tag > rhs ) { \
     return CMD( lhs, rhs ); \
 }

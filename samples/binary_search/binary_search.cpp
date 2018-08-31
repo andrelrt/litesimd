@@ -272,7 +272,7 @@ ForwardIterator lower_bound2( ForwardIterator beg, ForwardIterator end, const T&
     // Create SIMD search key
     simd_type cmp = i32Gather< TAG_T >( start, indexes );
 
-    auto eq = ls::equals< value_type, TAG_T >( key, cmp );
+    auto eq = ls::equal_to< value_type, TAG_T >( key, cmp );
 
     if( !is_zero< TAG_T >( eq ) )
     {

@@ -83,7 +83,7 @@ greater< double, avx_tag >( simd_type< double, avx_tag > lhs,
 // ---------------------------------------------------------------------------------------
 #define DEF_EQUALS( TYPE_T, CMD ) \
 template<> inline simd_type< TYPE_T, avx_tag > \
-equals< TYPE_T, avx_tag >( simd_type< TYPE_T, avx_tag > lhs, \
+equal_to< TYPE_T, avx_tag >( simd_type< TYPE_T, avx_tag > lhs, \
                            simd_type< TYPE_T, avx_tag > rhs ) { \
     return CMD( lhs, rhs ); \
 }
@@ -96,7 +96,7 @@ DEF_EQUALS( int64_t, _mm256_cmpeq_epi64 )
 #undef DEF_EQUALS
 
 template<> inline simd_type< float, avx_tag >
-equals< float, avx_tag >( simd_type< float, avx_tag > lhs,
+equal_to< float, avx_tag >( simd_type< float, avx_tag > lhs,
                           simd_type< float, avx_tag > rhs )
 {
     // Quietly ignore NaN
@@ -104,7 +104,7 @@ equals< float, avx_tag >( simd_type< float, avx_tag > lhs,
 }
 
 template<> inline simd_type< double, avx_tag >
-equals< double, avx_tag >( simd_type< double, avx_tag > lhs,
+equal_to< double, avx_tag >( simd_type< double, avx_tag > lhs,
                            simd_type< double, avx_tag > rhs )
 {
     // Quietly ignore NaN

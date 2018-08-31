@@ -108,7 +108,7 @@ public:
         }
 
         const simd_type* cmp = reinterpret_cast< const simd_type* >( &ref_[ idx * array_size ] );
-        int off = ls::equals_last_index< value_type, TAG_T >( key, *cmp );
+        int off = ls::equal_to_last_index< value_type, TAG_T >( key, *cmp );
 
         if( off < 0 )
         {

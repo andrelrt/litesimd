@@ -111,23 +111,23 @@ TYPED_TEST(SimdCompareTypes, EqualsTypedTest)
 
     for( size_t i = 0; i < size+1; ++i )
     {
-        EXPECT_EQ( mask, (ls::equals_bitmask< type, tag >( val, cmp )) )
+        EXPECT_EQ( mask, (ls::equal_to_bitmask< type, tag >( val, cmp )) )
             << "val: " << (int)val
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
-            << ls::equals_bitmask< type, tag >( val, cmp );
-        EXPECT_EQ( 0u, (ls::equals_bitmask< type, tag >( val + 1, cmp )) )
+            << ls::equal_to_bitmask< type, tag >( val, cmp );
+        EXPECT_EQ( 0u, (ls::equal_to_bitmask< type, tag >( val + 1, cmp )) )
             << "val: " << (int)val + 1
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
-            << ls::equals_bitmask< type, tag >( val, cmp );
+            << ls::equal_to_bitmask< type, tag >( val, cmp );
 
-        EXPECT_EQ( i, (ls::equals_last_index< type, tag >( val, cmp )) )
+        EXPECT_EQ( i, (ls::equal_to_last_index< type, tag >( val, cmp )) )
             << "val: " << (int) val
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
-            << ls::equals_last_index< type, tag >( val, cmp );
-        EXPECT_EQ( 0u, (ls::equals_last_index< type, tag >( val + 1, cmp )) )
+            << ls::equal_to_last_index< type, tag >( val, cmp );
+        EXPECT_EQ( 0u, (ls::equal_to_last_index< type, tag >( val + 1, cmp )) )
             << "val: " << (int) val + 1
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
-            << ls::equals_last_index< type, tag >( val, cmp );
+            << ls::equal_to_last_index< type, tag >( val, cmp );
 
         val += 2;
         mask <<= std::is_integral< type >::value ? sizeof(type) : 1;

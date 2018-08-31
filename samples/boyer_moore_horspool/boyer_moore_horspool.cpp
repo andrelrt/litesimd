@@ -107,7 +107,7 @@ struct boost_searcher
 //            bool found = true;
 //            for( size_t j = simd_find_size -1; j > 0; --j )
 //            {
-//                auto bitmask = ls::equals_bitmask< int8_t, Tag_T >( simd_find[ j ], _mm_lddqu_si128( (__m128i*) sstr + j ) );
+//                auto bitmask = ls::equal_to_bitmask< int8_t, Tag_T >( simd_find[ j ], _mm_lddqu_si128( (__m128i*) sstr + j ) );
 ////                std::cout << "bitmask: " << bitmask << std::endl;
 //                if( bitmask != bitmask_all )
 //                {
@@ -219,7 +219,7 @@ struct litesimd_boyer_moore_horspool2
 
             size_t base_end = simd_idx * ssize;
             size_t zskip = index[ str[ base_end - 1 ] ];
-            auto mask = ls::equals< int8_t, Tag_T >( simd_last, simd_str[ simd_idx ] );
+            auto mask = ls::equal_to< int8_t, Tag_T >( simd_last, simd_str[ simd_idx ] );
 //            std::cout << "mask, simd_last, simd_str: "
 //                      << stype(mask) << ", " << simd_last << ", " << simd_str[ simd_idx ] << std::endl;
 
@@ -316,13 +316,13 @@ struct litesimd_masquerade_search
         {
             const cmp8_t* simd_str = reinterpret_cast< const cmp8_t* >(str16_data + i);
 
-            auto mask = ls::equals< int8_t, Tag_T >( cmp8, *simd_str );
+            auto mask = ls::equal_to< int8_t, Tag_T >( cmp8, *simd_str );
 
             if( !is_zero< Tag_T>( mask ) )
             {
                 //std::cout << mask << ",";
                 const cmp8_t* simd_str2 = reinterpret_cast< const cmp8_t* >(str16_data + i +1);
-                mask = ls::bit_and< int8_t, Tag_T >( mask, ls::equals< int8_t, Tag_T >( cmp8_2, *simd_str2 ) );
+                mask = ls::bit_and< int8_t, Tag_T >( mask, ls::equal_to< int8_t, Tag_T >( cmp8_2, *simd_str2 ) );
 
                 //std::cout << mask << ",";
                 if( !is_zero< Tag_T>( mask ) &&
