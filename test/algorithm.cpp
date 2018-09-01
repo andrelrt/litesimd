@@ -91,99 +91,111 @@ TYPED_TEST(AlgorithmTypedTest, IotaTypedTest)
 
 TEST(AlgorithmTest, ForEachIndexTypedTest)
 {
-    size_t expected = 1;
+    int expected = 1;
     ls::for_each_index< int8_t >( 0xaaaaaaaa, [&expected]( size_t index )
     {
-        EXPECT_EQ( expected, index );
+        EXPECT_EQ( (size_t) expected, index );
         expected += 2;
         return true;
     } );
+    ExPECT_EQ( 33, expected );
 
     expected = 31;
     ls::for_each_index_backward< int8_t >( 0xaaaaaaaa, [&expected]( size_t index )
     {
-        EXPECT_EQ( expected, index );
+        EXPECT_EQ( (size_t) expected, index );
         expected -= 2;
         return true;
     } );
+    ExPECT_EQ( -1, expected );
 
     expected = 1;
     ls::for_each_index< int16_t >( 0xcccccccc, [&expected]( size_t index )
     {
-        EXPECT_EQ( expected, index );
+        EXPECT_EQ( (size_t) expected, index );
         expected += 2;
         return true;
     } );
+    ExPECT_EQ( 17, expected );
 
     expected = 15;
     ls::for_each_index_backward< int16_t >( 0xcccccccc, [&expected]( size_t index )
     {
-        EXPECT_EQ( expected, index );
+        EXPECT_EQ( (size_t) expected, index );
         expected -= 2;
         return true;
     } );
+    ExPECT_EQ( -1, expected );
 
     expected = 1;
     ls::for_each_index< int32_t >( 0xf0f0f0f0, [&expected]( size_t index )
     {
-        EXPECT_EQ( expected, index );
+        EXPECT_EQ( (size_t) expected, index );
         expected += 2;
         return true;
     } );
+    ExPECT_EQ( 9, expected );
 
     expected = 7;
     ls::for_each_index_backward< int32_t >( 0xf0f0f0f0, [&expected]( size_t index )
     {
-        EXPECT_EQ( expected, index );
+        EXPECT_EQ( (size_t) expected, index );
         expected -= 2;
         return true;
     } );
+    ExPECT_EQ( -1, expected );
 
     expected = 1;
     ls::for_each_index< int64_t >( 0xff00ff00, [&expected]( size_t index )
     {
-        EXPECT_EQ( expected, index );
+        EXPECT_EQ( (size_t) expected, index );
         expected += 2;
         return true;
     } );
+    ExPECT_EQ( 5, expected );
 
     expected = 3;
     ls::for_each_index_backward< int64_t >( 0xff00ff00, [&expected]( size_t index )
     {
-        EXPECT_EQ( expected, index );
+        EXPECT_EQ( (size_t) expected, index );
         expected -= 2;
         return true;
     } );
+    ExPECT_EQ( -1, expected );
 
     expected = 1;
     ls::for_each_index< float >( 0x000000aa, [&expected]( size_t index )
     {
-        EXPECT_EQ( expected, index );
+        EXPECT_EQ( (size_t) expected, index );
         expected += 2;
         return true;
     } );
+    ExPECT_EQ( 9, expected );
 
     expected = 7;
     ls::for_each_index_backward< float >( 0x000000aa, [&expected]( size_t index )
     {
-        EXPECT_EQ( expected, index );
+        EXPECT_EQ( (size_t) expected, index );
         expected -= 2;
         return true;
     } );
+    ExPECT_EQ( -1, expected );
 
     expected = 1;
     ls::for_each_index< double >( 0x0000000a, [&expected]( size_t index )
     {
-        EXPECT_EQ( expected, index );
+        EXPECT_EQ( (size_t) expected, index );
         expected += 2;
         return true;
     } );
+    ExPECT_EQ( 5, expected );
 
     expected = 3;
     ls::for_each_index_backward< double >( 0x0000000a, [&expected]( size_t index )
     {
-        EXPECT_EQ( expected, index );
+        EXPECT_EQ( (size_t) expected, index );
         expected -= 2;
         return true;
     } );
+    ExPECT_EQ( -1, expected );
 }
