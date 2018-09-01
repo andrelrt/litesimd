@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include <functional>
 #include <litesimd/types.h>
 #include <litesimd/algorithm.h>
 #include "gtest/gtest.h"
@@ -86,5 +87,103 @@ TYPED_TEST(AlgorithmTypedTest, IotaTypedTest)
         return true;
     } );
 }
-
 #endif //__SSE2__
+
+TEST(AlgorithmTest, ForEachIndexTypedTest)
+{
+    size_t expected = 1;
+    ls::for_each_index< int8_t >( 0xaaaaaaaa, [&expected]( size_t index )
+    {
+        EXPECT_EQ( expected, index );
+        expected += 2;
+        return true;
+    } );
+
+    expected = 31;
+    ls::for_each_index_backward< int8_t >( 0xaaaaaaaa, [&expected]( size_t index )
+    {
+        EXPECT_EQ( expected, index );
+        expected -= 2;
+        return true;
+    } );
+
+    expected = 1;
+    ls::for_each_index< int16_t >( 0xcccccccc, [&expected]( size_t index )
+    {
+        EXPECT_EQ( expected, index );
+        expected += 2;
+        return true;
+    } );
+
+    expected = 15;
+    ls::for_each_index_backward< int16_t >( 0xcccccccc, [&expected]( size_t index )
+    {
+        EXPECT_EQ( expected, index );
+        expected -= 2;
+        return true;
+    } );
+
+    expected = 1;
+    ls::for_each_index< int32_t >( 0xf0f0f0f0, [&expected]( size_t index )
+    {
+        EXPECT_EQ( expected, index );
+        expected += 2;
+        return true;
+    } );
+
+    expected = 7;
+    ls::for_each_index_backward< int32_t >( 0xf0f0f0f0, [&expected]( size_t index )
+    {
+        EXPECT_EQ( expected, index );
+        expected -= 2;
+        return true;
+    } );
+
+    expected = 1;
+    ls::for_each_index< int64_t >( 0xff00ff00, [&expected]( size_t index )
+    {
+        EXPECT_EQ( expected, index );
+        expected += 2;
+        return true;
+    } );
+
+    expected = 3;
+    ls::for_each_index_backward< int64_t >( 0xff00ff00, [&expected]( size_t index )
+    {
+        EXPECT_EQ( expected, index );
+        expected -= 2;
+        return true;
+    } );
+
+    expected = 1;
+    ls::for_each_index< float >( 0x000000aa, [&expected]( size_t index )
+    {
+        EXPECT_EQ( expected, index );
+        expected += 2;
+        return true;
+    } );
+
+    expected = 7;
+    ls::for_each_index_backward< float >( 0x000000aa, [&expected]( size_t index )
+    {
+        EXPECT_EQ( expected, index );
+        expected -= 2;
+        return true;
+    } );
+
+    expected = 1;
+    ls::for_each_index< double >( 0x0000000a, [&expected]( size_t index )
+    {
+        EXPECT_EQ( expected, index );
+        expected += 2;
+        return true;
+    } );
+
+    expected = 3;
+    ls::for_each_index_backward< double >( 0x0000000a, [&expected]( size_t index )
+    {
+        EXPECT_EQ( expected, index );
+        expected -= 2;
+        return true;
+    } );
+}
