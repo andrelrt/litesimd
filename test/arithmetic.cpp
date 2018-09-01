@@ -21,6 +21,7 @@
 // SOFTWARE.
 
 #include <litesimd/types.h>
+#include <litesimd/algorithm.h>
 #include <litesimd/arithmetic.h>
 #include "gtest/gtest.h"
 
@@ -59,25 +60,21 @@ TYPED_TEST(ArithmeticTypedTest, AddTypedTest)
     using type = typename TypeParam::first_type;
     using tag = typename TypeParam::second_type;
     using simd = ls::simd_type< type, tag >;
-    constexpr size_t size = ls::simd_type< type, tag >::simd_size;
 
-    simd a = ls::simd_type< type, tag >( 1 );
-    simd b = ls::simd_type< type, tag >( 2 );
-    simd c = ls::add< type, tag >( a, b );
+    simd a = simd( 1 );
+    simd b = simd( 2 );
 
-    type* pCmp = reinterpret_cast<type*>( &c );
-    for( size_t i = 0; i < size; ++i )
+    ls::for_each( ls::bit_add< type, tag >( a, b ), []( int index, type val )
     {
-        EXPECT_EQ( 3, pCmp[ i ] );
-    }
+        EXPECT_EQ( 3, val ) << "Error on index " << index;
+        return true;
+    } );
 
-    simd d = a + b;
-
-    pCmp = reinterpret_cast<type*>( &d );
-    for( size_t i = 0; i < size; ++i )
+    ls::for_each( a + b, []( int index, type val )
     {
-        EXPECT_EQ( 3, pCmp[ i ] );
-    }
+        EXPECT_EQ( 3, val ) << "Error on index " << index;
+        return true;
+    } );
 }
 
 TYPED_TEST(ArithmeticTypedTest, SubTypedTest)
@@ -85,25 +82,21 @@ TYPED_TEST(ArithmeticTypedTest, SubTypedTest)
     using type = typename TypeParam::first_type;
     using tag = typename TypeParam::second_type;
     using simd = ls::simd_type< type, tag >;
-    constexpr size_t size = ls::simd_type< type, tag >::simd_size;
 
-    simd a = ls::simd_type< type, tag >( 8 );
-    simd b = ls::simd_type< type, tag >( 3 );
-    simd c = ls::sub< type, tag >( a, b );
+    simd a = simd( 8 );
+    simd b = simd( 3 );
 
-    type* pCmp = reinterpret_cast<type*>( &c );
-    for( size_t i = 0; i < size; ++i )
+    ls::for_each( ls::bit_sub< type, tag >( a, b ), []( int index, type val )
     {
-        EXPECT_EQ( 5, pCmp[ i ] );
-    }
+        EXPECT_EQ( 5, val ) << "Error on index " << index;
+        return true;
+    } );
 
-    simd d = a - b;
-
-    pCmp = reinterpret_cast<type*>( &d );
-    for( size_t i = 0; i < size; ++i )
+    ls::for_each( a - b, []( int index, type val )
     {
-        EXPECT_EQ( 5, pCmp[ i ] );
-    }
+        EXPECT_EQ( 5, val ) << "Error on index " << index;
+        return true;
+    } );
 }
 
 TYPED_TEST(ArithmeticTaggedTest, MulLoHiTest)
@@ -114,29 +107,27 @@ TYPED_TEST(ArithmeticTaggedTest, MulLoHiTest)
 
     simd16 a = simd16( 0x2003 );
     simd16 b = simd16( 0x30 );
-    simd16 c = ls::mullo( a, b );
 
-    int16_t* pCmp = reinterpret_cast<int16_t*>( &c );
-    for( size_t i = 0; i < size; ++i )
+    ls::for_each( ls::mullo( a, b ), []( int index, type val )
     {
-        EXPECT_EQ( 0x90, pCmp[ i ] );
-    }
+        EXPECT_EQ( 0x90, val ) << "Error on index " << index;
+        return true;
+    } );
 
-    c = ls::mulhi( a, b );
-    for( size_t i = 0; i < size; ++i )
+    ls::for_each( ls::mulhi( a, b ), []( int index, type val )
     {
-        EXPECT_EQ( 6, pCmp[ i ] );
-    }
+        EXPECT_EQ( 6, val ) << "Error on index " << index;
+        return true;
+    } );
 
     simd32 d = simd32( 0x20000003 );
     simd32 e = simd32( 0x30 );
-    simd32 f = ls::mullo( d, e );
 
-    int32_t* pF = reinterpret_cast<int32_t*>( &f );
-    for( size_t i = 0; i < size; ++i )
+    ls::for_each( ls::mullo( d, e ), []( int index, type val )
     {
-        EXPECT_EQ( 0x90, pF[ i ] );
-    }
+        EXPECT_EQ( 0x90, val ) << "Error on index " << index;
+        return true;
+    } );
 }
 
 TYPED_TEST(ArithmeticTaggedTest, DivTest)
@@ -147,22 +138,20 @@ TYPED_TEST(ArithmeticTaggedTest, DivTest)
 
     simdf a = simdf( 20 );
     simdf b = simdf( 2 );
-    simdf c = ls::div( a, b );
 
-    float* pCmp = reinterpret_cast<float*>( &c );
-    for( size_t i = 0; i < size; ++i )
+    ls::for_each( ls::div( a, b ), []( int index, type val )
     {
-        EXPECT_FLOAT_EQ( 10, pCmp[ i ] );
-    }
+        EXPECT_FLOAT_EQ( 10, val ) << "Error on index " << index;
+        return true;
+    } );
 
     simdd d = simdd( 20 );
     simdd e = simdd( 2 );
-    simdd f = ls::div( a, b );
 
-    double* pF = reinterpret_cast<double*>( &f );
-    for( size_t i = 0; i < size; ++i )
+    ls::for_each( ls::div( d, e ), []( int index, type val )
     {
-        EXPECT_DOUBLE_EQ( 10, pF[ i ] );
-    }
+        EXPECT_DOUBLE_EQ( 10, val ) << "Error on index " << index;
+        return true;
+    } );
 }
 #endif //__SSE2__
