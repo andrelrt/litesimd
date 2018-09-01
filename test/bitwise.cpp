@@ -22,6 +22,7 @@
 
 #include <litesimd/types.h>
 #include <litesimd/bitwise.h>
+#include <litesimd/algorithm.h>
 #include "gtest/gtest.h"
 
 namespace ls = litesimd;
@@ -46,25 +47,21 @@ TYPED_TEST(BitwiseTypedTest, AndTypedTest)
     using type = typename TypeParam::first_type;
     using tag = typename TypeParam::second_type;
     using simd = ls::simd_type< type, tag >;
-    constexpr size_t size = ls::simd_type< type, tag >::simd_size;
 
-    simd a = ls::simd_type< type, tag >( 3 );
-    simd b = ls::simd_type< type, tag >( 6 );
-    simd c = ls::bit_and< type, tag >( a, b );
+    simd a = simd( 3 );
+    simd b = simd( 6 );
 
-    type* pCmp = reinterpret_cast<type*>( &c );
-    for( size_t i = 0; i < size; ++i )
+    ls::for_each( ls::bit_and< type, tag >( a, b ), []( int index, type val )
     {
-        EXPECT_EQ( 2, pCmp[ i ] );
-    }
+        EXPECT_EQ( 2, val ) << "Error on index " << index;
+        return true;
+    } );
 
-    simd d = a & b;
-
-    type* pCmp = reinterpret_cast<type*>( &d );
-    for( size_t i = 0; i < size; ++i )
+    ls::for_each( a & b, []( int index, type val )
     {
-        EXPECT_EQ( 2, pCmp[ i ] );
-    }
+        EXPECT_EQ( 2, val ) << "Error on index " << index;
+        return true;
+    } );
 }
 
 TYPED_TEST(BitwiseTypedTest, OrTypedTest)
@@ -72,25 +69,21 @@ TYPED_TEST(BitwiseTypedTest, OrTypedTest)
     using type = typename TypeParam::first_type;
     using tag = typename TypeParam::second_type;
     using simd = ls::simd_type< type, tag >;
-    constexpr size_t size = ls::simd_type< type, tag >::simd_size;
 
-    simd a = ls::simd_type< type, tag >( 3 );
-    simd b = ls::simd_type< type, tag >( 6 );
-    simd c = ls::bit_or< type, tag >( a, b );
+    simd a = simd( 3 );
+    simd b = simd( 6 );
 
-    type* pCmp = reinterpret_cast<type*>( &c );
-    for( size_t i = 0; i < size; ++i )
+    ls::for_each( ls::bit_or< type, tag >( a, b ), []( int index, type val )
     {
-        EXPECT_EQ( 7, pCmp[ i ] );
-    }
+        EXPECT_EQ( 7, val ) << "Error on index " << index;
+        return true;
+    } );
 
-    simd d = a | b;
-
-    type* pCmp = reinterpret_cast<type*>( &d );
-    for( size_t i = 0; i < size; ++i )
+    ls::for_each( a | b, []( int index, type val )
     {
-        EXPECT_EQ( 7, pCmp[ i ] );
-    }
+        EXPECT_EQ( 7, val ) << "Error on index " << index;
+        return true;
+    } );
 }
 
 TYPED_TEST(BitwiseTypedTest, XorTypedTest)
@@ -98,25 +91,21 @@ TYPED_TEST(BitwiseTypedTest, XorTypedTest)
     using type = typename TypeParam::first_type;
     using tag = typename TypeParam::second_type;
     using simd = ls::simd_type< type, tag >;
-    constexpr size_t size = ls::simd_type< type, tag >::simd_size;
 
-    simd a = ls::simd_type< type, tag >( 3 );
-    simd b = ls::simd_type< type, tag >( 6 );
-    simd c = ls::bit_xor< type, tag >( a, b );
+    simd a = simd( 3 );
+    simd b = simd( 6 );
 
-    type* pCmp = reinterpret_cast<type*>( &c );
-    for( size_t i = 0; i < size; ++i )
+    ls::for_each( ls::bit_xor< type, tag >( a, b ), []( int index, type val )
     {
-        EXPECT_EQ( 5, pCmp[ i ] );
-    }
+        EXPECT_EQ( 5, val ) << "Error on index " << index;
+        return true;
+    } );
 
-    simd d = a ^ b;
-
-    type* pCmp = reinterpret_cast<type*>( &d );
-    for( size_t i = 0; i < size; ++i )
+    ls::for_each( a ^ b, []( int index, type val )
     {
-        EXPECT_EQ( 5, pCmp[ i ] );
-    }
+        EXPECT_EQ( 5, val ) << "Error on index " << index;
+        return true;
+    } );
 }
 
 TYPED_TEST(BitwiseTypedTest, NotTypedTest)
@@ -124,27 +113,20 @@ TYPED_TEST(BitwiseTypedTest, NotTypedTest)
     using type = typename TypeParam::first_type;
     using tag = typename TypeParam::second_type;
     using simd = ls::simd_type< type, tag >;
-    constexpr size_t size = ls::simd_type< type, tag >::simd_size;
 
-    simd a = ls::simd_type< type, tag >( 3 );
-    simd c = ls::bit_not< type, tag >( a );
+    simd a = simd( 3 );
 
-    type* pCmp = reinterpret_cast<type*>( &c );
-    for( size_t i = 0; i < size; ++i )
+    ls::for_each( ls::bit_not< type, tag >( a ), []( int index, type val )
     {
-        EXPECT_EQ( static_cast<type>( ~3 ), pCmp[ i ] );
-    }
+        EXPECT_EQ( static_cast<type>( ~3 ), val ) << "Error on index " << index;
+        return true;
+    } );
 
-    simd d = ~a;
-
-    type* pCmp = reinterpret_cast<type*>( &d );
-    for( size_t i = 0; i < size; ++i )
+    ls::for_each( ~a, []( int index, type val )
     {
-        EXPECT_EQ( static_cast<type>( ~3 ), pCmp[ i ] );
-    }
+        EXPECT_EQ( static_cast<type>( ~3 ), val ) << "Error on index " << index;
+        return true;
+    } );
 }
 
-
-
 #endif //__SSE2__
-
