@@ -25,11 +25,67 @@
 
 #include <functional>
 #include "../compare.h"
+#include "../shuffle.h"
 
 namespace litesimd {
 
-template< typename ValueType_T >
-void for_each_index( size_t bitmask, std::function< bool(size_t) > func )
+namespace {
+
+template< int index, typename SimdType_T, typename Function_T >
+struct litesimd_internal_for_each_loop
+{
+    bool operator()( bool forward, SimdType_T vec, Function_T func )
+    {
+        if( forward )
+        {
+            if( litesimd_internal_for_each_loop< index-1, SimdType_T >()( true, vec, func ) )
+            {
+                return func( index, get< index >( vec ) );
+            }
+        }
+        else
+        {
+            if( func( index, get< index >( vec ) ) )
+            {
+                return litesimd_internal_for_each_loop< index-1, SimdType_T >()( false, vec, func );
+            }
+        }
+        return false;
+    }
+};
+
+template< typename SimdType_T, typename Function_T >
+struct litesimd_internal_for_each_loop< 0, SimdType_T, Function_T >
+{
+    bool operator()( bool, SimdType_T vec, Function_T func )
+    {
+        return func( 0, get< 0 >( vec ) );
+    }
+};
+
+} // empty namespace
+
+
+template< typename SimdType_T, typename Function_T,
+          typename SimdType_T::simd_value_type* = nullptr >
+Function_T for_each( SimdType_T vec, Function_T func )
+{
+    using st = SimdType_T;
+    litesimd_internal_for_each_loop< st::simd_size, st >()( true, vec, func );
+    return std::move( func );
+}
+
+template< typename SimdType_T, typename Function_T,
+          typename SimdType_T::simd_value_type* = nullptr >
+Function_T for_each_backward( SimdType_T vec, Function_T func )
+{
+    using st = SimdType_T;
+    litesimd_internal_for_each_loop< st::simd_size, st >()( false, vec, func );
+    return std::move( func );
+}
+
+template< typename ValueType_T, typename Function_T >
+void for_each_index( size_t bitmask, Function_T func )
 {
     while( bitmask != 0 )
     {
@@ -40,7 +96,18 @@ void for_each_index( size_t bitmask, std::function< bool(size_t) > func )
     }
 }
 
+template< typename ValueType_T, typename Function_T >
+void for_each_index_backward( size_t bitmask, Function_T func )
+{
+    while( bitmask != 0 )
+    {
+        size_t idx = bitmask_last_index< ValueType_T >( bitmask );
+        if( !func( idx ) )
+            break;
+        bitmask &= ~(size_t(1) << (idx-1));
+    }
+}
+
 } // namespace litesimd
 
 #endif // LITESIMD_ALGORITHM_FOREACH_H
-
