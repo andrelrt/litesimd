@@ -26,5 +26,6 @@
 #include "arch/sse/algorithm.h"
 #include "arch/avx/algorithm.h"
 #include "algorithm/for_each.h"
+#include "algorithm/iota.h"
 
 #endif // LITESIMD_ALGORITHM_H
