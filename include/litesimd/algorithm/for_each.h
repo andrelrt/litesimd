@@ -23,7 +23,6 @@
 #ifndef LITESIMD_ALGORITHM_FOREACH_H
 #define LITESIMD_ALGORITHM_FOREACH_H
 
-#include <functional>
 #include "../compare.h"
 #include "../shuffle.h"
 

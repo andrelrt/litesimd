@@ -51,7 +51,7 @@ int main()
         //
         // Returns values between [-1, ls::int32_simd_size)
         int index = ls::bitmask_last_index< int32_t >( mask );
-        
+
         // greater_last_index could be called instead
         // greater_bitmask + bitmask_last_index
         //
