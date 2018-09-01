@@ -42,6 +42,17 @@ using TestTypes = ::testing::Types<
 >;
 TYPED_TEST_CASE(ArithmeticTypedTest, TestTypes);
 
+using TagTypes = ::testing::Types<
+#ifdef __SSE2__
+ls::sse_tag
+#ifdef __AVX2__
+, ls::avx_tag
+#endif //__AVX2__
+#endif //__SSE2__
+>;
+
+TYPED_TEST_CASE(ArithmeticTaggedTest, TagTypes);
+
 #ifdef __SSE2__
 TYPED_TEST(ArithmeticTypedTest, AddTypedTest)
 {
@@ -69,7 +80,7 @@ TYPED_TEST(ArithmeticTypedTest, AddTypedTest)
     }
 }
 
-TYPED_TEST(ArithmeticTypedTest, AddTypedTest)
+TYPED_TEST(ArithmeticTypedTest, SubTypedTest)
 {
     using type = typename TypeParam::first_type;
     using tag = typename TypeParam::second_type;
@@ -95,4 +106,63 @@ TYPED_TEST(ArithmeticTypedTest, AddTypedTest)
     }
 }
 
+TYPED_TEST(ArithmeticTaggedTest, MulLoHiTest)
+{
+    using tag = TypeParam;
+    using simd16 = ls::simd_type< int16_t, tag >;
+    using simd32 = ls::simd_type< int32_t, tag >;
+
+    simd16 a = simd16( 0x2003 );
+    simd16 b = simd16( 0x30 );
+    simd16 c = ls::mullo( a, b );
+
+    int16_t* pCmp = reinterpret_cast<int16_t*>( &c );
+    for( size_t i = 0; i < size; ++i )
+    {
+        EXPECT_EQ( 0x90, pCmp[ i ] );
+    }
+
+    c = ls::mulhi( a, b );
+    for( size_t i = 0; i < size; ++i )
+    {
+        EXPECT_EQ( 6, pCmp[ i ] );
+    }
+
+    simd32 d = simd32( 0x20000003 );
+    simd32 e = simd32( 0x30 );
+    simd32 f = ls::mullo( d, e );
+
+    int32_t* pF = reinterpret_cast<int32_t*>( &f );
+    for( size_t i = 0; i < size; ++i )
+    {
+        EXPECT_EQ( 0x90, pF[ i ] );
+    }
+}
+
+TYPED_TEST(ArithmeticTaggedTest, DivTest)
+{
+    using tag = TypeParam;
+    using simdf = ls::simd_type< float, tag >;
+    using simdd = ls::simd_type< double, tag >;
+
+    simdf a = simdf( 20 );
+    simdf b = simdf( 2 );
+    simdf c = ls::div( a, b );
+
+    float* pCmp = reinterpret_cast<float*>( &c );
+    for( size_t i = 0; i < size; ++i )
+    {
+        EXPECT_FLOAT_EQ( 10, pCmp[ i ] );
+    }
+
+    simdd d = simdd( 20 );
+    simdd e = simdd( 2 );
+    simdd f = ls::div( a, b );
+
+    double* pF = reinterpret_cast<double*>( &f );
+    for( size_t i = 0; i < size; ++i )
+    {
+        EXPECT_DOUBLE_EQ( 10, pF[ i ] );
+    }
+}
 #endif //__SSE2__
