@@ -42,11 +42,33 @@ using TestTypes = ::testing::Types<
 TYPED_TEST_CASE(ShuffleTypedTest, TestTypes);
 
 #ifdef __SSE2__
-TYPED_TEST(ShuffleTypedTest, BlendTest)
+TYPED_TEST(ShuffleTypedTest, HighInsertTest)
 {
     using type = typename TypeParam::first_type;
     using tag = typename TypeParam::second_type;
     using simd = ls::simd_type< type, tag >;
 
+    simd a = ls::iota< type, tag >( 0 );
+    a = ls::high_insert( a, static_cast<type>( simd::simd_size ) );
+    ls::for_each( a, []( int index, type val )
+    {
+        EXPECT_EQ( static_cast<type>( index + 1 ), val ) << "Error on index " << index;
+        return true;
+    } );
+}
+
+TYPED_TEST(ShuffleTypedTest, LowInsertTest)
+{
+    using type = typename TypeParam::first_type;
+    using tag = typename TypeParam::second_type;
+    using simd = ls::simd_type< type, tag >;
+
+    simd a = ls::iota< type, tag >( 1 );
+    a = ls::low_insert( a, 0 );
+    ls::for_each( a, []( int index, type val )
+    {
+        EXPECT_EQ( static_cast<type>( index ), val ) << "Error on index " << index;
+        return true;
+    } );
 }
 #endif // __SSE2__

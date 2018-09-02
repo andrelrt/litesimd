@@ -30,7 +30,7 @@
 
 namespace litesimd {
 
-// Low insert
+// High insert
 // ---------------------------------------------------------------------------------------
 template<> inline simd_type< int8_t, avx_tag >
 high_insert< int8_t, avx_tag >( simd_type< int8_t, avx_tag > vec,

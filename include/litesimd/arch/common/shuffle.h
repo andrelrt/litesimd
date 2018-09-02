@@ -27,11 +27,15 @@
 
 namespace litesimd {
 
-// High insert
+// High/Low insert
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
 simd_type< ValueType_T, Tag_T >
 high_insert( simd_type< ValueType_T, Tag_T >, ValueType_T = 0 ){}
+
+template< typename ValueType_T, typename Tag_T = default_tag >
+simd_type< ValueType_T, Tag_T >
+low_insert( simd_type< ValueType_T, Tag_T >, ValueType_T = 0 ){}
 
 // Blend
 // ---------------------------------------------------------------------------------------
