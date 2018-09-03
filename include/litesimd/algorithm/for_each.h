@@ -26,57 +26,14 @@
 #include <type_traits>
 #include "../compare.h"
 #include "../shuffle.h"
-
-namespace litesimd {
-
-namespace {
-
-template< int index, typename SimdType_T, typename Function_T >
-struct litesimd_internal_for_each_loop
-{
-    bool operator()( bool forward, SimdType_T vec, Function_T func )
-    {
-        using type = typename SimdType_T::simd_value_type;
-        using tag = typename SimdType_T::simd_tag;
-        if( forward )
-        {
-            if( litesimd_internal_for_each_loop< index-1, SimdType_T, Function_T >()( true, vec, func ) )
-            {
-                return func( index, get< index, type, tag >( vec ) );
-            }
-        }
-        else
-        {
-            if( func( index, get< index, type, tag >( vec ) ) )
-            {
-                return litesimd_internal_for_each_loop< index-1, SimdType_T, Function_T >()( false, vec, func );
-            }
-        }
-        return false;
-    }
-};
-
-template< typename SimdType_T, typename Function_T >
-struct litesimd_internal_for_each_loop< 0, SimdType_T, Function_T >
-{
-    bool operator()( bool, SimdType_T vec, Function_T func )
-    {
-        using type = typename SimdType_T::simd_value_type;
-        using tag = typename SimdType_T::simd_tag;
-
-        return func( 0, get< 0, type, tag >( vec ) );
-    }
-};
-
-} // empty namespace
-
+#include "detail/for_each_loop.h"
 
 template< typename SimdType_T, typename Function_T,
           typename SimdType_T::simd_value_type* = nullptr >
 Function_T for_each( SimdType_T vec, Function_T func )
 {
     using st = SimdType_T;
-    litesimd_internal_for_each_loop< st::simd_size-1, st, Function_T >()( true, vec, func );
+    detail::for_each_loop< st::simd_size-1, st, Function_T >()( true, vec, func );
     return std::move( func );
 }
 
@@ -85,7 +42,7 @@ template< typename SimdType_T, typename Function_T,
 Function_T for_each_backward( SimdType_T vec, Function_T func )
 {
     using st = SimdType_T;
-    litesimd_internal_for_each_loop< st::simd_size-1, st, Function_T >()( false, vec, func );
+    detail::for_each_loop< st::simd_size-1, st, Function_T >()( false, vec, func );
     return std::move( func );
 }
 

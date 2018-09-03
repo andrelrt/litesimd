@@ -90,7 +90,7 @@ TYPED_TEST(AlgorithmTypedTest, IotaTypedTest)
 }
 #endif //__SSE2__
 
-TEST(AlgorithmTest, ForEachIndexTypedTest)
+TEST(AlgorithmTest, ForEachIndexTest)
 {
     int expected = 1;
     ls::for_each_index< int8_t >( 0xaaaaaaaa, [&expected]( size_t index )
