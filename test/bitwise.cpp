@@ -22,6 +22,7 @@
 
 #include <litesimd/types.h>
 #include <litesimd/bitwise.h>
+#include <litesimd/shuffle.h>
 #include <litesimd/algorithm.h>
 #include "gtest/gtest.h"
 
@@ -62,6 +63,9 @@ TYPED_TEST(BitwiseTypedTest, AndTypedTest)
         EXPECT_EQ( 2, val ) << "Error on index " << index;
         return true;
     } );
+
+    a = ls::set<0>( a, 6 );
+    EXPECT_EQ( static_cast<type>(2), ls::bit_and(a) );
 }
 
 TYPED_TEST(BitwiseTypedTest, OrTypedTest)
@@ -84,6 +88,9 @@ TYPED_TEST(BitwiseTypedTest, OrTypedTest)
         EXPECT_EQ( 7, val ) << "Error on index " << index;
         return true;
     } );
+
+    a = ls::set<0>( a, 6 );
+    EXPECT_EQ( static_cast<type>(7), ls::bit_or( a ) );
 }
 
 TYPED_TEST(BitwiseTypedTest, XorTypedTest)
@@ -106,6 +113,9 @@ TYPED_TEST(BitwiseTypedTest, XorTypedTest)
         EXPECT_EQ( 5, val ) << "Error on index " << index;
         return true;
     } );
+
+    a = ls::set<0>( a, 6 );
+    EXPECT_EQ( static_cast<type>(5), ls::bit_xor( a ) );
 }
 
 TYPED_TEST(BitwiseTypedTest, NotTypedTest)
