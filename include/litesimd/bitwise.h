@@ -24,6 +24,7 @@
 #define LITESIMD_BITWISE_H
 
 #include "types.h"
+#include "intravector.h"
 #include "arch/bitwise.h"
 #include "detail/helper_macros.h"
 
@@ -34,6 +35,30 @@ namespace litesimd {
 DEFINE_BINARY_FUNCTION_ADAPTORS( bit_and, type )
 DEFINE_BINARY_FUNCTION_ADAPTORS( bit_or, type )
 DEFINE_BINARY_FUNCTION_ADAPTORS( bit_xor, type )
+
+template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
+typename SimdType_T::simd_value_type bit_and( SimdType_T vec )
+{
+    using type = SimdType_T::simd_value_type;
+    using tag = SimdType_T::simd_tag;
+    return intervector_op< type, tag >()( vec, &bit_and< type, tag > );
+}
+
+template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
+typename SimdType_T::simd_value_type bit_or( SimdType_T vec )
+{
+    using type = SimdType_T::simd_value_type;
+    using tag = SimdType_T::simd_tag;
+    return intervector_op< type, tag >()( vec, &bit_or< type, tag > );
+}
+
+template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
+typename SimdType_T::simd_value_type bit_xor( SimdType_T vec )
+{
+    using type = SimdType_T::simd_value_type;
+    using tag = SimdType_T::simd_tag;
+    return intervector_op< type, tag >()( vec, &bit_xor< type, tag > );
+}
 
 template< typename LHS, typename RHS >
 auto inline operator&( LHS lhs, RHS rhs )
