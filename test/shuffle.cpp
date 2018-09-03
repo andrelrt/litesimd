@@ -23,6 +23,7 @@
 #include <litesimd/types.h>
 #include <litesimd/shuffle.h>
 #include <litesimd/algorithm.h>
+#include <litesimd/helpers/iostream.h>
 #include "gtest/gtest.h"
 
 namespace ls = litesimd;
@@ -83,11 +84,24 @@ TYPED_TEST(ShuffleTypedTest, HighInsertTest)
     using tag = typename TypeParam::second_type;
     using simd = ls::simd_type< type, tag >;
 
-    simd a = ls::iota< type, tag >( 0 );
-    a = ls::high_insert( a, static_cast<type>( simd::simd_size ) );
-    ls::for_each( a, []( int index, type val )
+    simd a = simd::zero();
+    a = ls::high_insert( a, 1 );
+    EXPECT_EQ( 1, (ls::get< simd::simd_size -1, type, tag> ( a )) ) << "Simd: " << a;
+    auto mask = _mm256_cmp_pd( _mm256_set1_pd( simd::simd_size -2 ),
+                               _mm256_set_pd( 3, 2, 1, 0 ), _CMP_EQ_OQ );
+    EXPECT_EQ( 1, (ls::get< 0, int64_t, ls::avx_tag> ( mask )) )
+        << "Simd: " << simd::simd_size -1 << ls::simd_type< int64_t, ls::avx_tag >( mask )
+        << " Set1: " << ls::simd_type< double, ls::avx_tag>( _mm256_set1_pd( simd::simd_size -1 ) )
+        << " Blend: " << ls::simd_type< double, ls::avx_tag>( _mm256_blendv_pd( _mm256_setzero_pd(), _mm256_set1_pd( simd::simd_size -1 ), mask ) );
+
+    type sz = simd::simd_size;
+    simd b = ls::iota< type, tag >( 0 );
+    a = ls::high_insert( ls::iota< type, tag >( 0 ), sz );
+    EXPECT_EQ( sz, (ls::get< simd::simd_size -1, type, tag> ( a )) ) << "Simd: " << a << b;
+
+    ls::for_each( a, [&a]( int index, type val )
     {
-        EXPECT_EQ( static_cast<type>( index + 1 ), val ) << "Error on index " << index;
+        EXPECT_EQ( static_cast<type>( index + 1 ), val ) << "Error on index " << index << ", Simd: " << a;
         return true;
     } );
 }
@@ -100,6 +114,7 @@ TYPED_TEST(ShuffleTypedTest, LowInsertTest)
 
     simd a = ls::iota< type, tag >( 1 );
     a = ls::low_insert( a, 0 );
+    EXPECT_EQ( 0, (ls::get< 0, type, tag> ( a )) );
     ls::for_each( a, []( int index, type val )
     {
         EXPECT_EQ( static_cast<type>( index ), val ) << "Error on index " << index;
