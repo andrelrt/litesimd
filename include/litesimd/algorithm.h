@@ -27,5 +27,24 @@
 #include "arch/avx/algorithm.h"
 #include "algorithm/for_each.h"
 #include "algorithm/iota.h"
+#include "intravector.h"
+
+// Min max
+// ---------------------------------------------------------------------------------------
+template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
+typename SimdType_T::simd_value_type min( SimdType_T vec )
+{
+    using type = SimdType_T::simd_value_type;
+    using tag = SimdType_T::simd_tag;
+    return intravector_op< type, tag >()( vec, &min< type, tag > );
+}
+
+template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
+typename SimdType_T::simd_value_type max( SimdType_T vec )
+{
+    using type = SimdType_T::simd_value_type;
+    using tag = SimdType_T::simd_tag;
+    return intravector_op< type, tag >()( vec, &max< type, tag > );
+}
 
 #endif // LITESIMD_ALGORITHM_H
