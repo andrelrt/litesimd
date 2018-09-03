@@ -43,6 +43,8 @@ using TestTypes = ::testing::Types<
 >;
 TYPED_TEST_CASE(ArithmeticTypedTest, TestTypes);
 
+template <typename T> class ArithmeticTaggedTest: public ::testing::Test {};
+
 using TagTypes = ::testing::Types<
 #ifdef __SSE2__
 ls::sse_tag
@@ -64,7 +66,7 @@ TYPED_TEST(ArithmeticTypedTest, AddTypedTest)
     simd a = simd( 1 );
     simd b = simd( 2 );
 
-    ls::for_each( ls::bit_add< type, tag >( a, b ), []( int index, type val )
+    ls::for_each( ls::add< type, tag >( a, b ), []( int index, type val )
     {
         EXPECT_EQ( 3, val ) << "Error on index " << index;
         return true;
@@ -86,7 +88,7 @@ TYPED_TEST(ArithmeticTypedTest, SubTypedTest)
     simd a = simd( 8 );
     simd b = simd( 3 );
 
-    ls::for_each( ls::bit_sub< type, tag >( a, b ), []( int index, type val )
+    ls::for_each( ls::sub< type, tag >( a, b ), []( int index, type val )
     {
         EXPECT_EQ( 5, val ) << "Error on index " << index;
         return true;
@@ -108,13 +110,13 @@ TYPED_TEST(ArithmeticTaggedTest, MulLoHiTest)
     simd16 a = simd16( 0x2003 );
     simd16 b = simd16( 0x30 );
 
-    ls::for_each( ls::mullo( a, b ), []( int index, type val )
+    ls::for_each( ls::mullo( a, b ), []( int index, int16_t val )
     {
         EXPECT_EQ( 0x90, val ) << "Error on index " << index;
         return true;
     } );
 
-    ls::for_each( ls::mulhi( a, b ), []( int index, type val )
+    ls::for_each( ls::mulhi( a, b ), []( int index, int16_t val )
     {
         EXPECT_EQ( 6, val ) << "Error on index " << index;
         return true;
@@ -123,7 +125,7 @@ TYPED_TEST(ArithmeticTaggedTest, MulLoHiTest)
     simd32 d = simd32( 0x20000003 );
     simd32 e = simd32( 0x30 );
 
-    ls::for_each( ls::mullo( d, e ), []( int index, type val )
+    ls::for_each( ls::mullo( d, e ), []( int index, int32_t val )
     {
         EXPECT_EQ( 0x90, val ) << "Error on index " << index;
         return true;
@@ -139,7 +141,7 @@ TYPED_TEST(ArithmeticTaggedTest, DivTest)
     simdf a = simdf( 20 );
     simdf b = simdf( 2 );
 
-    ls::for_each( ls::div( a, b ), []( int index, type val )
+    ls::for_each( ls::div( a, b ), []( int index, float val )
     {
         EXPECT_FLOAT_EQ( 10, val ) << "Error on index " << index;
         return true;
@@ -148,7 +150,7 @@ TYPED_TEST(ArithmeticTaggedTest, DivTest)
     simdd d = simdd( 20 );
     simdd e = simdd( 2 );
 
-    ls::for_each( ls::div( d, e ), []( int index, type val )
+    ls::for_each( ls::div( d, e ), []( int index, double val )
     {
         EXPECT_DOUBLE_EQ( 10, val ) << "Error on index " << index;
         return true;

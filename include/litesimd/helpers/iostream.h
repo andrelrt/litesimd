@@ -64,7 +64,7 @@ std::ostream& operator<<( std::ostream& out, SimdType_T vec )
     std::ios_base::fmtflags f( out.flags() );
 
     out << "(";
-    for_each_backward( vec, [&out]( int, SimdType_T::simd_value_type val ) -> bool
+    for_each_backward( vec, [&out]( int, typename SimdType_T::simd_value_type val ) -> bool
     {
         out << val;
         return true;

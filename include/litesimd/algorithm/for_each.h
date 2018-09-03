@@ -37,7 +37,7 @@ struct litesimd_internal_for_each_loop
     {
         if( forward )
         {
-            if( litesimd_internal_for_each_loop< index-1, SimdType_T >()( true, vec, func ) )
+            if( litesimd_internal_for_each_loop< index-1, SimdType_T, Function_T >()( true, vec, func ) )
             {
                 return func( index, get< index >( vec ) );
             }
@@ -46,7 +46,7 @@ struct litesimd_internal_for_each_loop
         {
             if( func( index, get< index >( vec ) ) )
             {
-                return litesimd_internal_for_each_loop< index-1, SimdType_T >()( false, vec, func );
+                return litesimd_internal_for_each_loop< index-1, SimdType_T, Function_T >()( false, vec, func );
             }
         }
         return false;
@@ -70,7 +70,7 @@ template< typename SimdType_T, typename Function_T,
 Function_T for_each( SimdType_T vec, Function_T func )
 {
     using st = SimdType_T;
-    litesimd_internal_for_each_loop< st::simd_size-1, st >()( true, vec, func );
+    litesimd_internal_for_each_loop< st::simd_size-1, st, Function_T >()( true, vec, func );
     return std::move( func );
 }
 
@@ -79,7 +79,7 @@ template< typename SimdType_T, typename Function_T,
 Function_T for_each_backward( SimdType_T vec, Function_T func )
 {
     using st = SimdType_T;
-    litesimd_internal_for_each_loop< st::simd_size-1, st >()( false, vec, func );
+    litesimd_internal_for_each_loop< st::simd_size-1, st, Function_T >()( false, vec, func );
     return std::move( func );
 }
 

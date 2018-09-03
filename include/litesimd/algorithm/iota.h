@@ -34,7 +34,7 @@ iota( ValueType_T val )
 {
     using simd_type = simd_type< ValueType_T, Tag_T >;
     simd_type ret;
-    for( size_t i = 0; i < SimdType_T::simd_size; ++i )
+    for( size_t i = 0; i < simd_type::simd_size; ++i )
     {
         ret = high_insert( ret, static_cast< ValueType_T >( val + i ) );
     }

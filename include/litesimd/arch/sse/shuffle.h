@@ -31,86 +31,6 @@
 
 namespace litesimd {
 
-// High insert
-// ---------------------------------------------------------------------------------------
-template<> inline simd_type< int8_t, sse_tag >
-high_insert< int8_t, sse_tag >( simd_type< int8_t, sse_tag > vec, int8_t val )
-{
-    return set<15>( _mm_srli_si128( vec, 8 ), val );
-}
-
-template<> inline simd_type< int16_t, sse_tag >
-high_insert< int16_t, sse_tag >( simd_type< int16_t, sse_tag > vec, int16_t val )
-{
-    return set<7>( _mm_srli_si128( vec, 16 ), val );
-}
-
-template<> inline simd_type< int32_t, sse_tag >
-high_insert< int32_t, sse_tag >( simd_type< int32_t, sse_tag > vec, int32_t val )
-{
-    return set<3>( _mm_shuffle_epi32( vec, _MM_SHUFFLE( 3, 3, 2, 1 ) ), val );
-}
-
-template<> inline simd_type< int64_t, sse_tag >
-high_insert< int64_t, sse_tag >( simd_type< int64_t, sse_tag > vec, int64_t val )
-{
-    return set<1>( _mm_shuffle_epi32( vec, _MM_SHUFFLE( 3, 3, 3, 2 ) ), val );
-}
-
-template<> inline simd_type< float, sse_tag >
-high_insert< float, sse_tag >( simd_type< float, sse_tag > vec,
-                                float val )
-{
-    return set<3>( _mm_shuffle_ps( vec, vec, _MM_SHUFFLE( 3, 3, 2, 1 ) ), val );
-}
-
-template<> inline simd_type< double, sse_tag >
-high_insert< double, sse_tag >( simd_type< double, sse_tag > vec,
-                                double val )
-{
-    return set<1>( _mm_shuffle_pd( vec, vec, 1 ), val );
-}
-
-// Low insert
-// ---------------------------------------------------------------------------------------
-template<> inline simd_type< int8_t, sse_tag >
-low_insert< int8_t, sse_tag >( simd_type< int8_t, sse_tag > vec, int8_t val )
-{
-    return set<0>( _mm_slli_si128( vec, 8 ), val );
-}
-
-template<> inline simd_type< int16_t, sse_tag >
-low_insert< int16_t, sse_tag >( simd_type< int16_t, sse_tag > vec, int16_t val )
-{
-    return set<0>( _mm_slli_si128( vec, 16 ), val );
-}
-
-template<> inline simd_type< int32_t, sse_tag >
-low_insert< int32_t, sse_tag >( simd_type< int32_t, sse_tag > vec, int32_t val )
-{
-    return set<0>( _mm_shuffle_epi32( vec, _MM_SHUFFLE( 2, 1, 0, 0 ) ), val );
-}
-
-template<> inline simd_type< int64_t, sse_tag >
-low_insert< int64_t, sse_tag >( simd_type< int64_t, sse_tag > vec, int64_t val )
-{
-    return set<0>( _mm_shuffle_epi32( vec, _MM_SHUFFLE( 1, 0, 0, 0 ) ), val );
-}
-
-template<> inline simd_type< float, sse_tag >
-low_insert< float, sse_tag >( simd_type< float, sse_tag > vec,
-                                float val )
-{
-    return set<0>( _mm_shuffle_ps( vec, vec, _MM_SHUFFLE( 2, 1, 0, 0 ) ), val );
-}
-
-template<> inline simd_type< double, sse_tag >
-low_insert< double, sse_tag >( simd_type< double, sse_tag > vec,
-                                double val )
-{
-    return set<0>( _mm_shuffle_pd( vec, vec, 0 ), val );
-}
-
 // Blend
 // ---------------------------------------------------------------------------------------
 #define DEF_BLEND( TYPE_T, BLEND_CMD ) \
@@ -256,6 +176,85 @@ struct set_functor< 1, double, sse_tag >
     }
 };
 
+// High insert
+// ---------------------------------------------------------------------------------------
+template<> inline simd_type< int8_t, sse_tag >
+high_insert< int8_t, sse_tag >( simd_type< int8_t, sse_tag > vec, int8_t val )
+{
+    return set_functor<15, int8_t, sse_tag>()( _mm_srli_si128( vec, 8 ), val );
+}
+
+template<> inline simd_type< int16_t, sse_tag >
+high_insert< int16_t, sse_tag >( simd_type< int16_t, sse_tag > vec, int16_t val )
+{
+    return set_functor<7, int16_t, sse_tag>()( _mm_srli_si128( vec, 16 ), val );
+}
+
+template<> inline simd_type< int32_t, sse_tag >
+high_insert< int32_t, sse_tag >( simd_type< int32_t, sse_tag > vec, int32_t val )
+{
+    return set_functor<3, int32_t, sse_tag>()( _mm_shuffle_epi32( vec, _MM_SHUFFLE( 3, 3, 2, 1 ) ), val );
+}
+
+template<> inline simd_type< int64_t, sse_tag >
+high_insert< int64_t, sse_tag >( simd_type< int64_t, sse_tag > vec, int64_t val )
+{
+    return set_functor<1, int64_t, sse_tag>()( _mm_shuffle_epi32( vec, _MM_SHUFFLE( 3, 3, 3, 2 ) ), val );
+}
+
+template<> inline simd_type< float, sse_tag >
+high_insert< float, sse_tag >( simd_type< float, sse_tag > vec,
+                                float val )
+{
+    return set_functor<3, float, sse_tag>()( _mm_shuffle_ps( vec, vec, _MM_SHUFFLE( 3, 3, 2, 1 ) ), val );
+}
+
+template<> inline simd_type< double, sse_tag >
+high_insert< double, sse_tag >( simd_type< double, sse_tag > vec,
+                                double val )
+{
+    return set_functor<1, double, sse_tag>()( _mm_shuffle_pd( vec, vec, 1 ), val );
+}
+
+// Low insert
+// ---------------------------------------------------------------------------------------
+template<> inline simd_type< int8_t, sse_tag >
+low_insert< int8_t, sse_tag >( simd_type< int8_t, sse_tag > vec, int8_t val )
+{
+    return set_functor<0, int8_t, sse_tag>()( _mm_slli_si128( vec, 8 ), val );
+}
+
+template<> inline simd_type< int16_t, sse_tag >
+low_insert< int16_t, sse_tag >( simd_type< int16_t, sse_tag > vec, int16_t val )
+{
+    return set_functor<0, int16_t, sse_tag>()( _mm_slli_si128( vec, 16 ), val );
+}
+
+template<> inline simd_type< int32_t, sse_tag >
+low_insert< int32_t, sse_tag >( simd_type< int32_t, sse_tag > vec, int32_t val )
+{
+    return set_functor<0, int32_t, sse_tag>()( _mm_shuffle_epi32( vec, _MM_SHUFFLE( 2, 1, 0, 0 ) ), val );
+}
+
+template<> inline simd_type< int64_t, sse_tag >
+low_insert< int64_t, sse_tag >( simd_type< int64_t, sse_tag > vec, int64_t val )
+{
+    return set_functor<0, int64_t, sse_tag>()( _mm_shuffle_epi32( vec, _MM_SHUFFLE( 1, 0, 0, 0 ) ), val );
+}
+
+template<> inline simd_type< float, sse_tag >
+low_insert< float, sse_tag >( simd_type< float, sse_tag > vec,
+                                float val )
+{
+    return set_functor<0, float, sse_tag>()( _mm_shuffle_ps( vec, vec, _MM_SHUFFLE( 2, 1, 0, 0 ) ), val );
+}
+
+template<> inline simd_type< double, sse_tag >
+low_insert< double, sse_tag >( simd_type< double, sse_tag > vec,
+                                double val )
+{
+    return set_functor<0, double, sse_tag>()( _mm_shuffle_pd( vec, vec, 0 ), val );
+}
 } // namespace litesimd
 
 #endif // LITESIMD_HAS_SSE

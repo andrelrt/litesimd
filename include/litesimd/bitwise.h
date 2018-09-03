@@ -35,34 +35,29 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( bit_and, type )
 DEFINE_BINARY_FUNCTION_ADAPTORS( bit_or, type )
 DEFINE_BINARY_FUNCTION_ADAPTORS( bit_xor, type )
 
-template< typename LHS, typename RHS, typename Tag_T = default_tag,
-          typename LHS::simd_value_type* = nullptr >
-LHS inline operator&( LHS lhs, RHS rhs ) { return bit_and< LHS::simd_value_type, Tag_T >( lhs, rhs ); }
+template< typename LHS, typename RHS >
+auto inline operator&( LHS lhs, RHS rhs )
+{
+    return bit_and( lhs, rhs );
+}
 
-template< typename LHS, typename RHS, typename Tag_T = default_tag,
-          typename RHS::simd_value_type* = nullptr >
-RHS inline operator&( LHS lhs, RHS rhs ) { return bit_and< RHS::simd_value_type, Tag_T >( lhs, rhs ); }
+template< typename LHS, typename RHS >
+auto inline operator|( LHS lhs, RHS rhs )
+{
+    return bit_or( lhs, rhs );
+}
 
-template< typename LHS, typename RHS, typename Tag_T = default_tag,
-          typename LHS::simd_value_type* = nullptr >
-LHS inline operator|( LHS lhs, RHS rhs ) { return bit_or< LHS::simd_value_type, Tag_T >( lhs, rhs ); }
+template< typename LHS, typename RHS >
+auto inline operator^( LHS lhs, RHS rhs )
+{
+    return bit_xor( lhs, rhs );
+}
 
-template< typename LHS, typename RHS, typename Tag_T = default_tag,
-          typename RHS::simd_value_type* = nullptr >
-RHS inline operator|( LHS lhs, RHS rhs ) { return bit_or< RHS::simd_value_type, Tag_T >( lhs, rhs ); }
-
-template< typename LHS, typename RHS, typename Tag_T = default_tag,
-          typename LHS::simd_value_type* = nullptr >
-LHS inline operator^( LHS lhs, RHS rhs ) { return bit_xor< LHS::simd_value_type, Tag_T >( lhs, rhs ); }
-
-template< typename LHS, typename RHS, typename Tag_T = default_tag,
-          typename RHS::simd_value_type* = nullptr >
-RHS inline operator^( LHS lhs, RHS rhs ) { return bit_xor< RHS::simd_value_type, Tag_T >( lhs, rhs ); }
-
-template< typename LHS, typename RHS, typename Tag_T = default_tag,
-          typename LHS::simd_value_type* = nullptr >
-LHS inline operator~( LHS lhs ) { return bit_not< LHS::simd_value_type, Tag_T >( lhs ); }
-
+template< typename LHS >
+auto inline operator~( LHS lhs )
+{
+    return bit_not( lhs );
+}
 
 } // namespace litesimd
 
