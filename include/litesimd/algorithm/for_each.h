@@ -48,9 +48,9 @@ Function_T for_each_backward( SimdType_T vec, Function_T func )
 
 template< typename ValueType_T, typename Function_T,
           typename std::enable_if_t<std::is_integral<ValueType_T>::value>* = nullptr >
-void for_each_index( uint32_t bitmask, Function_T func )
+Function_T for_each_index( uint32_t bitmask, Function_T func )
 {
-    uint32_t mask = (1 << sizeof(ValueType_T)) -1;
+    constexpr uint32_t mask = (1 << sizeof(ValueType_T)) -1;
     while( bitmask != 0 )
     {
         size_t idx = bitmask_first_index< ValueType_T >( bitmask );
@@ -58,11 +58,12 @@ void for_each_index( uint32_t bitmask, Function_T func )
             break;
         bitmask &= ~(mask << (idx*sizeof(ValueType_T)));
     }
+    return std::move( func );
 }
 
 template< typename ValueType_T, typename Function_T,
           typename std::enable_if_t<std::is_floating_point<ValueType_T>::value>* = nullptr >
-void for_each_index( uint32_t bitmask, Function_T func )
+Function_T for_each_index( uint32_t bitmask, Function_T func )
 {
     while( bitmask != 0 )
     {
@@ -71,13 +72,14 @@ void for_each_index( uint32_t bitmask, Function_T func )
             break;
         bitmask &= ~(1 << idx);
     }
+    return std::move( func );
 }
 
 template< typename ValueType_T, typename Function_T,
           typename std::enable_if_t<std::is_integral<ValueType_T>::value>* = nullptr >
-void for_each_index_backward( uint32_t bitmask, Function_T func )
+Function_T for_each_index_backward( uint32_t bitmask, Function_T func )
 {
-    uint32_t mask = (1 << sizeof(ValueType_T)) -1;
+    constexpr uint32_t mask = (1 << sizeof(ValueType_T)) -1;
     while( bitmask != 0 )
     {
         size_t idx = bitmask_last_index< ValueType_T >( bitmask );
@@ -85,11 +87,12 @@ void for_each_index_backward( uint32_t bitmask, Function_T func )
             break;
         bitmask &= ~(mask << (idx*sizeof(ValueType_T)));
     }
+    return std::move( func );
 }
 
 template< typename ValueType_T, typename Function_T,
           typename std::enable_if_t<std::is_floating_point<ValueType_T>::value>* = nullptr >
-void for_each_index_backward( uint32_t bitmask, Function_T func )
+Function_T for_each_index_backward( uint32_t bitmask, Function_T func )
 {
     while( bitmask != 0 )
     {
@@ -98,6 +101,7 @@ void for_each_index_backward( uint32_t bitmask, Function_T func )
             break;
         bitmask &= ~(1 << idx);
     }
+    return std::move( func );
 }
 
 } // namespace litesimd
