@@ -30,57 +30,6 @@
 
 namespace litesimd {
 
-// High insert
-// ---------------------------------------------------------------------------------------
-template<> inline simd_type< int8_t, avx_tag >
-high_insert< int8_t, avx_tag >( simd_type< int8_t, avx_tag > vec,
-                               int8_t val )
-{
-    return _mm256_insert_epi8(
-                 _mm256_insert_epi8(
-                       _mm256_shuffle_epi8( vec,
-                             _mm256_set_epi8( 15, 15, 14, 13, 12, 11, 10, 9,
-                                               8,  7,  6,  5,  4,  3,  2, 1,
-                                              15, 15, 14, 13, 12, 11, 10, 9,
-                                               8,  7,  6,  5,  4,  3,  2, 1 ) ),
-                       (int)_mm256_extract_epi8( vec, 16 ), 15 ),
-                 (int)val, 31 );
-}
-
-template<> inline simd_type< int16_t, avx_tag >
-high_insert< int16_t, avx_tag >( simd_type< int16_t, avx_tag > vec,
-                                int16_t val )
-{
-    return _mm256_insert_epi16(
-                 _mm256_insert_epi16(
-                       _mm256_shuffle_epi8( vec,
-                             _mm256_set_epi8( 15, 15, 15, 14, 13, 12, 11, 10,
-                                               9,  8,  7,  6,  5,  4,  3, 2,
-                                              15, 15, 15, 14, 13, 12, 11, 10,
-                                               9,  8,  7,  6,  5,  4,  3, 2 ) ),
-                       (int)_mm256_extract_epi16( vec, 8 ), 7 ),
-                 (int)val, 15 );
-}
-
-template<> inline simd_type< int32_t, avx_tag >
-high_insert< int32_t, avx_tag >( simd_type< int32_t, avx_tag > vec,
-                                int32_t val )
-{
-    return _mm256_insert_epi32(
-                 _mm256_permutevar8x32_epi32( vec,
-                        _mm256_set_epi32( 7, 7, 6, 5, 4, 3, 2, 1 ) ),
-                 val, 7 );
-}
-
-template<> inline simd_type< int64_t, avx_tag >
-high_insert< int64_t, avx_tag >( simd_type< int64_t, avx_tag > vec,
-                                int64_t val )
-{
-    return _mm256_insert_epi32(
-                 _mm256_permute4x64_epi64( vec, _MM_SHUFFLE( 3, 3, 2, 1 ) ),
-                 val, 3 );
-}
-
 // Blend
 // ---------------------------------------------------------------------------------------
 #define DEF_BLEND( TYPE_T, BLEND_CMD ) \
@@ -141,8 +90,8 @@ struct get_functor< index, float, avx_tag >
 {
     float inline operator()( simd_type< float, avx_tag > vec )
     {
-        return _mm_extract_ps( _mm256_extractf128_ps( vec, index >> 2 ),
-                               index & 3 );
+        return _mm_cvtss_f32( _mm_permute_ps( _mm256_extractf128_ps( vec, index >> 2 ),
+                                              index & 3 ) );
     }
 };
 
@@ -222,6 +171,126 @@ struct set_functor< index, double, avx_tag >
         return _mm256_blendv_pd( vec, _mm256_set1_pd( val ), mask );
     }
 };
+
+// High insert
+// ---------------------------------------------------------------------------------------
+template<> inline simd_type< int8_t, avx_tag >
+high_insert< int8_t, avx_tag >( simd_type< int8_t, avx_tag > vec, int8_t val )
+{
+    return set_functor<31, int8_t, avx_tag>()(
+                set_functor<15, int8_t, avx_tag>()(
+                        _mm256_srli_si256( vec, 1 ),
+                        get_functor<16, int8_t, avx_tag>()( vec ) ),
+                val );
+}
+
+template<> inline simd_type< int16_t, avx_tag >
+high_insert< int16_t, avx_tag >( simd_type< int16_t, avx_tag > vec, int16_t val )
+{
+    return set_functor<15, int16_t, avx_tag>()(
+                set_functor<7, int16_t, avx_tag>()(
+                        _mm256_srli_si256( vec, 2 ),
+                        get_functor<8, int16_t, avx_tag>()( vec ) ),
+                val );
+}
+
+template<> inline simd_type< int32_t, avx_tag >
+high_insert< int32_t, avx_tag >( simd_type< int32_t, avx_tag > vec, int32_t val )
+{
+    return set_functor<7, int32_t, avx_tag>()(
+                set_functor<3, int32_t, avx_tag>()(
+                        _mm256_srli_si256( vec, 4 ),
+                        get_functor<4, int32_t, avx_tag>()( vec ) ),
+                val );
+}
+
+template<> inline simd_type< int64_t, avx_tag >
+high_insert< int64_t, avx_tag >( simd_type< int64_t, avx_tag > vec, int64_t val )
+{
+    return set_functor<3, int64_t, avx_tag>()(
+                _mm256_permute4x64_epi64( vec, _MM_SHUFFLE( 3, 3, 2, 1 ) ),
+                val );
+}
+
+template<> inline simd_type< float, avx_tag >
+high_insert< float, avx_tag >( simd_type< float, avx_tag > vec,
+                                float val )
+{
+    return set_functor<7, float, avx_tag>()(
+                set_functor<3, float, avx_tag>()(
+                        _mm256_permute_ps( vec, _MM_SHUFFLE( 3, 3, 2, 1 ) ),
+                        get_functor<4, float, avx_tag>()( vec ) ),
+                val );
+}
+
+template<> inline simd_type< double, avx_tag >
+high_insert< double, avx_tag >( simd_type< double, avx_tag > vec,
+                                double val )
+{
+    return set_functor<3, double, avx_tag>()(
+                _mm256_permute4x64_pd( vec, _MM_SHUFFLE( 3, 3, 2, 1 ) ),
+                val );
+}
+
+// Low insert
+// ---------------------------------------------------------------------------------------
+template<> inline simd_type< int8_t, avx_tag >
+low_insert< int8_t, avx_tag >( simd_type< int8_t, avx_tag > vec, int8_t val )
+{
+    return set_functor<0, int8_t, avx_tag>()(
+                set_functor<16, int8_t, avx_tag>()(
+                        _mm256_slli_si256( vec, 1 ),
+                        get_functor<15, int8_t, avx_tag>()( vec ) ),
+                val );
+}
+
+template<> inline simd_type< int16_t, avx_tag >
+low_insert< int16_t, avx_tag >( simd_type< int16_t, avx_tag > vec, int16_t val )
+{
+    return set_functor<0, int16_t, avx_tag>()(
+                set_functor<8, int16_t, avx_tag>()(
+                        _mm256_slli_si256( vec, 2 ),
+                        get_functor<7, int16_t, avx_tag>()( vec ) ),
+                val );
+}
+
+template<> inline simd_type< int32_t, avx_tag >
+low_insert< int32_t, avx_tag >( simd_type< int32_t, avx_tag > vec, int32_t val )
+{
+    return set_functor<0, int32_t, avx_tag>()(
+                set_functor<4, int32_t, avx_tag>()(
+                        _mm256_slli_si256( vec, 4 ),
+                        get_functor<3, int32_t, avx_tag>()( vec ) ),
+                val );
+}
+
+template<> inline simd_type< int64_t, avx_tag >
+low_insert< int64_t, avx_tag >( simd_type< int64_t, avx_tag > vec, int64_t val )
+{
+    return set_functor<0, int64_t, avx_tag>()(
+                _mm256_permute4x64_epi64( vec, _MM_SHUFFLE( 2, 1, 0, 0 ) ),
+                val );
+}
+
+template<> inline simd_type< float, avx_tag >
+low_insert< float, avx_tag >( simd_type< float, avx_tag > vec,
+                                float val )
+{
+    return set_functor<0, float, avx_tag>()(
+                set_functor<4, float, avx_tag>()(
+                        _mm256_permute_ps( vec, _MM_SHUFFLE( 2, 1, 0, 0 ) ),
+                        get_functor<3, float, avx_tag>()( vec ) ),
+                val );
+}
+
+template<> inline simd_type< double, avx_tag >
+low_insert< double, avx_tag >( simd_type< double, avx_tag > vec,
+                                double val )
+{
+    return set_functor<0, double, avx_tag>()(
+                _mm256_permute4x64_pd( vec, _MM_SHUFFLE( 2, 1, 0, 0 ) ),
+                val );
+}
 
 } // namespace litesimd
 

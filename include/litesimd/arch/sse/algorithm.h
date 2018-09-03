@@ -57,7 +57,7 @@ DEF_BINARY_MAX( double,  _mm_max_pd )
 
 // Horizontal min max
 // ---------------------------------------------------------------------------------------
-template<> int8_t
+template<> inline int8_t
 min< int8_t, sse_tag >( simd_type< int8_t, sse_tag > vec )
 {
     vec = _mm_min_epi8( vec, _mm_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
@@ -67,7 +67,7 @@ min< int8_t, sse_tag >( simd_type< int8_t, sse_tag > vec )
     return (int8_t)_mm_cvtsi128_si32( vec );
 }
 
-template<> int16_t
+template<> inline int16_t
 min< int16_t, sse_tag >( simd_type< int16_t, sse_tag > vec )
 {
     vec = _mm_min_epi16( vec, _mm_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
@@ -76,7 +76,7 @@ min< int16_t, sse_tag >( simd_type< int16_t, sse_tag > vec )
     return (int16_t)_mm_cvtsi128_si32( vec );
 }
 
-template<> int32_t
+template<> inline int32_t
 min< int32_t, sse_tag >( simd_type< int32_t, sse_tag > vec )
 {
     vec = _mm_min_epi32( vec, _mm_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
@@ -84,7 +84,7 @@ min< int32_t, sse_tag >( simd_type< int32_t, sse_tag > vec )
     return (int32_t)_mm_cvtsi128_si32( vec );
 }
 
-template<> float
+template<> inline float
 min< float, sse_tag >( simd_type< float, sse_tag > vec )
 {
     vec = _mm_min_ps( vec, _mm_shuffle_ps( vec, vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
@@ -92,14 +92,14 @@ min< float, sse_tag >( simd_type< float, sse_tag > vec )
     return _mm_cvtss_f32( vec );
 }
 
-template<> double
+template<> inline double
 min< double, sse_tag >( simd_type< double, sse_tag > vec )
 {
     vec = _mm_min_pd( vec, _mm_shuffle_pd( vec, vec, _MM_SHUFFLE2( 0, 1 ) ) );
     return _mm_cvtsd_f64( vec );
 }
 
-template<> int8_t
+template<> inline int8_t
 max< int8_t, sse_tag >( simd_type< int8_t, sse_tag > vec )
 {
     vec = _mm_max_epi8( vec, _mm_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
@@ -109,7 +109,7 @@ max< int8_t, sse_tag >( simd_type< int8_t, sse_tag > vec )
     return (int8_t)_mm_cvtsi128_si32( vec );
 }
 
-template<> int16_t
+template<> inline int16_t
 max< int16_t, sse_tag >( simd_type< int16_t, sse_tag > vec )
 {
     vec = _mm_max_epi16( vec, _mm_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
@@ -118,7 +118,7 @@ max< int16_t, sse_tag >( simd_type< int16_t, sse_tag > vec )
     return (int16_t)_mm_cvtsi128_si32( vec );
 }
 
-template<> int32_t
+template<> inline int32_t
 max< int32_t, sse_tag >( simd_type< int32_t, sse_tag > vec )
 {
     vec = _mm_max_epi32( vec, _mm_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
@@ -126,7 +126,7 @@ max< int32_t, sse_tag >( simd_type< int32_t, sse_tag > vec )
     return (int32_t)_mm_cvtsi128_si32( vec );
 }
 
-template<> float
+template<> inline float
 max< float, sse_tag >( simd_type< float, sse_tag > vec )
 {
     vec = _mm_max_ps( vec, _mm_shuffle_ps( vec, vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
@@ -134,7 +134,7 @@ max< float, sse_tag >( simd_type< float, sse_tag > vec )
     return _mm_cvtss_f32( vec );
 }
 
-template<> double
+template<> inline double
 max< double, sse_tag >( simd_type< double, sse_tag > vec )
 {
     vec = _mm_max_pd( vec, _mm_shuffle_pd( vec, vec, _MM_SHUFFLE2( 0, 1 ) ) );

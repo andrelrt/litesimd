@@ -63,18 +63,18 @@ TYPED_TEST(ArithmeticTypedTest, AddTypedTest)
     using tag = typename TypeParam::second_type;
     using simd = ls::simd_type< type, tag >;
 
-    simd a = simd( 1 );
-    simd b = simd( 2 );
+    simd a = simd( static_cast<type>(1) );
+    simd b = simd( static_cast<type>(2) );
 
     ls::for_each( ls::add< type, tag >( a, b ), []( int index, type val )
     {
-        EXPECT_EQ( 3, val ) << "Error on index " << index;
+        EXPECT_EQ( static_cast<type>(3), val ) << "Error on index " << index;
         return true;
     } );
 
     ls::for_each( a + b, []( int index, type val )
     {
-        EXPECT_EQ( 3, val ) << "Error on index " << index;
+        EXPECT_EQ( static_cast<type>(3), val ) << "Error on index " << index;
         return true;
     } );
 }

@@ -32,10 +32,12 @@ template <typename T> class AlgorithmTypedTest: public ::testing::Test {};
 using TestTypes = ::testing::Types<
 #ifdef __SSE2__
     std::pair<int8_t, ls::sse_tag>, std::pair<int16_t, ls::sse_tag>,
-    std::pair<int32_t, ls::sse_tag>, std::pair<int64_t, ls::sse_tag>
+    std::pair<int32_t, ls::sse_tag>, std::pair<int64_t, ls::sse_tag>,
+    std::pair<float, ls::sse_tag>, std::pair<double, ls::sse_tag>
 #ifdef __AVX2__
     , std::pair<int8_t, ls::avx_tag>, std::pair<int16_t, ls::avx_tag>,
-    std::pair<int32_t, ls::avx_tag>, std::pair<int64_t, ls::avx_tag>
+    std::pair<int32_t, ls::avx_tag>, std::pair<int64_t, ls::avx_tag>,
+    std::pair<float, ls::avx_tag>, std::pair<double, ls::avx_tag>
 #endif //__AVX2__
 #endif //__SSE2__
 >;
@@ -73,7 +75,6 @@ TYPED_TEST(AlgorithmTypedTest, IotaTypedTest)
 {
     using type = typename TypeParam::first_type;
     using tag = typename TypeParam::second_type;
-    using simd = ls::simd_type< type, tag >;
 
     ls::for_each( ls::iota< type, tag >( 0 ), []( int index, type val )
     {
@@ -96,106 +97,166 @@ TEST(AlgorithmTest, ForEachIndexTypedTest)
     {
         EXPECT_EQ( (size_t) expected, index );
         expected += 2;
+        if( expected > 33 )
+        {
+            ADD_FAILURE() << "Expected bigger than 33";
+            return false;
+        }
         return true;
     } );
-    ExPECT_EQ( 33, expected );
+    EXPECT_EQ( 33, expected );
 
     expected = 31;
     ls::for_each_index_backward< int8_t >( 0xaaaaaaaa, [&expected]( size_t index )
     {
         EXPECT_EQ( (size_t) expected, index );
         expected -= 2;
+        if( expected < -1 )
+        {
+            ADD_FAILURE() << "Expected less than -1";
+            return false;
+        }
         return true;
     } );
-    ExPECT_EQ( -1, expected );
+    EXPECT_EQ( -1, expected );
 
     expected = 1;
     ls::for_each_index< int16_t >( 0xcccccccc, [&expected]( size_t index )
     {
         EXPECT_EQ( (size_t) expected, index );
         expected += 2;
+        if( expected > 17 )
+        {
+            ADD_FAILURE() << "Expected bigger than 17";
+            return false;
+        }
         return true;
     } );
-    ExPECT_EQ( 17, expected );
+    EXPECT_EQ( 17, expected );
 
     expected = 15;
     ls::for_each_index_backward< int16_t >( 0xcccccccc, [&expected]( size_t index )
     {
         EXPECT_EQ( (size_t) expected, index );
         expected -= 2;
+        if( expected < -1 )
+        {
+            ADD_FAILURE() << "Expected less than -1";
+            return false;
+        }
         return true;
     } );
-    ExPECT_EQ( -1, expected );
+    EXPECT_EQ( -1, expected );
 
     expected = 1;
     ls::for_each_index< int32_t >( 0xf0f0f0f0, [&expected]( size_t index )
     {
         EXPECT_EQ( (size_t) expected, index );
         expected += 2;
+        if( expected > 9 )
+        {
+            ADD_FAILURE() << "Expected bigger than 9";
+            return false;
+        }
         return true;
     } );
-    ExPECT_EQ( 9, expected );
+    EXPECT_EQ( 9, expected );
 
     expected = 7;
     ls::for_each_index_backward< int32_t >( 0xf0f0f0f0, [&expected]( size_t index )
     {
         EXPECT_EQ( (size_t) expected, index );
         expected -= 2;
+        if( expected < -1 )
+        {
+            ADD_FAILURE() << "Expected less than -1";
+            return false;
+        }
         return true;
     } );
-    ExPECT_EQ( -1, expected );
+    EXPECT_EQ( -1, expected );
 
     expected = 1;
     ls::for_each_index< int64_t >( 0xff00ff00, [&expected]( size_t index )
     {
         EXPECT_EQ( (size_t) expected, index );
         expected += 2;
+        if( expected > 5 )
+        {
+            ADD_FAILURE() << "Expected bigger than 5";
+            return false;
+        }
         return true;
     } );
-    ExPECT_EQ( 5, expected );
+    EXPECT_EQ( 5, expected );
 
     expected = 3;
     ls::for_each_index_backward< int64_t >( 0xff00ff00, [&expected]( size_t index )
     {
         EXPECT_EQ( (size_t) expected, index );
         expected -= 2;
+        if( expected < -1 )
+        {
+            ADD_FAILURE() << "Expected less than -1";
+            return false;
+        }
         return true;
     } );
-    ExPECT_EQ( -1, expected );
+    EXPECT_EQ( -1, expected );
 
     expected = 1;
     ls::for_each_index< float >( 0x000000aa, [&expected]( size_t index )
     {
         EXPECT_EQ( (size_t) expected, index );
         expected += 2;
+        if( expected > 9 )
+        {
+            ADD_FAILURE() << "Expected bigger than 9";
+            return false;
+        }
         return true;
     } );
-    ExPECT_EQ( 9, expected );
+    EXPECT_EQ( 9, expected );
 
     expected = 7;
     ls::for_each_index_backward< float >( 0x000000aa, [&expected]( size_t index )
     {
         EXPECT_EQ( (size_t) expected, index );
         expected -= 2;
+        if( expected < -1 )
+        {
+            ADD_FAILURE() << "Expected less than -1";
+            return false;
+        }
         return true;
     } );
-    ExPECT_EQ( -1, expected );
+    EXPECT_EQ( -1, expected );
 
     expected = 1;
     ls::for_each_index< double >( 0x0000000a, [&expected]( size_t index )
     {
         EXPECT_EQ( (size_t) expected, index );
         expected += 2;
+        if( expected > 5 )
+        {
+            ADD_FAILURE() << "Expected bigger than 5";
+            return false;
+        }
         return true;
     } );
-    ExPECT_EQ( 5, expected );
+    EXPECT_EQ( 5, expected );
 
     expected = 3;
     ls::for_each_index_backward< double >( 0x0000000a, [&expected]( size_t index )
     {
         EXPECT_EQ( (size_t) expected, index );
         expected -= 2;
+        if( expected < -1 )
+        {
+            ADD_FAILURE() << "Expected less than -1";
+            return false;
+        }
         return true;
     } );
-    ExPECT_EQ( -1, expected );
+    EXPECT_EQ( -1, expected );
 }

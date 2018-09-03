@@ -91,7 +91,7 @@ struct get_functor< index, float, sse_tag >
 {
     float inline operator()( simd_type< float, sse_tag > vec )
     {
-        return _mm_extract_ps( vec, index );
+        return _mm_cvtss_f32( _mm_shuffle_ps( vec, vec, index ) );
     }
 };
 
@@ -181,13 +181,13 @@ struct set_functor< 1, double, sse_tag >
 template<> inline simd_type< int8_t, sse_tag >
 high_insert< int8_t, sse_tag >( simd_type< int8_t, sse_tag > vec, int8_t val )
 {
-    return set_functor<15, int8_t, sse_tag>()( _mm_srli_si128( vec, 8 ), val );
+    return set_functor<15, int8_t, sse_tag>()( _mm_srli_si128( vec, 1 ), val );
 }
 
 template<> inline simd_type< int16_t, sse_tag >
 high_insert< int16_t, sse_tag >( simd_type< int16_t, sse_tag > vec, int16_t val )
 {
-    return set_functor<7, int16_t, sse_tag>()( _mm_srli_si128( vec, 16 ), val );
+    return set_functor<7, int16_t, sse_tag>()( _mm_srli_si128( vec, 2 ), val );
 }
 
 template<> inline simd_type< int32_t, sse_tag >
@@ -221,13 +221,13 @@ high_insert< double, sse_tag >( simd_type< double, sse_tag > vec,
 template<> inline simd_type< int8_t, sse_tag >
 low_insert< int8_t, sse_tag >( simd_type< int8_t, sse_tag > vec, int8_t val )
 {
-    return set_functor<0, int8_t, sse_tag>()( _mm_slli_si128( vec, 8 ), val );
+    return set_functor<0, int8_t, sse_tag>()( _mm_slli_si128( vec, 1 ), val );
 }
 
 template<> inline simd_type< int16_t, sse_tag >
 low_insert< int16_t, sse_tag >( simd_type< int16_t, sse_tag > vec, int16_t val )
 {
-    return set_functor<0, int16_t, sse_tag>()( _mm_slli_si128( vec, 16 ), val );
+    return set_functor<0, int16_t, sse_tag>()( _mm_slli_si128( vec, 2 ), val );
 }
 
 template<> inline simd_type< int32_t, sse_tag >
@@ -255,6 +255,7 @@ low_insert< double, sse_tag >( simd_type< double, sse_tag > vec,
 {
     return set_functor<0, double, sse_tag>()( _mm_shuffle_pd( vec, vec, 0 ), val );
 }
+
 } // namespace litesimd
 
 #endif // LITESIMD_HAS_SSE

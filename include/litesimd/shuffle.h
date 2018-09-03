@@ -29,6 +29,24 @@
 
 namespace litesimd {
 
+// High/Low insert
+// ---------------------------------------------------------------------------------------
+template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
+inline SimdType_T
+high_insert( SimdType_T vec, typename SimdType_T::simd_value_type val )
+{
+    return high_insert< typename SimdType_T::simd_value_type,
+                        typename SimdType_T::simd_tag >( vec, val );
+}
+
+template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
+inline SimdType_T
+low_insert( SimdType_T vec, typename SimdType_T::simd_value_type val )
+{
+    return low_insert< typename SimdType_T::simd_value_type,
+                       typename SimdType_T::simd_tag >( vec, val );
+}
+
 // Blend
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >

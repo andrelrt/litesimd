@@ -22,7 +22,7 @@
 
 #include <litesimd/types.h>
 #include <litesimd/shuffle.h>
-#include <litesimd/compare.h>
+#include <litesimd/algorithm.h>
 #include "gtest/gtest.h"
 
 namespace ls = litesimd;
@@ -32,16 +32,51 @@ template <typename T> class ShuffleTypedTest: public ::testing::Test {};
 using TestTypes = ::testing::Types<
 #ifdef __SSE2__
     std::pair<int8_t, ls::sse_tag>, std::pair<int16_t, ls::sse_tag>,
-    std::pair<int32_t, ls::sse_tag>, std::pair<int64_t, ls::sse_tag>
+    std::pair<int32_t, ls::sse_tag>, std::pair<int64_t, ls::sse_tag>,
+    std::pair<float, ls::sse_tag>, std::pair<double, ls::sse_tag>
 #ifdef __AVX2__
     , std::pair<int8_t, ls::avx_tag>, std::pair<int16_t, ls::avx_tag>,
-    std::pair<int32_t, ls::avx_tag>, std::pair<int64_t, ls::avx_tag>
+    std::pair<int32_t, ls::avx_tag>, std::pair<int64_t, ls::avx_tag>,
+    std::pair<float, ls::avx_tag>, std::pair<double, ls::avx_tag>
 #endif //__AVX2__
 #endif //__SSE2__
 >;
 TYPED_TEST_CASE(ShuffleTypedTest, TestTypes);
 
 #ifdef __SSE2__
+TEST(BaseTest, Set1FloatTest)
+{
+    __m128 a = _mm_set_ps( 4.0f, 3.0f, 2.0f, 1.0f );
+    EXPECT_FLOAT_EQ( 1.0f, (ls::get<0, float, ls::sse_tag >( a )) );
+
+    __m128d c = _mm_set_pd( 2.0, 1.0 );
+    EXPECT_DOUBLE_EQ( 1.0, (ls::get<0, double, ls::sse_tag >( c )) );
+
+#ifdef __AVX2__
+    __m256 b = _mm256_set_ps( 8.0f, 7.0f, 6.0f, 5.0f, 4.0f, 3.0f, 2.0f, 1.0f );
+    EXPECT_FLOAT_EQ( 1.0f, (ls::get<0, float, ls::avx_tag >( b )) );
+
+    __m256d d = _mm256_set_pd( 4.0, 3.0, 2.0, 1.0 );
+    EXPECT_DOUBLE_EQ( 1.0, (ls::get<0, double, ls::avx_tag >( d )) );
+
+#endif //__AVX2__
+}
+
+TYPED_TEST(ShuffleTypedTest, GetSetTest)
+{
+    using type = typename TypeParam::first_type;
+    using tag = typename TypeParam::second_type;
+    using simd = ls::simd_type< type, tag >;
+
+    simd a = simd::zero();
+
+    EXPECT_EQ( static_cast<type>(0), (ls::get<0, type, tag >( a )) );
+
+    a = ls::set< 0, type, tag >( a, (type)1 );
+
+    EXPECT_EQ( static_cast<type>(1), (ls::get<0, type, tag >( a )) );
+}
+
 TYPED_TEST(ShuffleTypedTest, HighInsertTest)
 {
     using type = typename TypeParam::first_type;
