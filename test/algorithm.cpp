@@ -23,6 +23,7 @@
 #include <functional>
 #include <litesimd/types.h>
 #include <litesimd/algorithm.h>
+#include <litesimd/helpers/iostream.h>
 #include "gtest/gtest.h"
 
 namespace ls = litesimd;
@@ -98,31 +99,33 @@ TYPED_TEST(AlgorithmTypedTest, MinMaxTypedTest)
     simd a = ls::iota< type, tag >( 0 );
     simd b = simd( 1 );
 
-    EXPECT_EQ( static_cast<type>(0), (ls::min<simd>( a )) );
-    EXPECT_EQ( static_cast<type>(simd::simd_size-1), (ls::max<simd>( a )) );
+    EXPECT_EQ( static_cast<type>(0), (ls::min<simd>( a )) ) << "Simd: " << a;
+    EXPECT_EQ( static_cast<type>(simd::simd_size-1), (ls::max<simd>( a )) ) << "Simd: " << a;
 
-    ls::for_each( ls::min< type, tag >( a, b ), []( int index, type val )
+    auto min = ls::min< type, tag >( a, b );
+    ls::for_each( min, [&min]( int index, type val )
     {
         if( index > 1 )
         {
-            EXPECT_EQ( static_cast<type>( 1 ), val ) << "Error on index " << index;
+            EXPECT_EQ( static_cast<type>( 1 ), val ) << "Error on index " << index << " Simd: " << min;
         }
         else
         {
-            EXPECT_EQ( static_cast<type>( index ), val ) << "Error on index " << index;
+            EXPECT_EQ( static_cast<type>( index ), val ) << "Error on index " << index << " Simd: " << min;
         }
         return true;
     } );
 
-    ls::for_each( ls::max< type, tag >( a, b ), []( int index, type val )
+    auto max = ls::max< type, tag >( a, b );
+    ls::for_each( max, [&max]( int index, type val )
     {
         if( index < 1 )
         {
-            EXPECT_EQ( static_cast<type>( 1 ), val ) << "Error on index " << index;
+            EXPECT_EQ( static_cast<type>( 1 ), val ) << "Error on index " << index << " Simd: " << max;
         }
         else
         {
-            EXPECT_EQ( static_cast<type>( index ), val ) << "Error on index " << index;
+            EXPECT_EQ( static_cast<type>( index ), val ) << "Error on index " << index << " Simd: " << max;
         }
         return true;
     } );

@@ -61,14 +61,14 @@ template<> inline simd_type< int64_t, avx_tag >
 min< int64_t, avx_tag >( simd_type< int64_t, avx_tag > lhs, simd_type< int64_t, avx_tag > rhs )
 {
     auto mask = greater< int64_t, avx_tag >( lhs, rhs );
-    return blend< int64_t, avx_tag >( rhs, lhs, mask );
+    return blend< int64_t, avx_tag >( mask, rhs, lhs );
 }
 
 template<> inline simd_type< int64_t, avx_tag >
 max< int64_t, avx_tag >( simd_type< int64_t, avx_tag > lhs, simd_type< int64_t, avx_tag > rhs )
 {
     auto mask = greater< int64_t, avx_tag >( lhs, rhs );
-    return blend< int64_t, avx_tag >( lhs, rhs, mask );
+    return blend< int64_t, avx_tag >( mask, lhs, rhs );
 }
 
 // Horizontal min max

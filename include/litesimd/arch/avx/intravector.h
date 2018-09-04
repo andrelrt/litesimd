@@ -87,8 +87,9 @@ struct intravector_op< float, avx_tag >
     template< typename Function_T >
     float inline operator()( simd_type< float, avx_tag > vec, Function_T func )
     {
-        vec = func( vec, _mm256_shuffle_ps( vec, vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
-        vec = func( vec, _mm256_shuffle_ps( vec, vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+        vec = func( vec, _mm256_permute2f128_ps( vec, vec, 1 ) );
+        vec = func( vec, _mm256_permute_ps( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+        vec = func( vec, _mm256_permute_ps( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
         return _mm256_cvtss_f32( vec );
     }
 };
@@ -99,7 +100,8 @@ struct intravector_op< double, avx_tag >
     template< typename Function_T >
     double inline operator()( simd_type< double, avx_tag > vec, Function_T func )
     {
-        vec = func( vec, _mm256_shuffle_pd( vec, vec, _MM_SHUFFLE2( 0, 1 ) ) );
+        vec = func( vec, _mm256_permute4x64_pd( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+        vec = func( vec, _mm256_permute4x64_pd( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
         return _mm256_cvtsd_f64( vec );
     }
 };
