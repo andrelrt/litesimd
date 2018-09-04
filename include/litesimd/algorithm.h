@@ -38,7 +38,9 @@ typename SimdType_T::simd_value_type min( SimdType_T vec )
 {
     using type = typename SimdType_T::simd_value_type;
     using tag = typename SimdType_T::simd_tag;
-    return intravector_op< type, tag >()( vec, &min< type, tag > );
+    struct op{ inline SimdType_T operator()( SimdType_T lhs, SimdType_T rhs )
+            { return min< type, tag >( lhs, rhs ); } };
+    return intravector_op< type, tag >()( vec, op() );
 }
 
 template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
@@ -46,7 +48,9 @@ typename SimdType_T::simd_value_type max( SimdType_T vec )
 {
     using type = typename SimdType_T::simd_value_type;
     using tag = typename SimdType_T::simd_tag;
-    return intravector_op< type, tag >()( vec, &max< type, tag > );
+    struct op{ inline SimdType_T operator()( SimdType_T lhs, SimdType_T rhs )
+            { return max< type, tag >( lhs, rhs ); } };
+    return intravector_op< type, tag >()( vec, op() );
 }
 
 } // namespace litesimd

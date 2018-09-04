@@ -87,17 +87,9 @@ TYPED_TEST(ShuffleTypedTest, HighInsertTest)
     simd a = simd::zero();
     a = ls::high_insert( a, 1 );
     EXPECT_EQ( 1, (ls::get< simd::simd_size -1, type, tag> ( a )) ) << "Simd: " << a;
-    auto mask = _mm256_cmp_pd( _mm256_set1_pd( simd::simd_size -2 ),
-                               _mm256_set_pd( 3, 2, 1, 0 ), _CMP_EQ_OQ );
-    EXPECT_EQ( 1, (ls::get< 0, int64_t, ls::avx_tag> ( mask )) )
-        << "Simd: " << simd::simd_size -1 << ls::simd_type< int64_t, ls::avx_tag >( mask )
-        << " Set1: " << ls::simd_type< double, ls::avx_tag>( _mm256_set1_pd( simd::simd_size -1 ) )
-        << " Blend: " << ls::simd_type< double, ls::avx_tag>( _mm256_blendv_pd( _mm256_setzero_pd(), _mm256_set1_pd( simd::simd_size -1 ), mask ) );
 
-    type sz = simd::simd_size;
-    simd b = ls::iota< type, tag >( 0 );
-    a = ls::high_insert( ls::iota< type, tag >( 0 ), sz );
-    EXPECT_EQ( sz, (ls::get< simd::simd_size -1, type, tag> ( a )) ) << "Simd: " << a << b;
+    a = ls::high_insert( ls::iota< type, tag >( 0 ), simd::simd_size );
+    EXPECT_EQ( simd::simd_size, (ls::get< simd::simd_size -1, type, tag> ( a )) ) << "Simd: " << a;
 
     ls::for_each( a, [&a]( int index, type val )
     {

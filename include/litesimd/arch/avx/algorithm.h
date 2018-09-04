@@ -24,6 +24,8 @@
 #define LITESIMD_ARCH_AVX_ALGORITHM_H
 
 #include "../common/algorithm.h"
+#include "../../compare.h"
+#include "../../shuffle.h"
 
 namespace litesimd {
 
@@ -55,101 +57,115 @@ DEF_BINARY_MAX( float,   _mm256_max_ps )
 DEF_BINARY_MAX( double,  _mm256_max_pd )
 #undef DEF_BINARY_MAX
 
+template<> inline simd_type< int64_t, avx_tag >
+min< int64_t, avx_tag >( simd_type< int64_t, avx_tag > lhs, simd_type< int64_t, avx_tag > rhs )
+{
+    auto mask = greater< int64_t, avx_tag >( lhs, rhs );
+    return blend< int64_t, avx_tag >( rhs, lhs, mask );
+}
+
+template<> inline simd_type< int64_t, avx_tag >
+max< int64_t, avx_tag >( simd_type< int64_t, avx_tag > lhs, simd_type< int64_t, avx_tag > rhs )
+{
+    auto mask = greater< int64_t, avx_tag >( lhs, rhs );
+    return blend< int64_t, avx_tag >( lhs, rhs, mask );
+}
+
 // Horizontal min max
 // ---------------------------------------------------------------------------------------
-template<> inline int8_t
-min< int8_t, avx_tag >( simd_type< int8_t, avx_tag > vec )
-{
-    vec = _mm256_min_epi8( vec, _mm256_permute2x128_si256( vec, vec, 1 ) );
-    vec = _mm256_min_epi8( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
-    vec = _mm256_min_epi8( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
-    vec = _mm256_min_epi8( vec, _mm256_shufflelo_epi16( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
-    vec = _mm256_min_epi8( vec, _mm256_srli_epi16( vec, 8 ) );
-    return (int8_t)_mm256_cvtsi256_si32( vec );
-}
-
-template<> inline int16_t
-min< int16_t, avx_tag >( simd_type< int16_t, avx_tag > vec )
-{
-    vec = _mm256_min_epi16( vec, _mm256_permute2x128_si256( vec, vec, 1 ) );
-    vec = _mm256_min_epi16( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
-    vec = _mm256_min_epi16( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
-    vec = _mm256_min_epi16( vec, _mm256_shufflelo_epi16( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
-    return (int16_t)_mm256_cvtsi256_si32( vec );
-}
-
-template<> inline int32_t
-min< int32_t, avx_tag >( simd_type< int32_t, avx_tag > vec )
-{
-    vec = _mm256_min_epi32( vec, _mm256_permute2x128_si256( vec, vec, 1 ) );
-    vec = _mm256_min_epi32( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
-    vec = _mm256_min_epi32( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
-    return (int32_t)_mm256_cvtsi256_si32( vec );
-}
-
-template<> inline float
-min< float, avx_tag >( simd_type< float, avx_tag > vec )
-{
-    vec = _mm256_min_ps( vec, _mm256_permute2f128_ps( vec, vec, 1 ) );
-    vec = _mm256_min_ps( vec, _mm256_permute_ps( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
-    vec = _mm256_min_ps( vec, _mm256_permute_ps( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
-    return _mm256_cvtss_f32( vec );
-}
-
-template<> inline double
-min< double, avx_tag >( simd_type< double, avx_tag > vec )
-{
-    vec = _mm256_min_pd( vec, _mm256_permute4x64_pd( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
-    vec = _mm256_min_pd( vec, _mm256_permute_pd( vec, 1 ) );
-    return _mm256_cvtsd_f64( vec );
-}
-
-template<> inline int8_t
-max< int8_t, avx_tag >( simd_type< int8_t, avx_tag > vec )
-{
-    vec = _mm256_max_epi8( vec, _mm256_permute2x128_si256( vec, vec, 1 ) );
-    vec = _mm256_max_epi8( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
-    vec = _mm256_max_epi8( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
-    vec = _mm256_max_epi8( vec, _mm256_shufflelo_epi16( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
-    vec = _mm256_max_epi8( vec, _mm256_srli_epi16( vec, 8 ) );
-    return (int8_t)_mm256_cvtsi256_si32( vec );
-}
-
-template<> inline int16_t
-max< int16_t, avx_tag >( simd_type< int16_t, avx_tag > vec )
-{
-    vec = _mm256_max_epi16( vec, _mm256_permute2x128_si256( vec, vec, 1 ) );
-    vec = _mm256_max_epi16( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
-    vec = _mm256_max_epi16( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
-    vec = _mm256_max_epi16( vec, _mm256_shufflelo_epi16( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
-    return (int16_t)_mm256_cvtsi256_si32( vec );
-}
-
-template<> inline int32_t
-max< int32_t, avx_tag >( simd_type< int32_t, avx_tag > vec )
-{
-    vec = _mm256_max_epi32( vec, _mm256_permute2x128_si256( vec, vec, 1 ) );
-    vec = _mm256_max_epi32( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
-    vec = _mm256_max_epi32( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
-    return (int32_t)_mm256_cvtsi256_si32( vec );
-}
-
-template<> inline float
-max< float, avx_tag >( simd_type< float, avx_tag > vec )
-{
-    vec = _mm256_max_ps( vec, _mm256_permute2f128_ps( vec, vec, 1 ) );
-    vec = _mm256_max_ps( vec, _mm256_permute_ps( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
-    vec = _mm256_max_ps( vec, _mm256_permute_ps( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
-    return _mm256_cvtss_f32( vec );
-}
-
-template<> inline double
-max< double, avx_tag >( simd_type< double, avx_tag > vec )
-{
-    vec = _mm256_max_pd( vec, _mm256_permute4x64_pd( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
-    vec = _mm256_max_pd( vec, _mm256_permute_pd( vec, 1 ) );
-    return _mm256_cvtsd_f64( vec );
-}
+//template<> inline int8_t
+//min< int8_t, avx_tag >( simd_type< int8_t, avx_tag > vec )
+//{
+//    vec = _mm256_min_epi8( vec, _mm256_permute2x128_si256( vec, vec, 1 ) );
+//    vec = _mm256_min_epi8( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+//    vec = _mm256_min_epi8( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+//    vec = _mm256_min_epi8( vec, _mm256_shufflelo_epi16( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+//    vec = _mm256_min_epi8( vec, _mm256_srli_epi16( vec, 8 ) );
+//    return (int8_t)_mm256_cvtsi256_si32( vec );
+//}
+//
+//template<> inline int16_t
+//min< int16_t, avx_tag >( simd_type< int16_t, avx_tag > vec )
+//{
+//    vec = _mm256_min_epi16( vec, _mm256_permute2x128_si256( vec, vec, 1 ) );
+//    vec = _mm256_min_epi16( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+//    vec = _mm256_min_epi16( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+//    vec = _mm256_min_epi16( vec, _mm256_shufflelo_epi16( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+//    return (int16_t)_mm256_cvtsi256_si32( vec );
+//}
+//
+//template<> inline int32_t
+//min< int32_t, avx_tag >( simd_type< int32_t, avx_tag > vec )
+//{
+//    vec = _mm256_min_epi32( vec, _mm256_permute2x128_si256( vec, vec, 1 ) );
+//    vec = _mm256_min_epi32( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+//    vec = _mm256_min_epi32( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+//    return (int32_t)_mm256_cvtsi256_si32( vec );
+//}
+//
+//template<> inline float
+//min< float, avx_tag >( simd_type< float, avx_tag > vec )
+//{
+//    vec = _mm256_min_ps( vec, _mm256_permute2f128_ps( vec, vec, 1 ) );
+//    vec = _mm256_min_ps( vec, _mm256_permute_ps( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+//    vec = _mm256_min_ps( vec, _mm256_permute_ps( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+//    return _mm256_cvtss_f32( vec );
+//}
+//
+//template<> inline double
+//min< double, avx_tag >( simd_type< double, avx_tag > vec )
+//{
+//    vec = _mm256_min_pd( vec, _mm256_permute4x64_pd( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+//    vec = _mm256_min_pd( vec, _mm256_permute_pd( vec, 1 ) );
+//    return _mm256_cvtsd_f64( vec );
+//}
+//
+//template<> inline int8_t
+//max< int8_t, avx_tag >( simd_type< int8_t, avx_tag > vec )
+//{
+//    vec = _mm256_max_epi8( vec, _mm256_permute2x128_si256( vec, vec, 1 ) );
+//    vec = _mm256_max_epi8( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+//    vec = _mm256_max_epi8( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+//    vec = _mm256_max_epi8( vec, _mm256_shufflelo_epi16( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+//    vec = _mm256_max_epi8( vec, _mm256_srli_epi16( vec, 8 ) );
+//    return (int8_t)_mm256_cvtsi256_si32( vec );
+//}
+//
+//template<> inline int16_t
+//max< int16_t, avx_tag >( simd_type< int16_t, avx_tag > vec )
+//{
+//    vec = _mm256_max_epi16( vec, _mm256_permute2x128_si256( vec, vec, 1 ) );
+//    vec = _mm256_max_epi16( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+//    vec = _mm256_max_epi16( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+//    vec = _mm256_max_epi16( vec, _mm256_shufflelo_epi16( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+//    return (int16_t)_mm256_cvtsi256_si32( vec );
+//}
+//
+//template<> inline int32_t
+//max< int32_t, avx_tag >( simd_type< int32_t, avx_tag > vec )
+//{
+//    vec = _mm256_max_epi32( vec, _mm256_permute2x128_si256( vec, vec, 1 ) );
+//    vec = _mm256_max_epi32( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+//    vec = _mm256_max_epi32( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+//    return (int32_t)_mm256_cvtsi256_si32( vec );
+//}
+//
+//template<> inline float
+//max< float, avx_tag >( simd_type< float, avx_tag > vec )
+//{
+//    vec = _mm256_max_ps( vec, _mm256_permute2f128_ps( vec, vec, 1 ) );
+//    vec = _mm256_max_ps( vec, _mm256_permute_ps( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+//    vec = _mm256_max_ps( vec, _mm256_permute_ps( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
+//    return _mm256_cvtss_f32( vec );
+//}
+//
+//template<> inline double
+//max< double, avx_tag >( simd_type< double, avx_tag > vec )
+//{
+//    vec = _mm256_max_pd( vec, _mm256_permute4x64_pd( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
+//    vec = _mm256_max_pd( vec, _mm256_permute_pd( vec, 1 ) );
+//    return _mm256_cvtsd_f64( vec );
+//}
 
 } // namespace litesimd
 

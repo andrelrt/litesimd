@@ -98,8 +98,8 @@ TYPED_TEST(AlgorithmTypedTest, MinMaxTypedTest)
     simd a = ls::iota< type, tag >( 0 );
     simd b = simd( 1 );
 
-    EXPECT_EQ( static_cast<type>(0), (ls::min<type, tag>( a )) );
-    EXPECT_EQ( static_cast<type>(simd::simd_size-1), (ls::max<type, tag>( a )) );
+    EXPECT_EQ( static_cast<type>(0), (ls::min<simd>( a )) );
+    EXPECT_EQ( static_cast<type>(simd::simd_size-1), (ls::max<simd>( a )) );
 
     ls::for_each( ls::min< type, tag >( a, b ), []( int index, type val )
     {

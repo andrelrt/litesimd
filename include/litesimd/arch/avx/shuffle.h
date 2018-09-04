@@ -100,7 +100,7 @@ struct get_functor< index, double, avx_tag >
 {
     double inline operator()( simd_type< double, avx_tag > vec )
     {
-        return _mm256_cvtsd_f64( _mm256_shuffle_pd( vec, vec, _MM_SHUFFLE2( index, index ) ) );
+        return _mm256_cvtsd_f64( _mm256_permute4x64_pd( vec, index ) );
     }
 };
 
