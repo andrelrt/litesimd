@@ -35,14 +35,6 @@ min( simd_type< Value_T, Tag_T >, simd_type< Value_T, Tag_T > ){}
 template< typename Value_T, typename Tag_T > simd_type< Value_T, Tag_T >
 max( simd_type< Value_T, Tag_T >, simd_type< Value_T, Tag_T > ){}
 
-// Horizontal min max
-// ---------------------------------------------------------------------------------------
-//template< typename Value_T, typename Tag_T > Value_T
-//min( simd_type< Value_T, Tag_T > ){}
-//
-//template< typename Value_T, typename Tag_T > Value_T
-//max( simd_type< Value_T, Tag_T > ){}
-
 } // namespace litesimd
 
 #endif // LITESIMD_ARCH_COMMON_ALGORITHM_H

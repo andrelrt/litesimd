@@ -57,11 +57,6 @@ bit_not( simd_type< ValueType_T, Tag_T > val )
     return bit_xor( val, simd_type< ValueType_T, Tag_T >::ones() );
 }
 
-// Horizontal bit AND
-// ---------------------------------------------------------------------------------------
-//template< typename Value_T, typename Tag_T = default_tag >
-//inline Value_T bit_and( simd_type< Value_T, Tag_T > ) { return 0; }
-
 } // namespace litesimd
 
 #endif // LITESIMD_ARCH_COMMON_BITWISE_H
