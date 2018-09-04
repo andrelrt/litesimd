@@ -48,6 +48,7 @@ TYPED_TEST(SimdCompareTypes, GreaterThanTypedTest)
     using type = typename TypeParam::first_type;
     using tag = typename TypeParam::second_type;
     using simd = ls::simd_type< type, tag >;
+    using bitmask_type = typename ls::simd_type< type, tag >::bitmask_type;
     constexpr size_t size = ls::simd_type< type, tag >::simd_size;
 
     simd cmp;
@@ -60,7 +61,7 @@ TYPED_TEST(SimdCompareTypes, GreaterThanTypedTest)
         val += 2;
     }
 
-    typename ls::simd_type< type, tag >::bitmask_type mask = 0;
+    bitmask_type mask = 0;
     val = 1;
 
     for( size_t i = 0; i < size+1; ++i )
@@ -74,11 +75,11 @@ TYPED_TEST(SimdCompareTypes, GreaterThanTypedTest)
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::greater_bitmask< type, tag >( val, cmp );
 
-        EXPECT_EQ( (int)i-1, (ls::greater_last_index< type, tag >( val, cmp )) )
+        EXPECT_EQ( (bitmask_type)(i-1), (ls::greater_last_index< type, tag >( val, cmp )) )
             << "val: " << (int) val
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::greater_last_index< type, tag >( val, cmp );
-        EXPECT_EQ( (int)i-1, (ls::greater_last_index< type, tag >( val + 1, cmp )) )
+        EXPECT_EQ( (bitmask_type)(i-1), (ls::greater_last_index< type, tag >( val + 1, cmp )) )
             << "val: " << (int) val + 1
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::greater_last_index< type, tag >( val, cmp );
@@ -94,6 +95,7 @@ TYPED_TEST(SimdCompareTypes, EqualsTypedTest)
     using type = typename TypeParam::first_type;
     using tag = typename TypeParam::second_type;
     using simd = ls::simd_type< type, tag >;
+    using bitmask_type = typename ls::simd_type< type, tag >::bitmask_type;
     constexpr size_t size = ls::simd_type< type, tag >::simd_size;
 
     simd cmp;
@@ -106,7 +108,7 @@ TYPED_TEST(SimdCompareTypes, EqualsTypedTest)
         val += 2;
     }
 
-    typename ls::simd_type< type, tag >::bitmask_type mask = 0;
+    bitmask_type mask = 0;
     val = 0;
 
     for( size_t i = 0; i < size+1; ++i )
@@ -120,11 +122,11 @@ TYPED_TEST(SimdCompareTypes, EqualsTypedTest)
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::equal_to_bitmask< type, tag >( val, cmp );
 
-        EXPECT_EQ( (int)i-1, (ls::equal_to_last_index< type, tag >( val, cmp )) )
+        EXPECT_EQ( (bitmask_type)(i-1), (ls::equal_to_last_index< type, tag >( val, cmp )) )
             << "val: " << (int) val
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::equal_to_last_index< type, tag >( val, cmp );
-        EXPECT_EQ( (int)-1, (ls::equal_to_last_index< type, tag >( val + 1, cmp )) )
+        EXPECT_EQ( (bitmask_type)-1, (ls::equal_to_last_index< type, tag >( val + 1, cmp )) )
             << "val: " << (int) val + 1
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::equal_to_last_index< type, tag >( val, cmp );
@@ -161,11 +163,11 @@ TEST(SimdCompareTest, GreaterThanDefault)
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::greater_bitmask( val, cmp );
 
-        EXPECT_EQ( (int)i-1, ls::greater_last_index( val, cmp ) )
+        EXPECT_EQ( (ls::t_bitmask)(i-1), ls::greater_last_index( val, cmp ) )
             << "val: " << val
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::greater_last_index( val, cmp );
-        EXPECT_EQ( (int)i-1, ls::greater_last_index( val + 1, cmp ) )
+        EXPECT_EQ( (ls::t_bitmask)(i-1), ls::greater_last_index( val + 1, cmp ) )
             << "val: " << val + 1
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::greater_last_index( val, cmp );
@@ -196,7 +198,7 @@ TEST(SimdCompareTest, GreaterThanDefaultSimd)
             << "val: " << val
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::greater_bitmask( simdVal, cmp );
-        EXPECT_EQ( (int)i-1, ls::greater_last_index( simdVal, cmp ) )
+        EXPECT_EQ( (ls::t_bitmask)(i-1), ls::greater_last_index( simdVal, cmp ) )
             << "val: " << val
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::greater_last_index( simdVal, cmp );
@@ -206,7 +208,7 @@ TEST(SimdCompareTest, GreaterThanDefaultSimd)
             << "val: " << val + 1
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::greater_bitmask( simdVal, cmp );
-        EXPECT_EQ( (int)i-1, ls::greater_last_index( simdVal, cmp ) )
+        EXPECT_EQ( (ls::t_bitmask)(i-1), ls::greater_last_index( simdVal, cmp ) )
             << "val: " << val + 1
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::greater_last_index( simdVal, cmp );

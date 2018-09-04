@@ -85,7 +85,7 @@ using t_double_simd = simd_type< double, default_tag >;
 constexpr static size_t float_simd_size  = t_float_simd::simd_size;
 constexpr static size_t double_simd_size = t_double_simd::simd_size;
 
-using t_bitmask = size_t;
+using t_bitmask = simd_type< int8_t, default_tag >::bitmask_type;
 
 } // namespace litesimd
 
