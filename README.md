@@ -97,6 +97,38 @@ The value 75 is between items 6 and 7 of (80, 70, 60, 50, 40, 30, 20, 10)
 The value 85 is greater than all values of (80, 70, 60, 50, 40, 30, 20, 10)
 ```
 
+## Directory structure
+
+```
+litesimd/
+    doc/                        ; Doxygen project
+    include/litesimd/
+        algorithm/
+            for_each.h          ; for_each item of simd_type, also for_each index of bitmask
+            iota.h              ; Fill vetor with [0, simd_size), eg. (3, 2, 1, 0)
+        arch/                   ; Architecture dependent code, should not included directly
+        detail/                 ; Internal helper functions/classes, should not included directly
+        helpers/
+            containers.h        ; Aligned std containers, depends on boost::align
+            iostreams.h         ; operator<< overload for litesimd types
+        algorithm.h             ; min/max, for_each, iota and all other algorithms
+        arithmetic.h            ; add, sub, mul, mullo, mulhi, div functions
+        bitwise.h               ; bit_and, bit_or, bit_xor and bit_not functions
+        compare.h               ; greater, equal_to, mask_to_bitmask, bitmask_to_high/low_index
+        intravector.h           ; horizontal reduction
+        shuffle.h               ; high/low_insert, blend, get/set<>
+        traits.h                ; Internal traits, should not included directly
+        types.h                 ; simd_type
+    samples/
+        binary_search/          ; Benchmark lower_bound implementations
+        boyer_moore_horspool/   ; Substring search using SIMD
+        bubble_sort/            ; Classic bubble sort in SIMD style
+        greater/                ; Simple greater than sample (the same of above)
+        nway_tree/              ; Another approach for same lower_bound search, using trees
+        to_lower/               ; ASCII to_lower benchmark
+    test/                       ; Unit tests
+```
+
 ## Building samples and tests
 
 ## Support
