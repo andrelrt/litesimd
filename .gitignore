@@ -30,3 +30,9 @@
 *.exe
 *.out
 *.app
+
+# vim
+*.swp
+
+# Directories
+build/
