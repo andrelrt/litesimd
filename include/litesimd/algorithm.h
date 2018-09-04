@@ -34,7 +34,7 @@ namespace litesimd {
 // Min max
 // ---------------------------------------------------------------------------------------
 template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
-typename SimdType_T::simd_value_type min( SimdType_T vec )
+inline typename SimdType_T::simd_value_type min( SimdType_T vec )
 {
     using type = typename SimdType_T::simd_value_type;
     using tag = typename SimdType_T::simd_tag;
@@ -44,7 +44,7 @@ typename SimdType_T::simd_value_type min( SimdType_T vec )
 }
 
 template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
-typename SimdType_T::simd_value_type max( SimdType_T vec )
+inline typename SimdType_T::simd_value_type max( SimdType_T vec )
 {
     using type = typename SimdType_T::simd_value_type;
     using tag = typename SimdType_T::simd_tag;

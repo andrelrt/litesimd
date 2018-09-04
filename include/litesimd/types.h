@@ -63,7 +63,7 @@ private:
 };
 
 template< typename Type_T, typename Tag_T = default_tag >
-simd_type< Type_T, Tag_T > from_value( Type_T val )
+inline simd_type< Type_T, Tag_T > from_value( Type_T val )
 {
     return simd_type< Type_T, Tag_T >( val );
 }

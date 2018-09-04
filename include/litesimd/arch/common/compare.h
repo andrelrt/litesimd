@@ -39,22 +39,14 @@ mask_to_bitmask( simd_type< ValueType_T, Tag_T > )
 // Greater than
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
-simd_type< ValueType_T, Tag_T >
-greater( simd_type< ValueType_T, Tag_T >,
-              simd_type< ValueType_T, Tag_T > )
-{
-    return simd_type< ValueType_T, Tag_T >::zero();
-}
+inline simd_type< ValueType_T, Tag_T >
+greater( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
 
 // Equals
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
-simd_type< ValueType_T, Tag_T >
-equal_to( simd_type< ValueType_T, Tag_T >,
-        simd_type< ValueType_T, Tag_T > )
-{
-    return simd_type< ValueType_T, Tag_T >::zero();
-}
+inline simd_type< ValueType_T, Tag_T >
+equal_to( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
 
 } // namespace litesimd
 

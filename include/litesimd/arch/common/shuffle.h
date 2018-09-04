@@ -30,36 +30,32 @@ namespace litesimd {
 // High/Low insert
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
-simd_type< ValueType_T, Tag_T >
+inline simd_type< ValueType_T, Tag_T >
 high_insert( simd_type< ValueType_T, Tag_T >, ValueType_T = 0 ){}
 
 template< typename ValueType_T, typename Tag_T = default_tag >
-simd_type< ValueType_T, Tag_T >
+inline simd_type< ValueType_T, Tag_T >
 low_insert( simd_type< ValueType_T, Tag_T >, ValueType_T = 0 ){}
 
 // Blend
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
-simd_type< ValueType_T, Tag_T >
-blend( simd_type< ValueType_T, Tag_T >,
-       simd_type< ValueType_T, Tag_T >,
-       simd_type< ValueType_T, Tag_T > )
-{
-    return simd_type< ValueType_T, Tag_T >::zero();
-}
+inline simd_type< ValueType_T, Tag_T >
+blend( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T >,
+       simd_type< ValueType_T, Tag_T > ){}
 
 // Get Set
 // ---------------------------------------------------------------------------------------
 template< int index, typename ValueType_T, typename Tag_T = default_tag >
 struct get_functor
 {
-    ValueType_T operator()( simd_type< ValueType_T, Tag_T > ){}
+    inline ValueType_T operator()( simd_type< ValueType_T, Tag_T > ){}
 };
 
 template< int index, typename ValueType_T, typename Tag_T = default_tag >
 struct set_functor
 {
-    simd_type< ValueType_T, Tag_T > operator()( simd_type< ValueType_T, Tag_T >, ValueType_T ){}
+    inline simd_type< ValueType_T, Tag_T > operator()( simd_type< ValueType_T, Tag_T >, ValueType_T ){}
 };
 
 } // namespace litesimd

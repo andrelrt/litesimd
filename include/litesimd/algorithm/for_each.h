@@ -32,7 +32,7 @@ namespace litesimd {
 
 template< typename SimdType_T, typename Function_T,
           typename SimdType_T::simd_value_type* = nullptr >
-Function_T for_each( SimdType_T vec, Function_T func )
+inline Function_T for_each( SimdType_T vec, Function_T func )
 {
     using st = SimdType_T;
     detail::for_each_loop< st::simd_size-1, st, Function_T >()( true, vec, func );
@@ -41,7 +41,7 @@ Function_T for_each( SimdType_T vec, Function_T func )
 
 template< typename SimdType_T, typename Function_T,
           typename SimdType_T::simd_value_type* = nullptr >
-Function_T for_each_backward( SimdType_T vec, Function_T func )
+inline Function_T for_each_backward( SimdType_T vec, Function_T func )
 {
     using st = SimdType_T;
     detail::for_each_loop< st::simd_size-1, st, Function_T >()( false, vec, func );
@@ -50,7 +50,7 @@ Function_T for_each_backward( SimdType_T vec, Function_T func )
 
 template< typename ValueType_T, typename Function_T,
           typename std::enable_if_t<std::is_integral<ValueType_T>::value>* = nullptr >
-Function_T for_each_index( uint32_t bitmask, Function_T func )
+inline Function_T for_each_index( uint32_t bitmask, Function_T func )
 {
     constexpr uint32_t mask = (1 << sizeof(ValueType_T)) -1;
     while( bitmask != 0 )
@@ -65,7 +65,7 @@ Function_T for_each_index( uint32_t bitmask, Function_T func )
 
 template< typename ValueType_T, typename Function_T,
           typename std::enable_if_t<std::is_floating_point<ValueType_T>::value>* = nullptr >
-Function_T for_each_index( uint32_t bitmask, Function_T func )
+inline Function_T for_each_index( uint32_t bitmask, Function_T func )
 {
     while( bitmask != 0 )
     {
@@ -79,7 +79,7 @@ Function_T for_each_index( uint32_t bitmask, Function_T func )
 
 template< typename ValueType_T, typename Function_T,
           typename std::enable_if_t<std::is_integral<ValueType_T>::value>* = nullptr >
-Function_T for_each_index_backward( uint32_t bitmask, Function_T func )
+inline Function_T for_each_index_backward( uint32_t bitmask, Function_T func )
 {
     constexpr uint32_t mask = (1 << sizeof(ValueType_T)) -1;
     while( bitmask != 0 )
@@ -94,7 +94,7 @@ Function_T for_each_index_backward( uint32_t bitmask, Function_T func )
 
 template< typename ValueType_T, typename Function_T,
           typename std::enable_if_t<std::is_floating_point<ValueType_T>::value>* = nullptr >
-Function_T for_each_index_backward( uint32_t bitmask, Function_T func )
+inline Function_T for_each_index_backward( uint32_t bitmask, Function_T func )
 {
     while( bitmask != 0 )
     {

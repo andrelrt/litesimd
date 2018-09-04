@@ -38,13 +38,13 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( mulhi, type )
 DEFINE_BINARY_FUNCTION_ADAPTORS( div, type )
 
 template< typename LHS, typename RHS >
-auto inline operator+( LHS lhs, RHS rhs )
+inline auto operator+( LHS lhs, RHS rhs )
 {
     return add( lhs, rhs );
 }
 
 template< typename LHS, typename RHS >
-auto inline operator-( LHS lhs, RHS rhs )
+inline auto operator-( LHS lhs, RHS rhs )
 {
     return sub( lhs, rhs );
 }

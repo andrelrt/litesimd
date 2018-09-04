@@ -30,7 +30,7 @@ namespace litesimd {
 // Generic intravector operation
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T >
-struct intravector_op 
+struct intravector_op
 {
     template< typename Function_T >
     inline simd_type< ValueType_T, Tag_T >

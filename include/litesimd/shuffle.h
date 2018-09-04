@@ -50,7 +50,7 @@ low_insert( SimdType_T vec, typename SimdType_T::simd_value_type val )
 // Blend
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
-simd_type< ValueType_T, Tag_T >
+inline simd_type< ValueType_T, Tag_T >
 blend( simd_type< ValueType_T, Tag_T > mask,
        ValueType_T trueVal,
        simd_type< ValueType_T, Tag_T > falseVal )
@@ -61,7 +61,7 @@ blend( simd_type< ValueType_T, Tag_T > mask,
 }
 
 template< typename ValueType_T, typename Tag_T = default_tag >
-simd_type< ValueType_T, Tag_T >
+inline simd_type< ValueType_T, Tag_T >
 blend( simd_type< ValueType_T, Tag_T > mask,
        simd_type< ValueType_T, Tag_T > trueVal,
        ValueType_T falseVal )
@@ -74,7 +74,7 @@ blend( simd_type< ValueType_T, Tag_T > mask,
 // Get Set
 // ---------------------------------------------------------------------------------------
 template< int index, typename ValueType_T, typename Tag_T = default_tag >
-ValueType_T inline
+inline ValueType_T
 get( simd_type< ValueType_T, Tag_T > vec )
 {
     static_assert( 0 <= index && index < simd_type< ValueType_T, Tag_T >::simd_size,
@@ -84,7 +84,7 @@ get( simd_type< ValueType_T, Tag_T > vec )
 }
 
 template< int index, typename ValueType_T, typename Tag_T = default_tag >
-simd_type< ValueType_T, Tag_T > inline
+inline simd_type< ValueType_T, Tag_T >
 set( simd_type< ValueType_T, Tag_T > vec, ValueType_T val )
 {
     static_assert( 0 <= index && index < simd_type< ValueType_T, Tag_T >::simd_size,

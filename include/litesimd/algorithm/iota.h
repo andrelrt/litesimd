@@ -28,7 +28,7 @@
 namespace litesimd {
 
 template< typename ValueType_T, typename Tag_T = default_tag >
-simd_type< ValueType_T, Tag_T >
+inline simd_type< ValueType_T, Tag_T >
 iota( ValueType_T val )
 {
     using simd_type = simd_type< ValueType_T, Tag_T >;
