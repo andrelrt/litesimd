@@ -37,49 +37,55 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( bit_or, type )
 DEFINE_BINARY_FUNCTION_ADAPTORS( bit_xor, type )
 
 template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
-typename SimdType_T::simd_value_type bit_and( SimdType_T vec )
+inline typename SimdType_T::simd_value_type bit_and( SimdType_T vec )
 {
-    using type = SimdType_T::simd_value_type;
-    using tag = SimdType_T::simd_tag;
-    return intravector_op< type, tag >()( vec, &bit_and< type, tag > );
+    using type = typename SimdType_T::simd_value_type;
+    using tag = typename SimdType_T::simd_tag;
+    struct op{ inline SimdType_T operator()( SimdType_T lhs, SimdType_T rhs )
+            { return bit_and< type, tag >( lhs, rhs ); } };
+    return intravector_op< type, tag >()( vec, op() );
 }
 
 template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
-typename SimdType_T::simd_value_type bit_or( SimdType_T vec )
+inline typename SimdType_T::simd_value_type bit_or( SimdType_T vec )
 {
-    using type = SimdType_T::simd_value_type;
-    using tag = SimdType_T::simd_tag;
-    return intravector_op< type, tag >()( vec, &bit_or< type, tag > );
+    using type = typename SimdType_T::simd_value_type;
+    using tag = typename SimdType_T::simd_tag;
+    struct op{ inline SimdType_T operator()( SimdType_T lhs, SimdType_T rhs )
+            { return bit_or< type, tag >( lhs, rhs ); } };
+    return intravector_op< type, tag >()( vec, op() );
 }
 
 template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
-typename SimdType_T::simd_value_type bit_xor( SimdType_T vec )
+inline typename SimdType_T::simd_value_type bit_xor( SimdType_T vec )
 {
-    using type = SimdType_T::simd_value_type;
-    using tag = SimdType_T::simd_tag;
-    return intravector_op< type, tag >()( vec, &bit_xor< type, tag > );
+    using type = typename SimdType_T::simd_value_type;
+    using tag = typename SimdType_T::simd_tag;
+    struct op{ inline SimdType_T operator()( SimdType_T lhs, SimdType_T rhs )
+            { return bit_xor< type, tag >( lhs, rhs ); } };
+    return intravector_op< type, tag >()( vec, op() );
 }
 
 template< typename LHS, typename RHS >
-auto inline operator&( LHS lhs, RHS rhs )
+inline auto operator&( LHS lhs, RHS rhs )
 {
     return bit_and( lhs, rhs );
 }
 
 template< typename LHS, typename RHS >
-auto inline operator|( LHS lhs, RHS rhs )
+inline auto operator|( LHS lhs, RHS rhs )
 {
     return bit_or( lhs, rhs );
 }
 
 template< typename LHS, typename RHS >
-auto inline operator^( LHS lhs, RHS rhs )
+inline auto operator^( LHS lhs, RHS rhs )
 {
     return bit_xor( lhs, rhs );
 }
 
 template< typename LHS >
-auto inline operator~( LHS lhs )
+inline auto operator~( LHS lhs )
 {
     return bit_not( lhs );
 }

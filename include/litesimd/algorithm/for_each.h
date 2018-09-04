@@ -28,6 +28,8 @@
 #include "../shuffle.h"
 #include "detail/for_each_loop.h"
 
+namespace litesimd {
+
 template< typename SimdType_T, typename Function_T,
           typename SimdType_T::simd_value_type* = nullptr >
 Function_T for_each( SimdType_T vec, Function_T func )

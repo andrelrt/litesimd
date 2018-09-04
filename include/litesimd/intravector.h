@@ -25,10 +25,14 @@
 
 #include "arch/intravector.h"
 
+namespace litesimd {
+
 template< typename ValueType_T, typename Function_T, typename Tag_T = default_tag >
 ValueType_T horizontal( simd_type< ValueType_T, Tag_T > vec, Function_T func )
 {
     return intravector_op< ValueType_T, Tag_T >()( vec, func );
 }
+
+} // namespace litesimd
 
 #endif // LITESIMD_INTRAVECTOR_H

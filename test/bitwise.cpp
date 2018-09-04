@@ -64,7 +64,7 @@ TYPED_TEST(BitwiseTypedTest, AndTypedTest)
         return true;
     } );
 
-    a = ls::set<0>( a, 6 );
+    a = ls::set<0, type, tag>( a, 6 );
     EXPECT_EQ( static_cast<type>(2), ls::bit_and(a) );
 }
 
@@ -89,7 +89,7 @@ TYPED_TEST(BitwiseTypedTest, OrTypedTest)
         return true;
     } );
 
-    a = ls::set<0>( a, 6 );
+    a = ls::set<0, type, tag>( a, 6 );
     EXPECT_EQ( static_cast<type>(7), ls::bit_or( a ) );
 }
 
@@ -114,7 +114,7 @@ TYPED_TEST(BitwiseTypedTest, XorTypedTest)
         return true;
     } );
 
-    a = ls::set<0>( a, 6 );
+    a = ls::set<0, type, tag>( a, 6 );
     EXPECT_EQ( static_cast<type>(5), ls::bit_xor( a ) );
 }
 

@@ -29,22 +29,26 @@
 #include "algorithm/iota.h"
 #include "intravector.h"
 
+namespace litesimd {
+
 // Min max
 // ---------------------------------------------------------------------------------------
 template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
 typename SimdType_T::simd_value_type min( SimdType_T vec )
 {
-    using type = SimdType_T::simd_value_type;
-    using tag = SimdType_T::simd_tag;
+    using type = typename SimdType_T::simd_value_type;
+    using tag = typename SimdType_T::simd_tag;
     return intravector_op< type, tag >()( vec, &min< type, tag > );
 }
 
 template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
 typename SimdType_T::simd_value_type max( SimdType_T vec )
 {
-    using type = SimdType_T::simd_value_type;
-    using tag = SimdType_T::simd_tag;
+    using type = typename SimdType_T::simd_value_type;
+    using tag = typename SimdType_T::simd_tag;
     return intravector_op< type, tag >()( vec, &max< type, tag > );
 }
+
+} // namespace litesimd
 
 #endif // LITESIMD_ALGORITHM_H

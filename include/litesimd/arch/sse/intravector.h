@@ -27,6 +27,7 @@
 
 namespace litesimd {
 
+template<>
 struct intravector_op< int8_t, sse_tag >
 {
     template< typename Function_T >
@@ -40,6 +41,7 @@ struct intravector_op< int8_t, sse_tag >
     }
 };
 
+template<>
 struct intravector_op< int16_t, sse_tag >
 {
     template< typename Function_T >
@@ -52,6 +54,7 @@ struct intravector_op< int16_t, sse_tag >
     }
 };
 
+template<>
 struct intravector_op< int32_t, sse_tag >
 {
     template< typename Function_T >
@@ -63,6 +66,7 @@ struct intravector_op< int32_t, sse_tag >
     }
 };
 
+template<>
 struct intravector_op< int64_t, sse_tag >
 {
     template< typename Function_T >
@@ -73,6 +77,7 @@ struct intravector_op< int64_t, sse_tag >
     }
 };
 
+template<>
 struct intravector_op< float, sse_tag >
 {
     template< typename Function_T >
@@ -84,6 +89,7 @@ struct intravector_op< float, sse_tag >
     }
 };
 
+template<>
 struct intravector_op< double, sse_tag >
 {
     template< typename Function_T >
