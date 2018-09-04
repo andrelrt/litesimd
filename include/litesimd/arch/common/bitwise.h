@@ -59,8 +59,8 @@ bit_not( simd_type< ValueType_T, Tag_T > val )
 
 // Horizontal bit AND
 // ---------------------------------------------------------------------------------------
-template< typename Value_T, typename Tag_T = default_tag >
-inline Value_T bit_and( simd_type< Value_T, Tag_T > ) { return 0; }
+//template< typename Value_T, typename Tag_T = default_tag >
+//inline Value_T bit_and( simd_type< Value_T, Tag_T > ) { return 0; }
 
 } // namespace litesimd
 

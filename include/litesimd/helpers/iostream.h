@@ -25,6 +25,7 @@
 
 #include <iostream>
 #include <iomanip>
+#include <type_traits>
 #include "../types.h"
 #include "../shuffle.h"
 #include "../algorithm.h"
@@ -33,7 +34,30 @@ namespace litesimd {
 
 // Stream Operators
 // -----------------------------------------------------------------------------
-template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
+template< typename SimdType_T,
+          std::enable_if_t<std::is_integral<typename SimdType_T::simd_value_type>::value>* = nullptr >
+std::ostream& operator<<( std::ostream& out, SimdType_T vec )
+{
+    std::ios_base::fmtflags f( out.flags() );
+
+    out << "(";
+    for_each_backward( vec, [&out]( int index, typename SimdType_T::simd_value_type val ) -> bool
+    {
+        constexpr size_t mask = (1 << (2*sizeof(typename SimdType_T::simd_value_type)))-1;
+        out << (+val & mask);
+        if( index > 0 )
+            out << ", ";
+        return true;
+    } );
+    out << ")";
+
+    out.flags( f );
+
+    return out;
+}
+
+template< typename SimdType_T,
+          std::enable_if_t<std::is_floating_point<typename SimdType_T::simd_value_type>::value>* = nullptr >
 std::ostream& operator<<( std::ostream& out, SimdType_T vec )
 {
     std::ios_base::fmtflags f( out.flags() );

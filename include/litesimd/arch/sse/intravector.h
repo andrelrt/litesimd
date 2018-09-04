@@ -31,7 +31,7 @@ template<>
 struct intravector_op< int8_t, sse_tag >
 {
     template< typename Function_T >
-    int8_t operator()( simd_type< int8_t, sse_tag > vec, Function_T func )
+    int8_t inline operator()( simd_type< int8_t, sse_tag > vec, Function_T func )
     {
         vec = func( vec, _mm_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
         vec = func( vec, _mm_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
@@ -45,7 +45,7 @@ template<>
 struct intravector_op< int16_t, sse_tag >
 {
     template< typename Function_T >
-    int16_t operator()( simd_type< int16_t, sse_tag > vec, Function_T func )
+    int16_t inline operator()( simd_type< int16_t, sse_tag > vec, Function_T func )
     {
         vec = func( vec, _mm_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
         vec = func( vec, _mm_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
@@ -58,7 +58,7 @@ template<>
 struct intravector_op< int32_t, sse_tag >
 {
     template< typename Function_T >
-    int32_t operator()( simd_type< int32_t, sse_tag > vec, Function_T func )
+    int32_t inline operator()( simd_type< int32_t, sse_tag > vec, Function_T func )
     {
         vec = func( vec, _mm_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
         vec = func( vec, _mm_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
@@ -70,7 +70,7 @@ template<>
 struct intravector_op< int64_t, sse_tag >
 {
     template< typename Function_T >
-    int64_t operator()( simd_type< int64_t, sse_tag > vec, Function_T func )
+    int64_t inline operator()( simd_type< int64_t, sse_tag > vec, Function_T func )
     {
         vec = func( vec, _mm_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
         return _mm_cvtsi128_si64( vec );
@@ -81,7 +81,7 @@ template<>
 struct intravector_op< float, sse_tag >
 {
     template< typename Function_T >
-    float operator()( simd_type< float, sse_tag > vec, Function_T func )
+    float inline operator()( simd_type< float, sse_tag > vec, Function_T func )
     {
         vec = func( vec, _mm_shuffle_ps( vec, vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
         vec = func( vec, _mm_shuffle_ps( vec, vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
@@ -93,7 +93,7 @@ template<>
 struct intravector_op< double, sse_tag >
 {
     template< typename Function_T >
-    double operator()( simd_type< double, sse_tag > vec, Function_T func )
+    double inline operator()( simd_type< double, sse_tag > vec, Function_T func )
     {
         vec = func( vec, _mm_shuffle_pd( vec, vec, _MM_SHUFFLE2( 0, 1 ) ) );
         return _mm_cvtsd_f64( vec );

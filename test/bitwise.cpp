@@ -24,6 +24,7 @@
 #include <litesimd/bitwise.h>
 #include <litesimd/shuffle.h>
 #include <litesimd/algorithm.h>
+#include <litesimd/helpers/iostream.h>
 #include "gtest/gtest.h"
 
 namespace ls = litesimd;
@@ -65,7 +66,9 @@ TYPED_TEST(BitwiseTypedTest, AndTypedTest)
     } );
 
     a = ls::set<0, type, tag>( a, 6 );
-    EXPECT_EQ( static_cast<type>(2), ls::bit_and(a) );
+    auto ret = ls::bit_and(a);
+    EXPECT_EQ( static_cast<type>(6), (ls::get<0, type, tag>(a)) ) << "Simd: " << a;
+    EXPECT_EQ( static_cast<type>(2), ret ) << "ret, Simd: " << +ret << ", " << a;
 }
 
 TYPED_TEST(BitwiseTypedTest, OrTypedTest)
