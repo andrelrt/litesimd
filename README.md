@@ -1,5 +1,7 @@
 Litesimd is a no overhead, header only, C++ library for SIMD processing. This library goal is to provide tools for developers to incorporate SIMD processing in all kinds of algorithms not only for calculations. To achieve this goal, some design principles are observed.
 
+[WIP]
+
 ## Design principles
 
 #### SIMD for all kind of algorithms
@@ -14,14 +16,12 @@ By design, the library does not attempt to hide the complexity of using SIMD. Wh
 
 Any SIMD library typically covers a smaller scope than the total set of processor SIMD instructions. Litesimd library must be transparently interoperable with SIMD intrincs, allowing the developer to perform more complex operations than originally anticipated by the library.
 
-[WIP]
-
 ## Example
 
 ```cpp
 // Compiled with
 //
-// g++ -std=c++14 -O3 -msse4.2 -I<path/to/litesimd/include> greater.cpp -o greater
+// g++ -std=c++11 -O3 -mavx2 -I<path/to/litesimd/include> greater.cpp -o greater
 
 #include <iostream>
 #include <litesimd/compare.h>
@@ -31,15 +31,15 @@ int main()
 {
     namespace ls = litesimd;
 
-    // int32_t vector in default instruction set (SSE)
+    // int32_t vector in default instruction set (AVX)
     ls::t_int32_simd cmp;
 
     // litesimd types are intrincs compatible
-    cmp = _mm_set_epi32( 40, 30, 20, 10 );
+    cmp = _mm256_set_epi32( 80, 70, 60, 50, 40, 30, 20, 10 );
 
     int32_t val = 5;
 
-    // int32_simd_size is how many int32_t fits on t_int32_simd (4)
+    // int32_simd_size is how many int32_t fits on t_int32_simd (8)
     for( size_t i = 0; i <= ls::int32_simd_size; ++i )
     {
         // Compare 'val' against all 'cmp' values
@@ -86,11 +86,15 @@ This will produce the follow output:
 
 ```
 $ ./greater
-The value 5 is less than all values of (40, 30, 20, 10)
-The value 15 is between items 0 and 1 of (40, 30, 20, 10)
-The value 25 is between items 1 and 2 of (40, 30, 20, 10)
-The value 35 is between items 2 and 3 of (40, 30, 20, 10)
-The value 45 is greater than all values of (40, 30, 20, 10)
+The value 5 is less than all values of (80, 70, 60, 50, 40, 30, 20, 10)
+The value 15 is between items 0 and 1 of (80, 70, 60, 50, 40, 30, 20, 10)
+The value 25 is between items 1 and 2 of (80, 70, 60, 50, 40, 30, 20, 10)
+The value 35 is between items 2 and 3 of (80, 70, 60, 50, 40, 30, 20, 10)
+The value 45 is between items 3 and 4 of (80, 70, 60, 50, 40, 30, 20, 10)
+The value 55 is between items 4 and 5 of (80, 70, 60, 50, 40, 30, 20, 10)
+The value 65 is between items 5 and 6 of (80, 70, 60, 50, 40, 30, 20, 10)
+The value 75 is between items 6 and 7 of (80, 70, 60, 50, 40, 30, 20, 10)
+The value 85 is greater than all values of (80, 70, 60, 50, 40, 30, 20, 10)
 ```
 
 ## Building samples and tests
