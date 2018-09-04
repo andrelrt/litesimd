@@ -110,7 +110,7 @@ litesimd/
         detail/                 ; Internal helper functions/classes, should not included directly
         helpers/
             containers.h        ; Aligned std containers, depends on boost::align
-            iostreams.h         ; operator<< overload for litesimd types
+            iostream.h          ; operator<< overload for litesimd types
         algorithm.h             ; min/max, for_each, iota and all other algorithms
         arithmetic.h            ; add, sub, mul, mullo, mulhi, div functions
         bitwise.h               ; bit_and, bit_or, bit_xor and bit_not functions
