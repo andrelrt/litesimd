@@ -40,6 +40,7 @@ public:
     using type = simd_type< simd_value_type, simd_tag >;
     using inner_type = typename simd_traits::simd_type;
     using bitmask_type = typename simd_traits::bitmask_type;
+    using index_type = int;
     constexpr static size_t simd_size = sizeof(inner_type) / sizeof(simd_value_type);
 
     simd_type(){}

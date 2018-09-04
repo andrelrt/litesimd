@@ -129,14 +129,14 @@ public:
         {
             std::advance( it, step );
             ranges_[ i ] = it;
-            cmp_ = ls::high_insert( cmp_, *it );
+            cmp_ = ls::high_insert< value_type, TAG_T >( cmp_, *it );
         }
         ranges_[ array_size+1 ] = std::prev(ref_.end());
     }
 
     const_iterator find( const value_type& key ) const
     {
-        size_t i = ls::greater_last_index< value_type, TAG_T >( key, cmp_ ) + 1;
+        int i = 1 + ls::greater_last_index< value_type, TAG_T >( key, cmp_ );
         auto end = std::next( ranges_[ i + 1 ] );
         auto first = std::lower_bound( ranges_[ i ], end, key );
         return (first!=end && !(key<*first)) ? first : ref_.end();

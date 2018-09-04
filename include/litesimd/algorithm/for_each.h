@@ -55,7 +55,7 @@ inline Function_T for_each_index( uint32_t bitmask, Function_T func )
     constexpr uint32_t mask = (1 << sizeof(ValueType_T)) -1;
     while( bitmask != 0 )
     {
-        size_t idx = bitmask_first_index< ValueType_T >( bitmask );
+        int idx = bitmask_first_index< ValueType_T >( bitmask );
         if( !func( idx ) )
             break;
         bitmask &= ~(mask << (idx*sizeof(ValueType_T)));
@@ -69,7 +69,7 @@ inline Function_T for_each_index( uint32_t bitmask, Function_T func )
 {
     while( bitmask != 0 )
     {
-        size_t idx = bitmask_first_index< ValueType_T >( bitmask );
+        int idx = bitmask_first_index< ValueType_T >( bitmask );
         if( !func( idx ) )
             break;
         bitmask &= ~(1 << idx);
@@ -84,7 +84,7 @@ inline Function_T for_each_index_backward( uint32_t bitmask, Function_T func )
     constexpr uint32_t mask = (1 << sizeof(ValueType_T)) -1;
     while( bitmask != 0 )
     {
-        size_t idx = bitmask_last_index< ValueType_T >( bitmask );
+        int idx = bitmask_last_index< ValueType_T >( bitmask );
         if( !func( idx ) )
             break;
         bitmask &= ~(mask << (idx*sizeof(ValueType_T)));
@@ -98,7 +98,7 @@ inline Function_T for_each_index_backward( uint32_t bitmask, Function_T func )
 {
     while( bitmask != 0 )
     {
-        size_t idx = bitmask_last_index< ValueType_T >( bitmask );
+        int idx = bitmask_last_index< ValueType_T >( bitmask );
         if( !func( idx ) )
             break;
         bitmask &= ~(1 << idx);
