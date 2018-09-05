@@ -60,5 +60,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 14)
 
-add_tests(NAME litesimd_test
+add_test(NAME litesimd_test
     COMMAND ${PROJECT_NAME})
