@@ -36,4 +36,4 @@
 
 # Directories
 build/
-compile_commands.js
+compile_commands.json
