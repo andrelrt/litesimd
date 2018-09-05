@@ -44,6 +44,8 @@ matrix:
         - CXX=clang++
 
 script:
+  - export CC=$CC
+  - export CXX=$CXX
   - cmake --version
   - $CXX -v
-  - (make build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .)
+  - (mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .)
