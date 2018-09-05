@@ -9,6 +9,7 @@ common_sources: &all_sources
   - llvm-toolchain-trusty-4.0
   - llvm-toolchain-trusty-5.0
   - llvm-toolchain-trusty-6.0
+  - sourceline: 'ppa:mhier/libboost-latest'
 
 matrix:
   exclude: # On OSX g++ is a symlink to clang++ by default
@@ -21,7 +22,7 @@ matrix:
       addons:
         apt:
           sources: *all_sources
-          packages: ['gcc-7', 'g++-7', 'cmake', 'libboost1.62-all-dev']
+          packages: ['gcc-7', 'g++-7', 'cmake', 'boost1.67']
       env: CCOMPILER='gcc-7' CXXCOMPILER='g++-7'
 
     - os: linux
@@ -29,7 +30,7 @@ matrix:
       addons:
         apt:
           sources: *all_sources
-          packages: ['clang-6.0', 'libstdc++-6-dev', 'cmake', 'libboost1.62-all-dev']
+          packages: ['clang-6.0', 'libstdc++-6-dev', 'cmake', 'boost1.67']
       env: CCOMPILER='clang-6.0' CXXCOMPILER='clang++-6.0'
 
     - os: osx
