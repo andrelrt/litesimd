@@ -43,4 +43,4 @@ script:
   - export CXX=$CXXCOMPILER
   - cmake --version
   - $CXX -v
-  - (mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .)
+  - (mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build . && ctest -V .)
