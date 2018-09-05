@@ -89,7 +89,12 @@ TYPED_TEST(ShuffleTypedTest, HighInsertTest)
     EXPECT_EQ( 1, (ls::get< simd::simd_size -1, type, tag> ( a )) ) << "Simd: " << a;
 
     a = ls::high_insert( ls::iota< type, tag >( 0 ), simd::simd_size );
-    EXPECT_EQ( simd::simd_size, (ls::get< simd::simd_size -1, type, tag> ( a )) ) << "Simd: " << a;
+
+    // Weird bug on MacOSX clang 9
+    // simd_type is a constexpr but somehow EXPECT_EQ macro creates an external symbol to it
+    // on clang 9. This results in a linker error since there is no simd_size symbol defined.
+    auto ssize = simd::simd_size;
+    EXPECT_EQ( ssize, (ls::get< simd::simd_size -1, type, tag> ( a )) ) << "Simd: " << a;
 
     ls::for_each( a, [&a]( int index, type val )
     {
