@@ -58,4 +58,4 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     libgtest
 )
 
-set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 14)
