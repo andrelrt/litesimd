@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/andrelrt/litesimd.svg?branch=master)](https://travis-ci.org/andrelrt/litesimd)
+
 Litesimd is a no overhead, header only, C++ library for SIMD processing. This library goal is to provide tools for developers to incorporate SIMD processing in all kinds of algorithms not only for calculations. To achieve this goal, some design principles are observed.
 
 [WIP]
