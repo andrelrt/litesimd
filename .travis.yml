@@ -22,7 +22,7 @@ matrix:
         apt:
           sources: *all_sources
           packages: ['gcc-7', 'g++-7', 'cmake', 'libboost-all-dev']
-      env: COMPILER='g++-7'
+      env: CCOMPILER='gcc-7' CXXCOMPILER='g++-7'
 
     - os: linux
       compiler: clang
@@ -30,14 +30,16 @@ matrix:
         apt:
           sources: *all_sources
           packages: ['clang-6.0', 'libstdc++-6-dev', 'cmake', 'libboost-all-dev']
-      env: COMPILER='clang++-6.0'
+      env: CCOMPILER='clang-6.0' CXXCOMPILER='clang++-6.0'
 
     - os: osx
       osx_image: xcode9.4
       compiler: clang
-      env: COMPILER='clang++'
+      env: CCOMPILER='clang' CXXCOMPILER='clang++'
 
 script:
+  - export CC=$CCOMPILER
+  - export CXX=$CXXCOMPILER
   - cmake --version
   - $CXX -v
   - (mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .)
