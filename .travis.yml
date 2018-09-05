@@ -1,0 +1,49 @@
+dist: trusty
+language: cpp
+sudo: false
+
+common_sources: &all_sources
+  - ubuntu-toolchain-r-test
+  - llvm-toolchain-trusty
+  - llvm-toolchain-trusty-3.9
+  - llvm-toolchain-trusty-4.0
+  - llvm-toolchain-trusty-5.0
+  - llvm-toolchain-trusty-6.0
+
+matrix:
+  exclude: # On OSX g++ is a symlink to clang++ by default
+    - os: osx
+      compiler: gcc
+
+  include:
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: *all_sources
+          packages: ['gcc-7', 'g++-7', 'cmake']
+      env:
+        - CC=gcc-7
+        - CXX=g++-7
+
+    - os: linux
+      compiler: clang
+      addons:
+        apt:
+          sources: *all_sources
+          packages: ['clang-6.0', 'libstdc++-6-dev', 'cmake']
+      env:
+        - CC=clang-6.0
+        - CXX=clang++-6.0
+
+    - os: osx
+      osx_image: xcode9.4
+      compiler: clang
+      env:
+        - CC=clang
+        - CXX=clang++
+
+script:
+  - cmake --version
+  - $CXX -v
+  - (make build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .)
