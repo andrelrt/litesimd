@@ -21,7 +21,7 @@ matrix:
       addons:
         apt:
           sources: *all_sources
-          packages: ['gcc-7', 'g++-7', 'cmake', 'libboost-all-dev']
+          packages: ['gcc-7', 'g++-7', 'cmake', 'libboost1.62-all-dev']
       env: CCOMPILER='gcc-7' CXXCOMPILER='g++-7'
 
     - os: linux
@@ -29,7 +29,7 @@ matrix:
       addons:
         apt:
           sources: *all_sources
-          packages: ['clang-6.0', 'libstdc++-6-dev', 'cmake', 'libboost-all-dev']
+          packages: ['clang-6.0', 'libstdc++-6-dev', 'cmake', 'libboost1.62-all-dev']
       env: CCOMPILER='clang-6.0' CXXCOMPILER='clang++-6.0'
 
     - os: osx
