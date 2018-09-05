@@ -40,6 +40,8 @@ set_target_properties(libgtest PROPERTIES
 
 enable_testing()
 
+include(GoogleTest)
+
 # Test project
 aux_source_directory(. SRC_LIST)
 add_executable(${PROJECT_NAME}
@@ -59,3 +61,5 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 )
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 14)
+
+gtest_add_tests(TARGET ${PROJECT_NAME})
