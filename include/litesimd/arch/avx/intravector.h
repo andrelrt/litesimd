@@ -23,6 +23,8 @@
 #ifndef LITESIMD_ARCH_AVX_INTRAVECTOR_H
 #define LITESIMD_ARCH_AVX_INTRAVECTOR_H
 
+#ifdef LITESIMD_HAS_AVX
+
 #include "../common/intravector.h"
 
 namespace litesimd {
@@ -108,5 +110,5 @@ struct intravector_op< double, avx_tag >
 
 } // namespace litesimd
 
+#endif // LITESIMD_HAS_AVX
 #endif // LITESIMD_ARCH_AVX_INTRAVECTOR_H
-

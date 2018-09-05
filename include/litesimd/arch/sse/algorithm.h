@@ -23,6 +23,8 @@
 #ifndef LITESIMD_ARCH_SSE_ALGORITHM_H
 #define LITESIMD_ARCH_SSE_ALGORITHM_H
 
+#ifdef LITESIMD_HAS_SSE
+
 #include "../common/algorithm.h"
 #include "../../compare.h"
 #include "../../shuffle.h"
@@ -73,4 +75,5 @@ max< int64_t, sse_tag >( simd_type< int64_t, sse_tag > lhs, simd_type< int64_t, 
 
 } // namespace litesimd
 
+#endif // LITESIMD_HAS_SSE
 #endif // LITESIMD_ARCH_SSE_ALGORITHM_H

@@ -20,8 +20,8 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_AVX_COMPARE_H
-#define LITESIMD_AVX_COMPARE_H
+#ifndef LITESIMD_ARCH_AVX_COMPARE_H
+#define LITESIMD_ARCH_AVX_COMPARE_H
 
 #ifdef LITESIMD_HAS_AVX
 
@@ -114,4 +114,4 @@ equal_to< double, avx_tag >( simd_type< double, avx_tag > lhs,
 } // namespace litesimd
 
 #endif // LITESIMD_HAS_AVX
-#endif // LITESIMD_AVX_COMPARE_H
+#endif // LITESIMD_ARCH_AVX_COMPARE_H

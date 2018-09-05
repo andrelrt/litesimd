@@ -23,6 +23,8 @@
 #ifndef LITESIMD_ARCH_SSE_INTRAVECTOR_H
 #define LITESIMD_ARCH_SSE_INTRAVECTOR_H
 
+#ifdef LITESIMD_HAS_SSE
+
 #include "../common/intravector.h"
 
 namespace litesimd {
@@ -102,4 +104,5 @@ struct intravector_op< double, sse_tag >
 
 } // namespace litesimd
 
+#endif // LITESIMD_HAS_SSE
 #endif // LITESIMD_ARCH_SSE_INTRAVECTOR_H
