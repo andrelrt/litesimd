@@ -9,6 +9,8 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -mavx2 -Wall -fno-strict-aliasing")
 
 set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 
+enable_testing()
+
 add_subdirectory(samples)
 add_subdirectory(test)
 

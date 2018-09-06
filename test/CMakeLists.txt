@@ -38,7 +38,8 @@ set_target_properties(libgtest PROPERTIES
 #    "IMPORTED_LINK_INTERFACE_LIBRARIES" "${CMAKE_THREAD_LIBS_INIT}"
 #)
 
-enable_testing()
+cmake_policy(SET CMP0054 NEW)
+include(GoogleTest)
 
 # Test project
 aux_source_directory(. SRC_LIST)
@@ -59,3 +60,9 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
 )
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 14)
+
+if(CMAKE_VERSION VERSION_LESS "3.10")
+    gtest_add_tests(TARGET ${PROJECT_NAME})
+else()
+    gtest_discover_tests(${PROJECT_NAME} TEST_PREFIX test)
+endif()
