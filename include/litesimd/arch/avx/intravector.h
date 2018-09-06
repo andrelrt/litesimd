@@ -40,7 +40,7 @@ struct intravector_op< int8_t, avx_tag >
         vec = func( vec, _mm256_permute4x64_epi64( vec, _MM_SHUFFLE( 0, 0, 0, 2 ) ) );
         vec = func( vec, _mm256_shufflelo_epi16( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
         vec = func( vec, _mm256_srli_epi16( vec, 8 ) );
-        return (int8_t)_mm256_cvtsi256_si32( vec );
+        return (int8_t)_mm_cvtsi128_si32( _mm256_extracti128_si256( vec, 0 ) );
     }
 };
 
@@ -54,7 +54,7 @@ struct intravector_op< int16_t, avx_tag >
         vec = func( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
         vec = func( vec, _mm256_permute4x64_epi64( vec, _MM_SHUFFLE( 0, 0, 0, 2 ) ) );
         vec = func( vec, _mm256_shufflelo_epi16( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
-        return (int16_t)_mm256_cvtsi256_si32( vec );
+        return (int16_t)_mm_cvtsi128_si32( _mm256_extracti128_si256( vec, 0 ) );
     }
 };
 
@@ -67,7 +67,7 @@ struct intravector_op< int32_t, avx_tag >
         vec = func( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 3, 2 ) ) );
         vec = func( vec, _mm256_shuffle_epi32( vec, _MM_SHUFFLE( 0, 0, 0, 1 ) ) );
         vec = func( vec, _mm256_permute4x64_epi64( vec, _MM_SHUFFLE( 0, 0, 0, 2 ) ) );
-        return _mm256_cvtsi256_si32( vec );
+        return _mm_cvtsi128_si32( _mm256_extracti128_si256( vec, 0 ) );
     }
 };
 
