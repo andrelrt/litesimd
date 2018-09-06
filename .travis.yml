@@ -47,7 +47,6 @@ install:
     else
       brew install cmake || brew upgrade cmake
     fi
-    - cmake --version
 
 script:
   - export CC=$CCOMPILER
