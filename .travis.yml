@@ -9,6 +9,10 @@ common_sources: &all_sources
   - llvm-toolchain-trusty-4.0
   - llvm-toolchain-trusty-5.0
   - llvm-toolchain-trusty-6.0
+<<<<<<< HEAD
+=======
+  - sourceline: 'ppa:mhier/libboost-latest'
+>>>>>>> master
 
 matrix:
   exclude: # On OSX g++ is a symlink to clang++ by default
@@ -21,29 +25,25 @@ matrix:
       addons:
         apt:
           sources: *all_sources
-          packages: ['gcc-7', 'g++-7', 'cmake']
-      env:
-        - CC=gcc-7
-        - CXX=g++-7
+          packages: ['gcc-7', 'g++-7', 'cmake', 'boost1.67']
+      env: CCOMPILER='gcc-7' CXXCOMPILER='g++-7'
 
     - os: linux
       compiler: clang
       addons:
         apt:
           sources: *all_sources
-          packages: ['clang-6.0', 'libstdc++-6-dev', 'cmake']
-      env:
-        - CC=clang-6.0
-        - CXX=clang++-6.0
+          packages: ['clang-6.0', 'libstdc++-6-dev', 'cmake', 'boost1.67']
+      env: CCOMPILER='clang-6.0' CXXCOMPILER='clang++-6.0'
 
     - os: osx
       osx_image: xcode9.4
       compiler: clang
-      env:
-        - CC=clang
-        - CXX=clang++
+      env: CCOMPILER='clang' CXXCOMPILER='clang++'
 
 script:
+  - export CC=$CCOMPILER
+  - export CXX=$CXXCOMPILER
   - cmake --version
   - $CXX -v
-  - (make build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build .)
+  - (mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build . && ctest -V .)
