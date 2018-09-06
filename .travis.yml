@@ -45,10 +45,11 @@ script:
     if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
       CMAKE_URL="https://cmake.org/files/v3.10/cmake-3.10.0-Linux-x86_64.tar.gz"
       mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
+      expoxt CMAKE=${DEPS_DIR}/cmake/bin/cmake
       export PATH=${DEPS_DIR}/cmake/bin:${PATH}
     else
-      brew install cmake || brew upgrade cmake
+      export CMAKE=cmake
     fi
-  - cmake --version
+  - ${CMAKE} --version
   - ${CXX} -v
-  - (mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build . && ctest -V .)
+  - (mkdir build && cd build && ${CMAKE} -DCMAKE_BUILD_TYPE=Release .. && ${CMAKE} --build . && ctest -V .)
