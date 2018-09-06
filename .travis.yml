@@ -51,4 +51,5 @@ script:
   - export CXX=${CXXCOMPILER}
   - cmake --version
   - ${CXX} -v
+  - cat /proc/cpuinfo
   - (mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build . && ctest -V .)
