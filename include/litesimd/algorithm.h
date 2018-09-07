@@ -31,13 +31,16 @@
 
 namespace litesimd {
 
-// Min max
-// ---------------------------------------------------------------------------------------
+/**
+ * \defgroup algorithm Algorithm functions
+ *
+ * Algorithm defines a collection of functions especially designed to be used
+ * on each value inside the packed SIMD register.
+ */
 
 /**
- * \brief Return the smallest value in the SIMD register
- *
- * Returns the smallest of each number in the SIMD register.
+ * \ingroup algorithm
+ * \brief Returns the smallest of each number in the SIMD register.
  *
  * \param vec SIMD register to compare
  * \return The lesser of the values in SIMD register
@@ -58,8 +61,7 @@ namespace litesimd {
  *     return 0;
  * }
  * ```
- *
- * Output:
+ * Output
  * ```
  * min( zero ) == 0
  * min( iota ) == 5
@@ -79,9 +81,8 @@ inline typename SimdType_T::simd_value_type min( SimdType_T vec )
 }
 
 /**
- * \brief Return the largest value in the SIMD register
- *
- * Returns the largest the of each number in the SIMD register.
+ * \ingroup algorithm
+ * \brief Returns the largest the of each number in the SIMD register.
  *
  * \param vec SIMD register to compare
  * \return The greater of the values in SIMD register
