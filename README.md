@@ -18,6 +18,10 @@ By design, the library does not attempt to hide the complexity of using SIMD. Wh
 
 Any SIMD library typically covers a smaller scope than the total set of processor SIMD instructions. Litesimd library must be transparently interoperable with SIMD intrincs, allowing the developer to perform more complex operations than originally anticipated by the library.
 
+#### No memory access
+
+Processor instructions are much faster than memory access. Although memory access is unavoidable, the litesimd library prefers processor instructions to manipulate or enumerate values within the SIMD registers to minimize memory use.
+
 ## Example
 
 ```cpp
