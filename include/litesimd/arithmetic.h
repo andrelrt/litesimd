@@ -29,6 +29,13 @@
 
 namespace litesimd {
 
+/**
+ * \defgroup arithmetic Arithmetic operations
+ *
+ * In litesimd, arithmetic group has binary functions to execute the basic arithmetic operations
+ * (addition, subtraction, multiplication and division).
+ */
+
 // Basic operations
 // ---------------------------------------------------------------------------------------
 DEFINE_BINARY_FUNCTION_ADAPTORS( add, type )
@@ -37,12 +44,66 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( mullo, type )
 DEFINE_BINARY_FUNCTION_ADAPTORS( mulhi, type )
 DEFINE_BINARY_FUNCTION_ADAPTORS( div, type )
 
+/**
+ * \ingroup arithmetic
+ * \brief Returns the sum of two values.
+ *
+ * \param lhs, rhs Values to be added.
+ * \returns Sum of the two values.
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostreams>
+ * #include <litesimd/types.h>
+ * #include <litesimd/arithmetic.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd a( 1 ), b( 10 );
+ *     std::cout << "a + b:  " << a + b << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * a + b: (11, 11, 11, 11)
+ * ```
+ */
 template< typename LHS, typename RHS >
 inline auto operator+( LHS lhs, RHS rhs )
 {
     return add( lhs, rhs );
 }
 
+/**
+ * \ingroup arithmetic
+ * \brief Returns the subtraction of two values.
+ *
+ * \param lhs, rhs Values to be subtracted.
+ * \returns Difference of the two values.
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostreams>
+ * #include <litesimd/types.h>
+ * #include <litesimd/arithmetic.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd a( 10 ), b( 1 );
+ *     std::cout << "a - b:  " << a - b << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * a - b: (9, 9, 9, 9)
+ * ```
+ */
 template< typename LHS, typename RHS >
 inline auto operator-( LHS lhs, RHS rhs )
 {
