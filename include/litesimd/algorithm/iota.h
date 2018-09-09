@@ -27,9 +27,41 @@
 
 namespace litesimd {
 
+/**
+ * \ingroup algorithm
+ * \brief Store increasing sequence on a SIMD register
+ *
+ * Assigns to every element in SIMD register successive values of _val_, as if incremented with `++val` after each element is written.
+ *
+ * \param val Start value (default 0)
+ * \returns SIMD register with increasing values
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/algorithm.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     std::cout << "iota< int32_t >(): " << ls::iota< int32_t >() << std::endl;
+ *     std::cout << "iota< int16_t >( 4 ): " << ls::iota< int16_t >( 4 ) << std::endl;
+ *     std::cout << "iota< double >( 1.2 ): " << ls::iota< double >( 1.2 ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * iota< int32_t >(): (3, 2, 1, 0)
+ * iota< int16_t >( 4 ): (11, 10, 9, 8, 7, 6, 5, 4)
+ * iota< double >( 1.2 ): (2.2, 1.2)
+ * ```
+ */
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline simd_type< ValueType_T, Tag_T >
-iota( ValueType_T val )
+iota( ValueType_T val = 0 )
 {
     using simd_type = simd_type< ValueType_T, Tag_T >;
     simd_type ret;

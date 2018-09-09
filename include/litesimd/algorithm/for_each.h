@@ -33,10 +33,11 @@ namespace litesimd {
 
 /**
  * \ingroup algorithm
- * \brief Call function _func_ for each value inside the packed SIMD register from the lowest to the highest
+ * \brief Call function _func_ for each value inside the SIMD register from the lowest to the highest
  *
  * \param vec SIMD register
  * \param func Unary function that accepts two arguments. First argument is an index of the packed value, second argument is the value. It need to return a bool indicating `true` to continue to iterate; or `false` to break the loop.
+ * \returns The _func_ parameter, as a `std::move( func )`.
  *
  * **Example**
  * ```{.cpp}
@@ -78,10 +79,11 @@ inline Function_T for_each( SimdType_T vec, Function_T func )
 
 /**
  * \ingroup algorithm
- * \brief Call function _func_ for each value inside the packed SIMD register from the highest to the lowest
+ * \brief Call function _func_ for each value inside the SIMD register from the highest to the lowest
  *
  * \param vec SIMD register
  * \param func Unary function that accepts two arguments. First argument is an index of the packed value, second argument is the value. It need to return a bool indicating `true` to continue to iterate; or `false` to break the loop.
+ * \returns The _func_ parameter, as a `std::move( func )`.
  *
  * **Example**
  * ```{.cpp}
@@ -126,6 +128,7 @@ inline Function_T for_each_backward( SimdType_T vec, Function_T func )
  * \brief Call function _func_ for each bit set on a bitmask from the lowest to the highest
  * \param bitmask Bitmask
  * \param func Unary function that accepts an index of the set bit as argument. It need to return a bool indicating `true` to continue to iterate; or `false` to break the loop.
+ * \returns The _func_ parameter, as a `std::move( func )`.
  *
  * **Example**
  * ```{.cpp}
@@ -190,6 +193,7 @@ inline Function_T for_each_index( uint32_t bitmask, Function_T func )
  * \brief Call function _func_ for each bit set on a bitmask from the highest bit to the lowest
  * \param bitmask Bitmask
  * \param func Unary function that accepts an index of the set bit as argument. It need to return a bool indicating `true` to continue to iterate; or `false` to break the loop.
+ * \returns The _func_ parameter, as a `std::move( func )`.
  *
  * **Example**
  * ```{.cpp}
