@@ -61,7 +61,7 @@ namespace litesimd {
  *     return 0;
  * }
  * ```
- * Output
+ * Output on a SSE compilation
  * ```
  * min( zero ) == 0
  * min( iota ) == 5
@@ -103,8 +103,7 @@ inline typename SimdType_T::simd_value_type min( SimdType_T vec )
  *     return 0;
  * }
  * ```
- *
- * Output:
+ * Output on a SSE compilation
  * ```
  * max( zero ) == 0
  * max( iota ) == 8

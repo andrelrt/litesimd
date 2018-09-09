@@ -151,7 +151,7 @@ inline Function_T for_each_backward( SimdType_T vec, Function_T func )
  *     return 0;
  * }
  * ```
- * Output
+ * Output on a SSE compilation
  * ```
  * Index 0 is equal
  * Index 3 is equal
@@ -216,7 +216,7 @@ inline Function_T for_each_index( uint32_t bitmask, Function_T func )
  *     return 0;
  * }
  * ```
- * Output
+ * Output on a SSE compilation
  * ```
  * Index 3 is equal
  * Index 0 is equal
