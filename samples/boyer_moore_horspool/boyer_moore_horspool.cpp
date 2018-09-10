@@ -77,10 +77,12 @@ template<> int is_zero< ls::sse_tag >( ls::simd_type< int8_t, ls::sse_tag > val 
     return _mm_testz_si128( val, ls::simd_type< int8_t, ls::sse_tag >::ones() );
 }
 
+#ifdef LITESIMD_HAS_AVX
 template<> int is_zero< ls::avx_tag >( ls::simd_type< int8_t, ls::avx_tag > val )
 {
     return _mm256_testz_si256( val, ls::simd_type< int8_t, ls::avx_tag >::ones() );
 }
+#endif // LITESIMD_HAS_AVX
 
 template< typename Tag_T > int32_t index_max( const std::array< int32_t, 256 >&,
                                               ls::simd_type< int8_t, Tag_T > ){ return 0; }
@@ -238,7 +240,9 @@ int main(int argc, char* /*argv*/[])
     while( 1 )
     {
         uint64_t sse = bench< litesimd_boyer_moore_horspool2< ls::sse_tag > >( "SSE..", runSize, seekSize, loop );
+#ifdef LITESIMD_HAS_AVX
         uint64_t avx = bench< litesimd_boyer_moore_horspool2< ls::avx_tag > >( "AVX..", runSize, seekSize, loop );
+#endif // LITESIMD_HAS_AVX
         uint64_t base = bench< boost_searcher >( "Boost", runSize, seekSize, loop );
 
 
@@ -250,8 +254,10 @@ int main(int argc, char* /*argv*/[])
                       << std::endl << "Index Speed up SSE.......: " << std::fixed << std::setprecision(2)
                       << static_cast<float>(base)/static_cast<float>(sse) << "x"
 
+#ifdef LITESIMD_HAS_AVX
                       << std::endl << "Index Speed up AVX.......: " << std::fixed << std::setprecision(2)
                       << static_cast<float>(base)/static_cast<float>(avx) << "x"
+#endif // LITESIMD_HAS_AVX
 
                       << std::endl << std::endl;
         }
@@ -260,7 +266,9 @@ int main(int argc, char* /*argv*/[])
             std::cout
                 << base << ","
                 << sse << ","
+#ifdef LITESIMD_HAS_AVX
                 << avx
+#endif // LITESIMD_HAS_AVX
                 << std::endl;
         }
     }
