@@ -216,7 +216,9 @@ int main(int argc, char* /*argv*/[])
     {
         uint64_t base = bench< ls::vector< int32_t >, container_only, void >( "lower_bound .", runSize, loop );
         uint64_t index1 = bench< ls::vector< int32_t >, nway_tree, ls::sse_tag >( "index SSE ...", runSize, loop );
+#ifdef LITESIMD_HAS_AVX
         uint64_t index2 = bench< ls::vector< int32_t >, nway_tree, ls::avx_tag >( "index AVX ...", runSize, loop );
+#endif // LITESIMD_HAS_AVX
 
         if( g_verbose )
         {
@@ -226,8 +228,10 @@ int main(int argc, char* /*argv*/[])
                       << std::endl << "Index Speed up SSE.......: " << std::fixed << std::setprecision(2)
                       << static_cast<float>(base)/static_cast<float>(index1) << "x"
 
+#ifdef LITESIMD_HAS_AVX
                       << std::endl << "Index Speed up AVX.......: " << std::fixed << std::setprecision(2)
                       << static_cast<float>(base)/static_cast<float>(index2) << "x"
+#endif // LITESIMD_HAS_AVX
 
                       << std::endl << std::endl;
         }
@@ -236,7 +240,9 @@ int main(int argc, char* /*argv*/[])
             std::cout
                 << base << ","
                 << index1 << ","
+#ifdef LITESIMD_HAS_AVX
                 << index2
+#endif // LITESIMD_HAS_AVX
                 << std::endl;
         }
     }

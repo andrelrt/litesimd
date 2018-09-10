@@ -105,6 +105,7 @@ maskstore< ls::sse_tag >( ls::simd_type< int8_t, ls::sse_tag >* ptr,
     _mm_maskmoveu_si128( val, mask, (char*)ptr );
 }
 
+#ifdef LITESIMD_HAS_AVX
 template<> void
 maskstore< ls::avx_tag >( ls::simd_type< int8_t, ls::avx_tag >* ptr,
                           ls::simd_type< int8_t, ls::avx_tag > val,
@@ -118,6 +119,7 @@ maskstore< ls::avx_tag >( ls::simd_type< int8_t, ls::avx_tag >* ptr,
                          _mm256_extracti128_si256( mask, 1 ),
                          (char*)(ssePtr + 1) );
 }
+#endif // LITESIMD_HAS_AVX
 
 template< typename TAG_T >
 struct maskmove_to_lower
@@ -226,12 +228,16 @@ int main(int argc, char* /*argv*/[])
     {
         uint64_t base = bench< cachesize_to_lower >( "Scalar ", runSize, loop );
         uint64_t sse = bench< to_lower< ls::sse_tag > >( "SSE ...", runSize, loop );
+#ifdef LITESIMD_HAS_AVX
         uint64_t avx = bench< to_lower< ls::avx_tag > >( "AVX ...", runSize, loop );
+#endif // LITESIMD_HAS_AVX
 
         if( g_verbose )
         {
             bench< maskmove_to_lower< ls::sse_tag > >( "MM SSE ", runSize, loop );
+#ifdef LITESIMD_HAS_AVX
             bench< maskmove_to_lower< ls::avx_tag > >( "MM AVX ", runSize, loop );
+#endif // LITESIMD_HAS_AVX
             bench< std_to_lower >( "STD ...", runSize, loop );
             bench< autovec_to_lower >( "Autovec", runSize, loop );
             bench< default_simd_to_lower >( "Default", runSize, loop );
@@ -239,8 +245,10 @@ int main(int argc, char* /*argv*/[])
                       << std::endl << "Index Speed up SSE.......: " << std::fixed << std::setprecision(2)
                       << static_cast<float>(base)/static_cast<float>(sse) << "x"
 
+#ifdef LITESIMD_HAS_AVX
                       << std::endl << "Index Speed up AVX.......: " << std::fixed << std::setprecision(2)
                       << static_cast<float>(base)/static_cast<float>(avx) << "x"
+#endif // LITESIMD_HAS_AVX
 
                       << std::endl << std::endl;
         }
@@ -249,7 +257,9 @@ int main(int argc, char* /*argv*/[])
             std::cout
                 << base << ","
                 << sse << ","
+#ifdef LITESIMD_HAS_AVX
                 << avx
+#endif // LITESIMD_HAS_AVX
                 << std::endl;
         }
     }
