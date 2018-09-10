@@ -215,14 +215,9 @@ private:
     const container_type& ref_;
 };
 
+#ifdef LITESIMD_HAS_AVX
 template< typename Tag_T > ls::simd_type< int32_t, Tag_T >
 i32Gather( const int*, ls::simd_type< int32_t, Tag_T > ){}
-
-template<> ls::simd_type< int32_t, ls::sse_tag >
-i32Gather< ls::sse_tag >( const int* ptr, ls::simd_type< int32_t, ls::sse_tag > idx )
-{
-    return _mm_i32gather_epi32( ptr, idx, 4 );
-}
 
 template<> ls::simd_type< int32_t, ls::avx_tag >
 i32Gather< ls::avx_tag >( const int* ptr, ls::simd_type< int32_t, ls::avx_tag > idx )
@@ -231,11 +226,6 @@ i32Gather< ls::avx_tag >( const int* ptr, ls::simd_type< int32_t, ls::avx_tag > 
 }
 
 template< typename Tag_T > int is_zero( ls::simd_type< int32_t, Tag_T > ){ return 0; }
-
-template<> int is_zero< ls::sse_tag >( ls::simd_type< int32_t, ls::sse_tag > val )
-{
-    return _mm_testz_si128( val, ls::simd_type< int32_t, ls::sse_tag >::ones() );
-}
 
 template<> int is_zero< ls::avx_tag >( ls::simd_type< int32_t, ls::avx_tag > val )
 {
@@ -324,6 +314,7 @@ struct container_simd_lb2
 private:
     const container_type& ref_;
 };
+#endif // LITESIMD_HAS_AVX
 
 void do_nothing( int32_t );
 
@@ -401,7 +392,6 @@ int main(int argc, char* /*argv*/[])
         {
             uint64_t nocache =  bench< ls::vector< int32_t >, index_nocache, ls::sse_tag >( "index_nocache SSE ....", runSize, loop );
             uint64_t simdlb =  bench< ls::vector< int32_t >, container_simd_lb, ls::sse_tag >( "SIMD lower_bound SSE .", runSize, loop );
-            uint64_t simdlbv2 =  bench< ls::vector< int32_t >, container_simd_lb2, ls::sse_tag >( "SIMD lower_boundv2 SSE", runSize, loop );
 
 #ifdef LITESIMD_HAS_AVX
             uint64_t nocache2 = bench< ls::vector< int32_t >, index_nocache, ls::avx_tag >( "index_nocache AVX ....", runSize, loop );
@@ -418,9 +408,6 @@ int main(int argc, char* /*argv*/[])
 
                       << std::endl << "SIMD lower_bound Speed up SSE...: " << std::fixed << std::setprecision(2)
                       << static_cast<float>(base)/static_cast<float>(simdlb) << "x"
-
-                      << std::endl << "SIMD lower_boundv2 Speed up SSE.: " << std::fixed << std::setprecision(2)
-                      << static_cast<float>(base)/static_cast<float>(simdlbv2) << "x"
 
                       << std::endl << "Index Cache/Nocache Speed up SSE: " << std::fixed << std::setprecision(2)
                       << static_cast<float>(nocache)/static_cast<float>(cache) << "x"
