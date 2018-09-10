@@ -84,30 +84,6 @@ template<> int is_zero< ls::avx_tag >( ls::simd_type< int8_t, ls::avx_tag > val 
 }
 #endif // LITESIMD_HAS_AVX
 
-template< typename Tag_T > int32_t index_max( const std::array< int32_t, 256 >&,
-                                              ls::simd_type< int8_t, Tag_T > ){ return 0; }
-
-template<> int32_t index_max< ls::sse_tag >( const std::array< int32_t, 256 >& table,
-                                             ls::simd_type< int8_t, ls::sse_tag > val )
-{
-    std::array< ls::simd_type< int32_t, ls::sse_tag >, 4 > simd_index;
-
-    simd_index[ 0 ] = _mm_cvtepi8_epi32( val );
-    simd_index[ 1 ] = _mm_cvtepi8_epi32( _mm_shuffle_epi32( val, _MM_SHUFFLE( 1, 1, 1, 1 ) ) );
-    simd_index[ 2 ] = _mm_cvtepi8_epi32( _mm_shuffle_epi32( val, _MM_SHUFFLE( 2, 2, 2, 2 ) ) );
-    simd_index[ 3 ] = _mm_cvtepi8_epi32( _mm_shuffle_epi32( val, _MM_SHUFFLE( 3, 3, 3, 3 ) ) );
-
-    simd_index[ 0 ] = _mm_i32gather_epi32( table.data(), simd_index[ 0 ], 4 );
-    simd_index[ 1 ] = _mm_i32gather_epi32( table.data(), simd_index[ 1 ], 4 );
-    simd_index[ 2 ] = _mm_i32gather_epi32( table.data(), simd_index[ 2 ], 4 );
-    simd_index[ 3 ] = _mm_i32gather_epi32( table.data(), simd_index[ 3 ], 4 );
-
-    return ls::max( ls::max( ls::max( simd_index[ 0 ], simd_index[ 1 ] ),
-                             ls::max( simd_index[ 2 ], simd_index[ 3 ] ) ) );
-}
-
-
-
 template< typename Tag_T >
 struct litesimd_boyer_moore_horspool2
 {
