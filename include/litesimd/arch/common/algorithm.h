@@ -39,8 +39,8 @@ namespace litesimd {
  * | Index | 3 | 2 | 1 | 0 |
  * | :--- | :--: | :--: | :--: | :--: |
  * | Register X | a | b | c | d |
- * | Register Y | e | d | f | g |
- * | litesimd::min( X, Y ) | min( a, e ) | min( b, d ) | min( c, f ) | min( d, g ) |
+ * | Register Y | e | f | g | h |
+ * | litesimd::min( X, Y ) | min( a, e ) | min( b, f ) | min( c, g ) | min( d, h ) |
  *
  * \param lhs, rhs SIMD registers to compare
  * \returns SIMD register with the lesser of each packed value
@@ -80,8 +80,8 @@ min( simd_type< Value_T, Tag_T >, simd_type< Value_T, Tag_T > ){}
  * | Index | 3 | 2 | 1 | 0 |
  * | :--- | :--: | :--: | :--: | :--: |
  * | Register X | a | b | c | d |
- * | Register Y | e | d | f | g |
- * | litesimd::max( X, Y ) | max( a, e ) | max( b, d ) | max( c, f ) | max( d, g ) |
+ * | Register Y | e | f | g | h |
+ * | litesimd::max( X, Y ) | max( a, e ) | max( b, f ) | max( c, g ) | max( d, h ) |
  *
  * \param lhs, rhs SIMD registers to compare
  * \returns SIMD register with the greater of each packed value

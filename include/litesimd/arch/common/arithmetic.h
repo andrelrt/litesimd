@@ -29,17 +29,101 @@ namespace litesimd {
 
 // Basic operations
 // ---------------------------------------------------------------------------------------
-#define DEF_ARITH_BINARY( FUNC ) \
-template< typename ValueType_T, typename Tag_T = default_tag > \
-simd_type< ValueType_T, Tag_T > \
-FUNC( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
+/**
+ * \ingroup arithmetic
+ * \brief Adds each value inside the packed SIMD register.
+ *
+ * Each value inside the packed SIMD register is added indenpendently and the result is
+ * saved on the same index inside the packed SIMD register.
+ *
+ * | Index | 3 | 2 | 1 | 0 |
+ * | :--- | :--: | :--: | :--: | :--: |
+ * | Register X | a | b | c | d |
+ * | Register Y | e | f | g | h |
+ * | litesimd::add( X, Y ) | a + e | b + f | c + g | d + h |
+ *
+ * \param lhs, rhs SIMD registers to be added
+ * \returns SIMD register with the sum of each packed value
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostreams>
+ * #include <litesimd/types.h>
+ * #include <litesimd/algorithm.h>
+ * #include <litesimd/helpers/iostream.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *     t_int32_simd a( 10 ), b( 1 );
+ *     std::cout << "add( a, b ): " << ls::add( a, b ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * add( a, b ): ( 11, 11, 11, 11 )
+ * ```
+ *
+ * \see sub
+ */
+template< typename ValueType_T, typename Tag_T = default_tag >
+simd_type< ValueType_T, Tag_T >
+add( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
 
-DEF_ARITH_BINARY( add )
-DEF_ARITH_BINARY( sub )
-DEF_ARITH_BINARY( mullo )
-DEF_ARITH_BINARY( mulhi )
-DEF_ARITH_BINARY( div )
-#undef DEF_ARITH_BINARY
+/**
+ * \ingroup arithmetic
+ * \brief Subtract each value inside the packed SIMD register.
+ *
+ * Each value inside the packed SIMD register is subtracted indenpendently and the result is
+ * saved on the same index inside the packed SIMD register.
+ *
+ * | Index | 3 | 2 | 1 | 0 |
+ * | :--- | :--: | :--: | :--: | :--: |
+ * | Register X | a | b | c | d |
+ * | Register Y | e | f | g | h |
+ * | litesimd::sub( X, Y ) | a - e | b - f | c - g | d - h |
+ *
+ * \param lhs, rhs SIMD registers to be subtracted
+ * \returns SIMD register with the difference of each packed value
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostreams>
+ * #include <litesimd/types.h>
+ * #include <litesimd/algorithm.h>
+ * #include <litesimd/helpers/iostream.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *     t_int32_simd a( 10 ), b( 1 );
+ *     std::cout << "sub( a, b ): " << ls::sub( a, b ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * sub( a, b ): ( 9, 9, 9, 9 )
+ * ```
+ *
+ * \see add
+ */
+template< typename ValueType_T, typename Tag_T = default_tag >
+simd_type< ValueType_T, Tag_T >
+sub( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
+
+template< typename ValueType_T, typename Tag_T = default_tag >
+simd_type< ValueType_T, Tag_T >
+mullo( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
+
+template< typename ValueType_T, typename Tag_T = default_tag >
+simd_type< ValueType_T, Tag_T >
+mulhi( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
+
+template< typename ValueType_T, typename Tag_T = default_tag >
+simd_type< ValueType_T, Tag_T >
+div( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
 
 } // namespace litesimd
 
