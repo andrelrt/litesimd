@@ -36,6 +36,8 @@ namespace litesimd {
  *
  * Algorithm defines a collection of functions especially designed to be used
  * on each value inside the packed SIMD register.
+ *
+ * All this functions are accessable at `<litesimd/algorithm.h>`
  */
 
 /**

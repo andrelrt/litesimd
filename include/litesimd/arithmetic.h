@@ -34,6 +34,8 @@ namespace litesimd {
  *
  * In litesimd, arithmetic group has binary functions to execute the basic arithmetic operations
  * (addition, subtraction, multiplication and division).
+ *
+ * All this functions are accessable at `<litesimd/arithmetic.h>`
  */
 
 // Basic operations
