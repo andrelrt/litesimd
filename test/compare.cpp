@@ -198,7 +198,7 @@ TEST(SimdCompareTest, GreaterThanDefaultSimd)
             << "val: " << val
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::greater_bitmask( simdVal, cmp );
-        EXPECT_EQ( (ls::t_bitmask)(i-1), ls::greater_last_index( simdVal, cmp ) )
+        EXPECT_EQ( i, 1 + ls::greater_last_index( simdVal, cmp ) )
             << "val: " << val
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::greater_last_index( simdVal, cmp );
@@ -208,7 +208,7 @@ TEST(SimdCompareTest, GreaterThanDefaultSimd)
             << "val: " << val + 1
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::greater_bitmask( simdVal, cmp );
-        EXPECT_EQ( (ls::t_bitmask)(i-1), ls::greater_last_index( simdVal, cmp ) )
+        EXPECT_EQ( i, 1 + ls::greater_last_index( simdVal, cmp ) )
             << "val: " << val + 1
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::greater_last_index( simdVal, cmp );
