@@ -56,6 +56,7 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( div, type )
  * #include <iostreams>
  * #include <litesimd/types.h>
  * #include <litesimd/arithmetic.h>
+ * #include <litesimd/helpers/iostream.h>
  *
  * int main()
  * {
@@ -89,6 +90,7 @@ inline auto operator+( LHS lhs, RHS rhs )
  * #include <iostreams>
  * #include <litesimd/types.h>
  * #include <litesimd/arithmetic.h>
+ * #include <litesimd/helpers/iostream.h>
  *
  * int main()
  * {

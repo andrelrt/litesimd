@@ -41,6 +41,7 @@ namespace litesimd {
  * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/algorithm.h>
+ * #include <litesimd/helpers/iostream.h>
  *
  * int main()
  * {
