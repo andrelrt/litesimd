@@ -40,9 +40,8 @@ set_target_properties(libgtest PROPERTIES
 
 if(CMAKE_VERSION VERSION_LESS "3.10")
 cmake_policy(SET CMP0057 NEW)
-else()
-cmake_policy(SET CMP0054 NEW)
 endif()
+cmake_policy(SET CMP0054 NEW)
 include(GoogleTest)
 
 # Test project
