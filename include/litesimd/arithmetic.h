@@ -75,7 +75,7 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( div, type )
  * ```
  */
 template< typename LHS, typename RHS >
-inline auto operator+( LHS lhs, RHS rhs )
+inline auto operator+( LHS lhs, RHS rhs ) -> decltype( add( lhs, rhs ) )
 {
     return add( lhs, rhs );
 }
@@ -109,7 +109,7 @@ inline auto operator+( LHS lhs, RHS rhs )
  * ```
  */
 template< typename LHS, typename RHS >
-inline auto operator-( LHS lhs, RHS rhs )
+inline auto operator-( LHS lhs, RHS rhs ) -> decltype( sub( lhs, rhs ) )
 {
     return sub( lhs, rhs );
 }
