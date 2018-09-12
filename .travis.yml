@@ -70,7 +70,17 @@ matrix:
       env: MYCC='clang' MYCXX='clang++'
 
     - os: osx
-      osx_image: xcode9.0
+      osx_image: xcode9
+      compiler: clang
+      env: MYCC='clang' MYCXX='clang++'
+
+    - os: osx
+      osx_image: xcode8.3
+      compiler: clang
+      env: MYCC='clang' MYCXX='clang++'
+
+    - os: osx
+      osx_image: xcode8
       compiler: clang
       env: MYCC='clang' MYCXX='clang++'
 

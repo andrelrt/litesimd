@@ -38,7 +38,11 @@ set_target_properties(libgtest PROPERTIES
 #    "IMPORTED_LINK_INTERFACE_LIBRARIES" "${CMAKE_THREAD_LIBS_INIT}"
 #)
 
+if(CMAKE_VERSION VERSION_LESS "3.10")
+cmake_policy(SET CMP0057 NEW)
+else()
 cmake_policy(SET CMP0054 NEW)
+endif()
 include(GoogleTest)
 
 # Test project
