@@ -23,7 +23,7 @@
 #ifndef LITESIMD_ALGORITHM_IOTA_H
 #define LITESIMD_ALGORITHM_IOTA_H
 
-#include "../shuffle.h"
+#include <litesimd/shuffle.h>
 
 namespace litesimd {
 

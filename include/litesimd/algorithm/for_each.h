@@ -25,9 +25,9 @@
 
 #include <utility>
 #include <type_traits>
-#include "../compare.h"
-#include "../shuffle.h"
-#include "detail/for_each_loop.h"
+#include <litesimd/compare.h>
+#include <litesimd/shuffle.h>
+#include <litesimd/algorithm/detail/for_each_loop.h>
 
 namespace litesimd {
 

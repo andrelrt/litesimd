@@ -25,7 +25,7 @@
 
 #ifdef LITESIMD_HAS_SSE
 
-#include "../common/intravector.h"
+#include <litesimd/arch/common/intravector.h>
 
 namespace litesimd {
 

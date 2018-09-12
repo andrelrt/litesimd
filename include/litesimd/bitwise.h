@@ -23,10 +23,10 @@
 #ifndef LITESIMD_BITWISE_H
 #define LITESIMD_BITWISE_H
 
-#include "types.h"
-#include "intravector.h"
-#include "arch/bitwise.h"
-#include "detail/helper_macros.h"
+#include <litesimd/types.h>
+#include <litesimd/intravector.h>
+#include <litesimd/arch/bitwise.h>
+#include <litesimd/detail/helper_macros.h>
 
 namespace litesimd {
 

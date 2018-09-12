@@ -23,7 +23,7 @@
 #ifndef LITESIMD_ARCH_COMMON_SHUFFLE_H
 #define LITESIMD_ARCH_COMMON_SHUFFLE_H
 
-#include "../../types.h"
+#include <litesimd/types.h>
 
 namespace litesimd {
 

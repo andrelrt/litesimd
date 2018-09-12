@@ -30,9 +30,9 @@
 #include <x86intrin.h>
 #endif
 #include <type_traits>
-#include "types.h"
-#include "arch/compare.h"
-#include "detail/helper_macros.h"
+#include <litesimd/types.h>
+#include <litesimd/arch/compare.h>
+#include <litesimd/detail/helper_macros.h>
 
 namespace litesimd {
 

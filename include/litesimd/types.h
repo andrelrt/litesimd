@@ -24,7 +24,7 @@
 #define LITESIMD_TYPES_H
 
 #include <cstdint>
-#include "traits.h"
+#include <litesimd/traits.h>
 
 namespace litesimd {
 

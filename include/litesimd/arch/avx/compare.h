@@ -25,8 +25,8 @@
 
 #ifdef LITESIMD_HAS_AVX
 
-#include "../../types.h"
-#include "../common/compare.h"
+#include <litesimd/types.h>
+#include <litesimd/arch/common/compare.h>
 
 namespace litesimd {
 

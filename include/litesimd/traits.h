@@ -24,7 +24,7 @@
 #ifndef LITESIMD_TRAITS_H
 #define LITESIMD_TRAITS_H
 
-#include "arch/tag.h"
-#include "arch/traits.h"
+#include <litesimd/arch/tag.h>
+#include <litesimd/arch/traits.h>
 
 #endif //LITESIMD_TRAITS_H

@@ -26,7 +26,7 @@
 #ifdef LITESIMD_HAS_SSE
 
 #include <smmintrin.h>
-#include "../common/traits.h"
+#include <litesimd/arch/common/traits.h>
 
 namespace litesimd {
 

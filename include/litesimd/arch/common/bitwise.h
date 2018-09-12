@@ -23,7 +23,7 @@
 #ifndef LITESIMD_ARCH_COMMON_BITWISE_H
 #define LITESIMD_ARCH_COMMON_BITWISE_H
 
-#include "../../types.h"
+#include <litesimd/types.h>
 
 namespace litesimd {
 

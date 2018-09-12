@@ -23,9 +23,9 @@
 #ifndef LITESIMD_ARITHMETIC_H
 #define LITESIMD_ARITHMETIC_H
 
-#include "types.h"
-#include "arch/arithmetic.h"
-#include "detail/helper_macros.h"
+#include <litesimd/types.h>
+#include <litesimd/arch/arithmetic.h>
+#include <litesimd/detail/helper_macros.h>
 
 namespace litesimd {
 

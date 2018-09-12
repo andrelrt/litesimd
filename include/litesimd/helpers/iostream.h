@@ -26,9 +26,9 @@
 #include <iostream>
 #include <iomanip>
 #include <type_traits>
-#include "../types.h"
-#include "../shuffle.h"
-#include "../algorithm.h"
+#include <litesimd/types.h>
+#include <litesimd/shuffle.h>
+#include <litesimd/algorithm.h>
 
 namespace litesimd {
 
