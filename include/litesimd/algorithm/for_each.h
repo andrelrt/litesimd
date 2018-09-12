@@ -160,7 +160,7 @@ inline Function_T for_each_backward( SimdType_T vec, Function_T func )
  * \see for_each
  */
 template< typename ValueType_T, typename Function_T,
-          typename std::enable_if_t<std::is_integral<ValueType_T>::value>* = nullptr >
+          typename std::enable_if<std::is_integral<ValueType_T>::value>::type* = nullptr >
 inline Function_T for_each_index( uint32_t bitmask, Function_T func )
 {
     constexpr uint32_t mask = (1 << sizeof(ValueType_T)) -1;
@@ -175,7 +175,7 @@ inline Function_T for_each_index( uint32_t bitmask, Function_T func )
 }
 
 template< typename ValueType_T, typename Function_T,
-          typename std::enable_if_t<std::is_floating_point<ValueType_T>::value>* = nullptr >
+          typename std::enable_if<std::is_floating_point<ValueType_T>::value>::type* = nullptr >
 inline Function_T for_each_index( uint32_t bitmask, Function_T func )
 {
     while( bitmask != 0 )
@@ -225,7 +225,7 @@ inline Function_T for_each_index( uint32_t bitmask, Function_T func )
  * \see for_each_backward
  */
 template< typename ValueType_T, typename Function_T,
-          typename std::enable_if_t<std::is_integral<ValueType_T>::value>* = nullptr >
+          typename std::enable_if<std::is_integral<ValueType_T>::value>::type* = nullptr >
 inline Function_T for_each_index_backward( uint32_t bitmask, Function_T func )
 {
     constexpr uint32_t mask = (1 << sizeof(ValueType_T)) -1;
@@ -240,7 +240,7 @@ inline Function_T for_each_index_backward( uint32_t bitmask, Function_T func )
 }
 
 template< typename ValueType_T, typename Function_T,
-          typename std::enable_if_t<std::is_floating_point<ValueType_T>::value>* = nullptr >
+          typename std::enable_if<std::is_floating_point<ValueType_T>::value>::type* = nullptr >
 inline Function_T for_each_index_backward( uint32_t bitmask, Function_T func )
 {
     while( bitmask != 0 )
