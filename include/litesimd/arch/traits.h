@@ -23,6 +23,7 @@
 #ifndef LITESIMD_ARCH_TRAITS_H
 #define LITESIMD_ARCH_TRAITS_H
 
+#include <litesimd/arch/tag.h>
 #include <litesimd/arch/sse/traits.h>
 #include <litesimd/arch/avx/traits.h>
 

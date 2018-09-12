@@ -123,7 +123,6 @@ litesimd/
         compare.h               ; greater, equal_to, mask_to_bitmask, bitmask_to_high/low_index
         intravector.h           ; horizontal reduction
         shuffle.h               ; high/low_insert, blend, get/set<>
-        traits.h                ; Internal traits, should not included directly
         types.h                 ; simd_type
     samples/
         binary_search/          ; Benchmark lower_bound implementations
