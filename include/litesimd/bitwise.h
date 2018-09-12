@@ -188,7 +188,7 @@ inline typename SimdType_T::simd_value_type bit_xor( SimdType_T vec )
  * ```
  */
 template< typename LHS, typename RHS >
-inline auto operator&( LHS lhs, RHS rhs )
+inline auto operator&( LHS lhs, RHS rhs ) -> decltype( bit_and( lhs, rhs ) )
 {
     return bit_and( lhs, rhs );
 }
@@ -222,7 +222,7 @@ inline auto operator&( LHS lhs, RHS rhs )
  * ```
  */
 template< typename LHS, typename RHS >
-inline auto operator|( LHS lhs, RHS rhs )
+inline auto operator|( LHS lhs, RHS rhs ) -> decltype( bit_or( lhs, rhs ) )
 {
     return bit_or( lhs, rhs );
 }
@@ -256,7 +256,7 @@ inline auto operator|( LHS lhs, RHS rhs )
  * ```
  */
 template< typename LHS, typename RHS >
-inline auto operator^( LHS lhs, RHS rhs )
+inline auto operator^( LHS lhs, RHS rhs ) -> decltype( bit_xor( lhs, rhs ) )
 {
     return bit_xor( lhs, rhs );
 }
@@ -290,7 +290,7 @@ inline auto operator^( LHS lhs, RHS rhs )
  * ```
  */
 template< typename RHS >
-inline auto operator~( RHS rhs )
+inline auto operator~( RHS rhs ) -> decltype( bit_not( rhs ) )
 {
     return bit_not( rhs );
 }
