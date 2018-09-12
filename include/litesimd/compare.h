@@ -39,7 +39,7 @@ namespace litesimd {
 // Bitmask to index
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T,
-          std::enable_if< std::is_integral< ValueType_T >::value >::type* = nullptr >
+          typename std::enable_if< std::is_integral< ValueType_T >::value >::type* = nullptr >
 inline int
 bitmask_last_index( uint32_t bmask )
 {
@@ -56,7 +56,7 @@ bitmask_last_index( uint32_t bmask )
 }
 
 template< typename ValueType_T,
-          std::enable_if< std::is_integral< ValueType_T >::value >::type* = nullptr >
+          typename std::enable_if< std::is_integral< ValueType_T >::value >::type* = nullptr >
 inline int
 bitmask_first_index( uint32_t bmask )
 {
@@ -73,7 +73,7 @@ bitmask_first_index( uint32_t bmask )
 }
 
 template< typename ValueType_T,
-          std::enable_if< std::is_floating_point< ValueType_T >::value >::type* = nullptr >
+          typename std::enable_if< std::is_floating_point< ValueType_T >::value >::type* = nullptr >
 inline int
 bitmask_last_index( uint32_t bmask )
 {
@@ -90,7 +90,7 @@ bitmask_last_index( uint32_t bmask )
 }
 
 template< typename ValueType_T,
-          std::enable_if< std::is_floating_point< ValueType_T >::value >::type* = nullptr >
+          typename std::enable_if< std::is_floating_point< ValueType_T >::value >::type* = nullptr >
 inline int
 bitmask_first_index( uint32_t bmask )
 {

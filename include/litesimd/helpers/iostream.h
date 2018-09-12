@@ -35,7 +35,7 @@ namespace litesimd {
 // Stream Operators
 // -----------------------------------------------------------------------------
 template< typename SimdType_T,
-          std::enable_if<std::is_integral<typename SimdType_T::simd_value_type>::value>::type* = nullptr >
+          typename std::enable_if<std::is_integral<typename SimdType_T::simd_value_type>::value>::type* = nullptr >
 inline std::ostream& operator<<( std::ostream& out, SimdType_T vec )
 {
     std::ios_base::fmtflags f( out.flags() );
@@ -57,7 +57,7 @@ inline std::ostream& operator<<( std::ostream& out, SimdType_T vec )
 }
 
 template< typename SimdType_T,
-          std::enable_if<std::is_floating_point<typename SimdType_T::simd_value_type>::value>::type* = nullptr >
+          typename std::enable_if<std::is_floating_point<typename SimdType_T::simd_value_type>::value>::type* = nullptr >
 inline std::ostream& operator<<( std::ostream& out, SimdType_T vec )
 {
     std::ios_base::fmtflags f( out.flags() );
