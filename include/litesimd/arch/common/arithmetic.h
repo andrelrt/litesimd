@@ -113,6 +113,44 @@ template< typename ValueType_T, typename Tag_T = default_tag >
 simd_type< ValueType_T, Tag_T >
 sub( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
 
+/**
+ * \ingroup arithmetic
+ * \brief Multiply each value inside the packed SIMD register and save the lower bits.
+ *
+ * Each value inside the packed SIMD register are multiplied indenpendently and the
+ * lower bit of the result is saved on the same index inside the packed SIMD register.
+ *
+ * | Index | 3 | 2 | 1 | 0 |
+ * | :--- | :--: | :--: | :--: | :--: |
+ * | Register X | a | b | c | d |
+ * | Register Y | e | f | g | h |
+ * | litesimd::sub( X, Y ) | a - e | b - f | c - g | d - h |
+ *
+ * \param lhs, rhs SIMD registers to be subtracted
+ * \returns SIMD register with the difference of each packed value
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostreams>
+ * #include <litesimd/types.h>
+ * #include <litesimd/algorithm.h>
+ * #include <litesimd/helpers/iostream.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *     t_int32_simd a( 10 ), b( 1 );
+ *     std::cout << "sub( a, b ): " << ls::sub( a, b ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * sub( a, b ): ( 9, 9, 9, 9 )
+ * ```
+ *
+ * \see add
+ */
 template< typename ValueType_T, typename Tag_T = default_tag >
 simd_type< ValueType_T, Tag_T >
 mullo( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
