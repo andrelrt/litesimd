@@ -91,7 +91,7 @@ before_script:
       mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
       export PATH=${PWD}/cmake/bin:${PATH}
     fi; if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
-      brew update; brew install cmake
+      brew outdated cmake || brew upgrade cmake
     fi
 
 script:
