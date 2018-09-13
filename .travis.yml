@@ -26,14 +26,6 @@ matrix:
       env: MYCC='gcc-7' MYCXX='g++-7'
 
     - os: linux
-      compiler: gcc
-      addons:
-        apt:
-          sources: *all_sources
-          packages: ['gcc-6', 'g++-6', 'cmake', 'boost1.67']
-      env: MYCC='gcc-6' MYCXX='g++-6'
-
-    - os: linux
       compiler: clang
       addons:
         apt:
@@ -56,14 +48,6 @@ matrix:
           sources: *all_sources
           packages: ['clang-4.0', 'libstdc++-4.8-dev', 'cmake', 'boost1.67']
       env: MYCC='clang-4.0' MYCXX='clang++-4.0'
-
-    - os: linux
-      compiler: clang
-      addons:
-        apt:
-          sources: *all_sources
-          packages: ['clang-3.9', 'cmake', 'boost1.67']
-      env: MYCC='clang-3.9' MYCXX='clang++-3.9'
 
     - os: osx
       osx_image: xcode9.4
