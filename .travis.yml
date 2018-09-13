@@ -54,7 +54,7 @@ matrix:
       addons:
         apt:
           sources: *all_sources
-          packages: ['clang-4.0', 'libstdc++-4-dev', 'cmake', 'boost1.67']
+          packages: ['clang-4.0', 'libstdc++-4.8-dev', 'cmake', 'boost1.67']
       env: MYCC='clang-4.0' MYCXX='clang++-4.0'
 
     - os: linux
@@ -62,7 +62,7 @@ matrix:
       addons:
         apt:
           sources: *all_sources
-          packages: ['clang-3.9', 'libstdc++-3.9-dev', 'cmake', 'boost1.67']
+          packages: ['clang-3.9', 'cmake', 'boost1.67']
       env: MYCC='clang-3.9' MYCXX='clang++-3.9'
 
     - os: osx
