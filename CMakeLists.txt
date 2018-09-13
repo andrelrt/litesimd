@@ -1,5 +1,5 @@
 project(litesimd)
-cmake_minimum_required(VERSION 2.8)
+cmake_minimum_required(VERSION 3.9)
 
 find_package(Boost 1.62.0 REQUIRED COMPONENTS timer chrono system)
 
