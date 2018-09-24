@@ -36,8 +36,52 @@
 
 namespace litesimd {
 
-// Bitmask to index
-// ---------------------------------------------------------------------------------------
+/**
+ * \defgroup compare Comparision operations
+ *
+ * In litesimd, compare group has functions to compare values, with `grater than`
+ * and `equal to` operators, and to manipulate the result.
+ *
+ * All this functions are accessable at `<litesimd/compare.h>`
+ *
+ * The Litesimd comparision functions have 3 result types:
+ *
+ * - **mask**: Is the result of comparision intrincs. Is have the same SIMD type of
+ *   operands and hold the result as all bits 0 for `false` result and all bits 1 for
+ *   `true` result. Some SIMD intrics can use this mask as parameter to execute the
+ *   operation based on `true` and `false` values. @see blend
+ * - **bitmask**:
+ */
+
+/**
+ * \ingroup compare
+ * \brief Find the last index on a bitmask
+ *
+ *
+ *
+ * \param vec SIMD register to apply `AND` operator
+ * \returns Result of `AND` operation among all values
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostreams>
+ * #include <litesimd/types.h>
+ * #include <litesimd/bitwise.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd a( 0x71, 0x3c, 0x1e, 0x0f );
+ *     std::cout << "bit_and( a ): " << ls::bit_and( a ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * bit_and( a ): 8
+ * ```
+ */
 template< typename ValueType_T,
           typename std::enable_if< std::is_integral< ValueType_T >::value >::type* = nullptr >
 inline int
