@@ -49,7 +49,6 @@ namespace litesimd {
  *
  * **Example**
  * ```{.cpp}
- * // min example
  * #include <iostreams>
  * #include <litesimd/types.h>
  * #include <litesimd/algorithm.h>

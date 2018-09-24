@@ -54,7 +54,6 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( bit_xor, type )
  *
  * **Example**
  * ```{.cpp}
- * // min example
  * #include <iostreams>
  * #include <litesimd/types.h>
  * #include <litesimd/bitwise.h>
@@ -92,7 +91,6 @@ inline typename SimdType_T::simd_value_type bit_and( SimdType_T vec )
  *
  * **Example**
  * ```{.cpp}
- * // min example
  * #include <iostreams>
  * #include <litesimd/types.h>
  * #include <litesimd/bitwise.h>
@@ -130,7 +128,6 @@ inline typename SimdType_T::simd_value_type bit_or( SimdType_T vec )
  *
  * **Example**
  * ```{.cpp}
- * // min example
  * #include <iostreams>
  * #include <litesimd/types.h>
  * #include <litesimd/bitwise.h>
