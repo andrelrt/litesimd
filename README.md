@@ -121,7 +121,7 @@ litesimd/
         arithmetic.h            ; add, sub, mul, mullo, mulhi, div functions
         bitwise.h               ; bit_and, bit_or, bit_xor and bit_not functions
         compare.h               ; greater, equal_to, mask_to_bitmask, bitmask_to_high/low_index
-        intravector.h           ; horizontal reduction
+        intravector.h           ; generic horizontal reduction
         shuffle.h               ; high/low_insert, blend, get/set<>
         types.h                 ; simd_type
     samples/
