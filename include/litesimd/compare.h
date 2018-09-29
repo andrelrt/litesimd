@@ -46,11 +46,35 @@ namespace litesimd {
  *
  * The Litesimd comparision functions have 3 result types:
  *
- * - **mask**: Is the result of comparision intrincs. Is have the same SIMD type of
- *   operands and hold the result as all bits 0 for `false` result and all bits 1 for
- *   `true` result. Some SIMD intrics can use this mask as parameter to execute the
- *   operation based on `true` and `false` values. @see blend
- * - **bitmask**:
+ * - **mask**: Is the result of the comparison and have the same SIMD type of
+ *   operands. It represents the result as all bits 0 for `false` and all bits 1
+ *   for `true`. Some litesimd functions can use this mask as a parameter to execute
+ *   the operation based on `true` and `false` values. \see blend()
+ * - **bitmask**: Scalar version of the _mask_ result. It is calculated as the
+ *   highest bit of each 8 bits of SIMD register. It can be useful to calculate the
+ *   _index_ of `true` result and to use SIMD result on an `if` statement.
+ *   ```{.cpp}
+ *   auto bitmask = litesimd::mask_to_bitmask( mask );
+ *   if( bitmask == 0 ) {
+ *      // No bit set on mask
+ *   }
+ *   ``` 
+ * - **index**: Position inside the SIMD register with `true` result and is generated
+ *   using the bitmask. There are 2 functions to calculate indexes, one returns the
+ *   first index of the bitmask and the another returns the last index of the
+ *   bitmask. \see for_each_index() 
+ *
+ * Example of this results on SSE and int32_t
+ *
+ * | Index | 3 | 2 | 1 | 0 |
+ * | :--- | :--: | :--: | :--: | :--: |
+ * | litesimd::t_int32_simd X( 9, 8, 7, 6 ); | 9 | 8 | 7 | 6 |
+ * | litesimd::t_int32_simd Y( 9, 8, 5, 6 ); | 9 | 8 | 5 | 6 |
+ * | litesimd::t_int32_simd **mask** = litesimd::equal_to( X, Y ); | 0xFFFFFFFF | 0xFFFFFFFF | 0x00000000 | 0xFFFFFFFF |
+ * | uint16_t **bitmask** = litesimd::mask_to_bitmask( _mask_ ); | 0xFF0F ||||
+ * | int **first_index** = litesimd::bitmask_first_index( _bitmask_ ); | 0 ||||
+ * | int **last_index** = litesimd::bitmask_last_index( _bitmask_ ); | 3 ||||
+ *
  */
 
 /**

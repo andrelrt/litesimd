@@ -141,7 +141,7 @@ inline Function_T for_each_backward( SimdType_T vec, Function_T func )
  * {
  *     namespace ls = litesimd;
  *     auto a = ls::simd_type< int32_t, ls::sse_tag >( 4, 3, 2, 1 );
- *     auto b = ls::simd_type< int32_t, ls::sse_tag >( 4, 0, 0, 1 );
+ *     auto b = ls::simd_type< int32_t, ls::sse_tag >( 5, 3, 1, 1 );
  *     ls::for_each_index( ls::equal_to_bitmask( a, b ),
  *                         []( int index ) -> bool
  *     {
@@ -154,7 +154,7 @@ inline Function_T for_each_backward( SimdType_T vec, Function_T func )
  * Output on a SSE compilation
  * ```
  * Index 0 is equal
- * Index 3 is equal
+ * Index 2 is equal
  * ```
  * \see for_each_index_backward
  * \see for_each
@@ -206,7 +206,7 @@ inline Function_T for_each_index( uint32_t bitmask, Function_T func )
  * {
  *     namespace ls = litesimd;
  *     auto a = ls::simd_type< int32_t, ls::sse_tag >( 4, 3, 2, 1 );
- *     auto b = ls::simd_type< int32_t, ls::sse_tag >( 4, 0, 0, 1 );
+ *     auto b = ls::simd_type< int32_t, ls::sse_tag >( 5, 3, 1, 1 );
  *     ls::for_each_index_backward( ls::equal_to_bitmask( a, b ),
  *                                  []( int index ) -> bool
  *     {
@@ -218,7 +218,7 @@ inline Function_T for_each_index( uint32_t bitmask, Function_T func )
  * ```
  * Output on a SSE compilation
  * ```
- * Index 3 is equal
+ * Index 2 is equal
  * Index 0 is equal
  * ```
  * \see for_each_index
