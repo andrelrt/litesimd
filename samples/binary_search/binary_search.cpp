@@ -30,6 +30,7 @@
 #include <litesimd/types.h>
 #include <litesimd/compare.h>
 #include <litesimd/shuffle.h>
+#include <litesimd/arithmetic.h>
 #include <litesimd/helpers/containers.h>
 
 bool g_verbose = true;
@@ -233,7 +234,8 @@ template<> int is_zero< ls::avx_tag >( ls::simd_type< int32_t, ls::avx_tag > val
 }
 
 template <class ForwardIterator, class T, typename TAG_T >
-ForwardIterator lower_bound2( ForwardIterator beg, ForwardIterator end, const T& key )
+ForwardIterator simd_lower_bound2( ForwardIterator beg, ForwardIterator end,
+                                   const ls::simd_type< T, TAG_T > key )
 {
     using value_type = typename std::iterator_traits< ForwardIterator >::value_type;
     using simd_type  = ls::simd_type< value_type, TAG_T >;
@@ -244,33 +246,29 @@ ForwardIterator lower_bound2( ForwardIterator beg, ForwardIterator end, const T&
     if( size < 0x20 )
     {
         // Standard lower_bound on small sizes
-        return std::lower_bound( beg, end, key );
+        return std::lower_bound( beg, end, ls::get<0>( key ) );
     }
 
     size_t step = size / (array_size + 1);
 
     const value_type* start = &(*beg);
+
+    _mm_prefetch( start + step * 1, _MM_HINT_T0 );
+    _mm_prefetch( start + step * 2, _MM_HINT_T0 );
+    _mm_prefetch( start + step * 3, _MM_HINT_T0 );
+    _mm_prefetch( start + step * 4, _MM_HINT_T0 );
+    _mm_prefetch( start + step * 5, _MM_HINT_T0 );
+    _mm_prefetch( start + step * 6, _MM_HINT_T0 );
+    _mm_prefetch( start + step * 7, _MM_HINT_T0 );
+    _mm_prefetch( start + step * 8, _MM_HINT_T0 );
+
     // Create SIMD index key
-    ls::simd_type< int32_t, TAG_T > indexes;
-    for( size_t i = 1; i <= array_size; ++i )
-    {
-        // Preload SIMD search key values into processor cache
-        _mm_prefetch( start + (step*i), _MM_HINT_T0 );
-        indexes = ls::high_insert( indexes, (int32_t)(step*i) );
-    }
+    ls::simd_type< int32_t, TAG_T > indexes =
+        ls::mullo( ls::simd_type< int32_t, TAG_T >( 8, 7, 6, 5, 4, 3, 2, 1 ),
+                   ls::simd_type< int32_t, TAG_T >( step ) );
 
     // Create SIMD search key
     simd_type cmp = i32Gather< TAG_T >( start, indexes );
-
-    auto eq = ls::equal_to< value_type, TAG_T >( key, cmp );
-
-    if( !is_zero< TAG_T >( eq ) )
-    {
-        auto it = beg;
-        std::advance( it, step * ( 1 + ls::bitmask_last_index< value_type >(
-                                     ls::mask_to_bitmask< value_type, TAG_T >( eq ) ) ) );
-        return it;
-    }
 
     // N-Way search
     size_t i = ls::greater_last_index< value_type, TAG_T >( key, cmp ) + 1;
@@ -289,7 +287,13 @@ ForwardIterator lower_bound2( ForwardIterator beg, ForwardIterator end, const T&
         std::advance( itEnd, step + 1 );
     }
 
-    return lower_bound2< ForwardIterator, T, TAG_T >( it, itEnd, key );
+    return simd_lower_bound2< ForwardIterator, T, TAG_T >( it, itEnd, key );
+}
+
+template <class ForwardIterator, class T, typename TAG_T >
+ForwardIterator lower_bound2( ForwardIterator beg, ForwardIterator end, const T& key )
+{
+    return simd_lower_bound2< ForwardIterator, T, TAG_T >( beg, end, ls::simd_type< T, TAG_T >( key ) );
 }
 
 template< class Cont_T, typename TAG_T >
