@@ -32,13 +32,14 @@
 #include <litesimd/bitwise.h>
 #include <litesimd/shuffle.h>
 #include <litesimd/arithmetic.h>
+#include <litesimd/helpers/containers.h>
 
 bool g_verbose = true;
 namespace ls = litesimd;
 
 struct default_simd_to_lower
 {
-    void operator()( std::string& str )
+    void operator()( ls::string& str )
     {
         ls::t_int8_simd* data = (ls::t_int8_simd*) str.data();
 
@@ -65,7 +66,7 @@ struct default_simd_to_lower
 template< typename TAG_T >
 struct to_lower
 {
-    void operator()( std::string& str )
+    void operator()( ls::string& str )
     {
         constexpr static size_t array_size = ls::simd_type< int8_t, TAG_T >::simd_size;
         using simd_type = ls::simd_type< int8_t, TAG_T >;
@@ -124,7 +125,7 @@ maskstore< ls::avx_tag >( ls::simd_type< int8_t, ls::avx_tag >* ptr,
 template< typename TAG_T >
 struct maskmove_to_lower
 {
-    void operator()( std::string& str )
+    void operator()( ls::string& str )
     {
         constexpr static size_t array_size = ls::simd_type< int8_t, TAG_T >::simd_size;
         using simd_type = ls::simd_type< int8_t, TAG_T >;
@@ -152,7 +153,7 @@ struct maskmove_to_lower
 
 struct std_to_lower
 {
-    void operator()( std::string& str )
+    void operator()( ls::string& str )
     {
         for( size_t i = 0; i < str.size(); ++i )
         {
@@ -163,7 +164,7 @@ struct std_to_lower
 
 struct cachesize_to_lower
 {
-    void operator()( std::string& str )
+    void operator()( ls::string& str )
     {
         size_t sz = str.size();
         for( size_t i = 0; i < sz; ++i )
@@ -175,7 +176,7 @@ struct cachesize_to_lower
 
 struct autovec_to_lower
 {
-    void operator()( std::string& str )
+    void operator()( ls::string& str )
     {
         size_t sz = str.size();
         char* s = (char*) str.data();
@@ -186,17 +187,17 @@ struct autovec_to_lower
     }
 };
 
-void do_nothing( const std::string& );
+void do_nothing( const ls::string& );
 
 template< typename TO_LOWER_T >
-uint64_t bench( const std::string& name, size_t size, size_t loop )
+uint64_t bench( const ls::string& name, size_t size, size_t loop )
 {
 	using functor = TO_LOWER_T;
 
     boost::timer::cpu_timer timer;
     functor toLower;
 
-    std::string str( size, 'C' );
+    ls::string str( size, 'C' );
 
     timer.start();
     for( size_t j = 0; j < loop; ++j )

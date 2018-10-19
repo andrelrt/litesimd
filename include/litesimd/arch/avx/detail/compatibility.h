@@ -20,24 +20,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_HELPERS_CONTAINERS_H
-#define LITESIMD_HELPERS_CONTAINERS_H
+#ifndef LITESIMD_AVX_DETAIL_COMPATIBILITY_H
+#define LITESIMD_AVX_DETAIL_COMPATIBILITY_H
 
-#include <vector>
-#include <string>
-#include <boost/align/aligned_allocator.hpp>
+#ifdef LITESIMD_HAS_AVX
 
-namespace litesimd {
+#if defined(__GNUC__) && (GCC_VERSION < 70000)
+// old GCC workarounds
+static float _mm256_cvtss_f32( __m256 vec ) { return vec[0]; }
+static double _mm256_cvtsd_f64( __m256d vec ) { return vec[0]; }
+#endif
 
-// Aligned STL substitutes
-// ---------------------------------------------------------------------------------------
-template< typename Val_T >
-using vector = std::vector< Val_T, boost::alignment::aligned_allocator<Val_T, 64> >;
-
-using string = std::basic_string< char,
-                                  std::char_traits<char>,
-                                  boost::alignment::aligned_allocator<char, 64> >;
-
-} // namespace litesimd
-
-#endif // LITESIMD_HELPERS_CONTAINERS_H
+#endif // LITESIMD_HAS_AVX
+#endif // LITESIMD_AVX_DETAIL_COMPATIBILITY_H

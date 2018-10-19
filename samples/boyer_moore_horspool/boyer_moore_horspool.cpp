@@ -62,11 +62,19 @@ struct boost_searcher
         auto ret =
             boost::algorithm::boyer_moore_horspool_search( str.begin(), str.end(),
                                                            find.begin(), find.end() );
-        if( ret.first == str.end() )
+
+        // Boost changed the return value of boyer_moore_horspool_search in version 1.65.0
+        #if BOOST_VERSION > 106500
+        auto start = ret.first;
+        #else
+        auto start = ret;
+        #endif
+
+        if( start == str.end() )
         {
             return str.size();
         }
-        return std::distance( str.begin(), ret.first );
+        return std::distance( str.begin(), start );
     }
 };
 

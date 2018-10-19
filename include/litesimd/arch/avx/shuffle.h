@@ -27,6 +27,7 @@
 
 #include <litesimd/types.h>
 #include <litesimd/arch/common/shuffle.h>
+#include <litesimd/arch/avx/detail/compatibility.h>
 
 namespace litesimd {
 

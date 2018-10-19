@@ -21,7 +21,6 @@
 // SOFTWARE.
 
 #include <string>
+#include <litesimd/helpers/containers.h>
 
-void do_nothing( const std::string& )
-{
-}
+void do_nothing( const litesimd::string& ) {}
