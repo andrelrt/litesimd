@@ -51,8 +51,8 @@ namespace litesimd {
  *   for `true`. Some litesimd functions can use this mask as a parameter to execute
  *   the operation based on `true` and `false` values. \see blend()
  * - **bitmask**: Scalar version of the _mask_ result. It is calculated as the
- *   highest bit of each 8 bits of SIMD register. It can be useful to calculate the
- *   _index_ of `true` result and to use SIMD result on an `if` statement.
+ *   most significant bit of each 8 bits of SIMD register. It can be useful to calculate
+ *   the _index_ of `true` result and to use SIMD result on an `if` statement.
  *   ```{.cpp}
  *   auto bitmask = litesimd::mask_to_bitmask( mask );
  *   if( bitmask == 0 ) {
@@ -61,8 +61,8 @@ namespace litesimd {
  *   ``` 
  * - **index**: Position inside the SIMD register with `true` result and is generated
  *   using the bitmask. There are 2 functions to calculate indexes, one returns the
- *   first index of the bitmask and the another returns the last index of the
- *   bitmask. \see for_each_index() 
+ *   first index of the bitmask and the another returns the last index of the bitmask.
+ *   \see for_each_index()
  *
  * Example of this results on SSE and int32_t
  *
@@ -81,30 +81,34 @@ namespace litesimd {
  * \ingroup compare
  * \brief Find the last index on a bitmask
  *
- *
- *
- * \param vec SIMD register to apply `AND` operator
- * \returns Result of `AND` operation among all values
+ * \param bmask Bitmask to be searched
+ * \tparam ValueType_T Base type of original SIMD register
+ * \returns The highest index set on the bitmask
  *
  * **Example**
  * ```{.cpp}
  * #include <iostreams>
  * #include <litesimd/types.h>
- * #include <litesimd/bitwise.h>
+ * #include <litesimd/compare.h>
  *
  * int main()
  * {
  *     namespace ls = litesimd;
  *
- *     ls::t_int32_simd a( 0x71, 0x3c, 0x1e, 0x0f );
- *     std::cout << "bit_and( a ): " << ls::bit_and( a ) << std::endl;
+ *     ls::t_int32_simd x( 9, 8, 7, 6 );
+ *     ls::t_int32_simd y( 9, 8, 5, 6 );
+ *     auto mask = ls::equal_to( x, y ); // (0xFFFFFFFF, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF)
+ *     auto bitmask = ls::mask_to_bitmask( mask ); // 0xFF0F
+ *     std::cout << "bitmask_last_index< int32_t >( bitmask ): "
+ *               << ls::bitmask_last_index< int32_t >( bitmask ) << std::endl;
  *     return 0;
  * }
  * ```
  * Output on a SSE compilation
  * ```
- * bit_and( a ): 8
+ * bitmask_last_index< int32_t >( bitmask ): 3
  * ```
+ * @{
  */
 template< typename ValueType_T,
           typename std::enable_if< std::is_integral< ValueType_T >::value >::type* = nullptr >
@@ -123,6 +127,57 @@ bitmask_last_index( uint32_t bmask )
 #endif
 }
 
+template< typename ValueType_T,
+          typename std::enable_if< std::is_floating_point< ValueType_T >::value >::type* = nullptr >
+inline int
+bitmask_last_index( uint32_t bmask )
+{
+#ifdef _WIN32
+    unsigned long index;
+    return (0 == _BitScanReverse( &index, bmask ))
+        ? -1
+        : index;
+#else
+    return (bmask == 0)
+        ? -1
+        : _bit_scan_reverse( bmask );
+#endif
+}
+/**@}*/
+
+/**
+ * \ingroup compare
+ * \brief Find the first index on a bitmask
+ *
+ * \param bmask Bitmask to be searched
+ * \tparam ValueType_T Base type of original SIMD register
+ * \returns The lowest index set on the bitmask
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostreams>
+ * #include <litesimd/types.h>
+ * #include <litesimd/compare.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 9, 8, 7, 6 );
+ *     ls::t_int32_simd y( 9, 8, 5, 6 );
+ *     auto mask = ls::equal_to( x, y ); // (0xFFFFFFFF, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF)
+ *     auto bitmask = ls::mask_to_bitmask( mask ); // 0xFF0F
+ *     std::cout << "bitmask_first_index< int32_t >( bitmask ): "
+ *               << ls::bitmask_first_index< int32_t >( bitmask ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * bitmask_first_index< int32_t >( bitmask ): 0
+ * ```
+ */
+///@{
 template< typename ValueType_T,
           typename std::enable_if< std::is_integral< ValueType_T >::value >::type* = nullptr >
 inline int
@@ -143,23 +198,6 @@ bitmask_first_index( uint32_t bmask )
 template< typename ValueType_T,
           typename std::enable_if< std::is_floating_point< ValueType_T >::value >::type* = nullptr >
 inline int
-bitmask_last_index( uint32_t bmask )
-{
-#ifdef _WIN32
-    unsigned long index;
-    return (0 == _BitScanReverse( &index, bmask ))
-        ? -1
-        : index;
-#else
-    return (bmask == 0)
-        ? -1
-        : _bit_scan_reverse( bmask );
-#endif
-}
-
-template< typename ValueType_T,
-          typename std::enable_if< std::is_floating_point< ValueType_T >::value >::type* = nullptr >
-inline int
 bitmask_first_index( uint32_t bmask )
 {
 #ifdef _WIN32
@@ -173,6 +211,7 @@ bitmask_first_index( uint32_t bmask )
         : _bit_scan_forward( bmask );
 #endif
 }
+///@}
 
 // Greater than
 // ---------------------------------------------------------------------------------------
