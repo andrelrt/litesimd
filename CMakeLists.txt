@@ -11,6 +11,7 @@ set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 
 enable_testing()
 
+add_subdirectory(doc)
 add_subdirectory(samples)
 add_subdirectory(test)
 
