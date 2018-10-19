@@ -46,7 +46,7 @@ matrix:
       addons:
         apt:
           sources: *all_sources
-          packages: ['gcc-4.9', 'g++-4.9', 'cmake', 'boost1.56']
+          packages: ['gcc-4.9', 'g++-4.9', 'cmake', 'boost1.67']
       env: MYCC='gcc-4.9' MYCXX='g++-4.9'
 
     - os: linux
@@ -54,7 +54,7 @@ matrix:
       addons:
         apt:
           sources: *all_sources
-          packages: ['gcc-4.8', 'g++-4.8', 'cmake', 'boost1.56']
+          packages: ['gcc-4.8', 'g++-4.8', 'cmake', 'boost1.67']
       env: MYCC='gcc-4.8' MYCXX='g++-4.8'
 
     - os: linux
