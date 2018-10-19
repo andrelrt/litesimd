@@ -25,7 +25,7 @@
 
 #ifdef LITESIMD_HAS_AVX
 
-#if defined(__GNUC__) && (GCC_VERSION < 70000)
+#if defined(__GNUC__) && !defined(__clang__) && (GCC_VERSION < 70000)
 // old GCC workarounds
 static float _mm256_cvtss_f32( __m256 vec ) { return vec[0]; }
 static double _mm256_cvtsd_f64( __m256d vec ) { return vec[0]; }
