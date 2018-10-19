@@ -94,6 +94,11 @@ struct litesimd_boyer_moore_horspool2
 
         int32_t find_size = find.size();
 
+        size_t simd_str_size = str.size() / simd_size;
+        size_t simd_find_size = find_size / simd_size -1;
+        const simd* simd_str = reinterpret_cast<const simd*>( str.data() );
+        _mm_prefetch( (void*)(simd_str + simd_find_size), _MM_HINT_T0 );
+
         std::array< int32_t, 256 > index;
         index.fill( std::max<int32_t>( 1, find_size / simd_size ) );
         for( int32_t i = 0; i < find_size-1; ++i )
@@ -101,24 +106,20 @@ struct litesimd_boyer_moore_horspool2
             index[ find[ i ] ] = std::max<int32_t>( 1, (find_size - 1 - i)/simd_size );
         }
 
-        size_t simd_find_size = find_size / simd_size -1;
-        size_t simd_str_size = str.size() / simd_size;
+        const char* str_data = str.data();
 
         simd simd_last = simd( find.back() );
 
-        const simd* simd_str = reinterpret_cast<const simd*>( str.data() );
-
-        _mm_prefetch( (void*)(simd_str + simd_find_size), _MM_HINT_T0 );
         for( size_t simd_idx = simd_find_size; simd_idx < simd_str_size; )
         {
-            size_t base_end = (simd_idx+1) * simd_size;
-            size_t zskip = index[ str[ base_end - 1 ] ];
-            _mm_prefetch( (void*)(simd_str + simd_idx + zskip), _MM_HINT_T0 );
-
             auto mask = ls::equal_to< int8_t, Tag_T >( simd_last, simd_str[ simd_idx ] );
+
+            size_t base_end = (simd_idx+1) * simd_size;
 
             if( is_zero< Tag_T >( mask ) )
             {
+                size_t zskip = index[ str_data[ base_end - 1 ] ];
+                _mm_prefetch( (void*)(simd_str + simd_idx + zskip), _MM_HINT_T0 );
                 simd_idx += zskip;
             }
             else
@@ -137,10 +138,10 @@ struct litesimd_boyer_moore_horspool2
                     size_t idx = end_idx -1;
                     for( size_t i = find_size-1; i > 0; --i, --idx )
                     {
-                        if( str[ idx ] != find[ i ] )
+                        if( str_data[ idx ] != find[ i ] )
                         {
                             found = false;
-                            skip = index[ str[ idx ] ];
+                            skip = index[ str_data[ idx ] ];
                             _mm_prefetch( (void*)(simd_str + simd_idx + skip), _MM_HINT_T0 );
                             do_break = ( skip > simd_size ); // not found and it impossible for this simd has a hit
                             break;
@@ -162,6 +163,7 @@ struct litesimd_boyer_moore_horspool2
                 if( found )
                     return ret;
 
+                _mm_prefetch( (void*)(simd_str + simd_idx + skip), _MM_HINT_T0 );
                 simd_idx += skip;
             }
         }
