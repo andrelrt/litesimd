@@ -27,11 +27,40 @@
 
 namespace litesimd {
 
-// Mask to bitmask
-// ---------------------------------------------------------------------------------------
+/**
+ * \ingroup compare
+ * \brief Converts a SIMD mask to a bitmask
+ *
+ * \param mask SIMD mask to be converted
+ * \tparam ValueType_T Base type of original SIMD register
+ * \returns Bitmask equivalent
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostreams>
+ * #include <litesimd/types.h>
+ * #include <litesimd/compare.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 9, 8, 7, 6 );
+ *     ls::t_int32_simd y( 9, 8, 5, 6 );
+ *     auto mask = ls::equal_to( x, y ); // (0xFFFFFFFF, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF)
+ *     std::cout << "mask_to_bitmask< int32_t >( mask ): " << std::hex
+ *               << ls::mask_to_bitmask< int32_t >( mask ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * mask_to_bitmask< int32_t >( mask ): ff0f
+ * ```
+ */
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline typename simd_type< ValueType_T, Tag_T >::bitmask_type
-mask_to_bitmask( simd_type< ValueType_T, Tag_T > )
+mask_to_bitmask( simd_type< ValueType_T, Tag_T > /*mask*/ )
 {
     return 0;
 }
@@ -71,7 +100,7 @@ greater( simd_type< ValueType_T, Tag_T > /*lhs*/, simd_type< ValueType_T, Tag_T 
 
 /**
  * \ingroup compare
- * \brief Compares two SIMD registers and returns a mask with equal values
+ * \brief Compares two SIMD registers and returns a mask of equal values
  *
  * \param lhs, rhs Values to be compared
  * \tparam ValueType_T Base type of SIMD register

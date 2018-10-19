@@ -213,16 +213,43 @@ bitmask_first_index( uint32_t bmask )
 }
 ///@}
 
-// Greater than
+// Greater than adaptors
 // ---------------------------------------------------------------------------------------
 DEFINE_BINARY_FUNCTION_ADAPTORS( greater, type )
 
-// Greater than bitmask
-// ---------------------------------------------------------------------------------------
+/**
+ * \ingroup compare
+ * \brief Compares two SIMD registers and returns a bitmask representing the values of the first parameter is greater than the second parameter
+ *
+ * \param lhs, rhs Values to be compared
+ * \tparam ValueType_T Base type of SIMD register
+ * \returns Bitmask representing the values of the lhs parameter which are greater than the rhs parameter
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostreams>
+ * #include <litesimd/types.h>
+ * #include <litesimd/compare.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 9, 8, 7, 6 );
+ *     ls::t_int32_simd y( 9, 8, 5, 6 );
+ *     std::cout << "greater_bitmask( x, y ): " << std::hex << ls::greater_bitmask( x, y ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * greater_bitmask( x, y ): f0
+ * ```
+ */
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline typename simd_type< ValueType_T, Tag_T >::bitmask_type
 greater_bitmask( simd_type< ValueType_T, Tag_T > lhs,
-                      simd_type< ValueType_T, Tag_T > rhs )
+                 simd_type< ValueType_T, Tag_T > rhs )
 {
     return mask_to_bitmask< ValueType_T, Tag_T >(
                 greater< ValueType_T, Tag_T >( lhs, rhs )
@@ -231,12 +258,39 @@ greater_bitmask( simd_type< ValueType_T, Tag_T > lhs,
 
 DEFINE_BINARY_FUNCTION_ADAPTORS( greater_bitmask, bitmask_type )
 
-// Greater than high index
-// ---------------------------------------------------------------------------------------
+/**
+ * \ingroup compare
+ * \brief Compares two SIMD registers and returns the index of last item which the value of the first parameter is greater than the second parameter
+ *
+ * \param lhs, rhs Values to be compared
+ * \tparam ValueType_T Base type of SIMD register
+ * \returns Index of last item which the value of the lhs parameter which are greater than the rhs parameter
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostreams>
+ * #include <litesimd/types.h>
+ * #include <litesimd/compare.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 9, 8, 7, 6 );
+ *     ls::t_int32_simd y( 9, 1, 5, 6 );
+ *     std::cout << "greater_last_index( x, y ): " << ls::greater_last_index( x, y ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * greater_last_index( x, y ): 2
+ * ```
+ */
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline int
 greater_last_index( simd_type< ValueType_T, Tag_T > lhs,
-                         simd_type< ValueType_T, Tag_T > rhs )
+                    simd_type< ValueType_T, Tag_T > rhs )
 {
     return bitmask_last_index< ValueType_T >(
                 greater_bitmask< ValueType_T, Tag_T >( lhs, rhs )
@@ -245,12 +299,39 @@ greater_last_index( simd_type< ValueType_T, Tag_T > lhs,
 
 DEFINE_BINARY_FUNCTION_ADAPTORS( greater_last_index, index_type )
 
-// Greater than low index
-// ---------------------------------------------------------------------------------------
+/**
+ * \ingroup compare
+ * \brief Compares two SIMD registers and returns the index of first item which the value of the first parameter is greater than the second parameter
+ *
+ * \param lhs, rhs Values to be compared
+ * \tparam ValueType_T Base type of SIMD register
+ * \returns Index of first item which the value of the lhs parameter which are greater than the rhs parameter
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostreams>
+ * #include <litesimd/types.h>
+ * #include <litesimd/compare.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 9, 8, 7, 6 );
+ *     ls::t_int32_simd y( 9, 8, 5, 6 );
+ *     std::cout << "greater_first_index( x, y ): " << ls::greater_first_index( x, y ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * greater_first_index( x, y ): 1
+ * ```
+ */
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline int
 greater_first_index( simd_type< ValueType_T, Tag_T > lhs,
-                         simd_type< ValueType_T, Tag_T > rhs )
+                     simd_type< ValueType_T, Tag_T > rhs )
 {
     return bitmask_first_index< ValueType_T >(
                 greater_bitmask< ValueType_T, Tag_T >( lhs, rhs )
@@ -263,12 +344,39 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( greater_first_index, index_type )
 // ---------------------------------------------------------------------------------------
 DEFINE_BINARY_FUNCTION_ADAPTORS( equal_to, type )
 
-// Equals bitmask
-// ---------------------------------------------------------------------------------------
+/**
+ * \ingroup compare
+ * \brief Compares two SIMD registers and returns a bitmask of equal values
+ *
+ * \param lhs, rhs Values to be compared
+ * \tparam ValueType_T Base type of SIMD register
+ * \returns Bitmask representing the values of the lhs parameter which are equal to the rhs parameter
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostreams>
+ * #include <litesimd/types.h>
+ * #include <litesimd/compare.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 9, 8, 7, 6 );
+ *     ls::t_int32_simd y( 9, 8, 5, 6 );
+ *     std::cout << "equal_to_bitmask( x, y ): " << std::hex << ls::equal_to_bitmask( x, y ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * equal_to_bitmask( x, y ): ff0f
+ * ```
+ */
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline typename simd_type< ValueType_T, Tag_T >::bitmask_type
 equal_to_bitmask( simd_type< ValueType_T, Tag_T > lhs,
-                      simd_type< ValueType_T, Tag_T > rhs )
+                  simd_type< ValueType_T, Tag_T > rhs )
 {
     return mask_to_bitmask< ValueType_T, Tag_T >(
                 equal_to< ValueType_T, Tag_T >( lhs, rhs )
@@ -277,12 +385,39 @@ equal_to_bitmask( simd_type< ValueType_T, Tag_T > lhs,
 
 DEFINE_BINARY_FUNCTION_ADAPTORS( equal_to_bitmask, bitmask_type )
 
-// Equals high index
-// ---------------------------------------------------------------------------------------
+/**
+ * \ingroup compare
+ * \brief Compares two SIMD registers and returns the index of last item which the value is equal
+ *
+ * \param lhs, rhs Values to be compared
+ * \tparam ValueType_T Base type of SIMD register
+ * \returns The index of last equal item, or -1 if none is equal
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostreams>
+ * #include <litesimd/types.h>
+ * #include <litesimd/compare.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 9, 8, 7, 6 );
+ *     ls::t_int32_simd y( 9, 8, 5, 6 );
+ *     std::cout << "equal_to_last_index( x, y ): " << std::hex << ls::equal_to_last_index( x, y ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * equal_to_last_index( x, y ): 3
+ * ```
+ */
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline int
 equal_to_last_index( simd_type< ValueType_T, Tag_T > lhs,
-                         simd_type< ValueType_T, Tag_T > rhs )
+                     simd_type< ValueType_T, Tag_T > rhs )
 {
     return bitmask_last_index< ValueType_T >(
                 equal_to_bitmask< ValueType_T, Tag_T >( lhs, rhs )
@@ -291,8 +426,35 @@ equal_to_last_index( simd_type< ValueType_T, Tag_T > lhs,
 
 DEFINE_BINARY_FUNCTION_ADAPTORS( equal_to_last_index, index_type )
 
-// Equals low index
-// ---------------------------------------------------------------------------------------
+/**
+ * \ingroup compare
+ * \brief Compares two SIMD registers and returns the index of first item which the value is equal
+ *
+ * \param lhs, rhs Values to be compared
+ * \tparam ValueType_T Base type of SIMD register
+ * \returns The index of first equal item, or -1 if none is equal
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostreams>
+ * #include <litesimd/types.h>
+ * #include <litesimd/compare.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 9, 8, 7, 6 );
+ *     ls::t_int32_simd y( 9, 8, 5, 6 );
+ *     std::cout << "equal_to_first_index( x, y ): " << std::hex << ls::equal_to_first_index( x, y ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * equal_to_first_index( x, y ): 0
+ * ```
+ */
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline int
 equal_to_first_index( simd_type< ValueType_T, Tag_T > lhs,
