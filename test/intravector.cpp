@@ -60,4 +60,39 @@ TYPED_TEST(IntravectorTypedTest, HorizontalAritmeticTest)
     EXPECT_EQ( sum, ls::horizontal( a, ls::add< type, tag > ) );
 }
 
+TEST(BaseTest, HorizontalIntrincsTest)
+{
+    // Sum ones, because iota will give us an overflow
+    auto  i8 = ls::simd_type<  int8_t, ls::sse_tag >( 1 );
+    auto i16 = ls::iota< int16_t, ls::sse_tag >( 1 );
+    auto i32 = ls::iota< int32_t, ls::sse_tag >( 1 );
+    auto i64 = ls::iota< int64_t, ls::sse_tag >( 1 );
+    auto f32 = ls::iota<   float, ls::sse_tag >( 1 );
+    auto f64 = ls::iota<  double, ls::sse_tag >( 1 );
+
+    EXPECT_EQ( 16, ls::horizontal(  i8, _mm_add_epi8 ) );
+    EXPECT_EQ( 36, ls::horizontal( i16, _mm_add_epi16 ) );
+    EXPECT_EQ( 10, ls::horizontal( i32, _mm_add_epi32 ) );
+    EXPECT_EQ(  3, ls::horizontal( i64, _mm_add_epi64 ) );
+    EXPECT_FLOAT_EQ(  10, ls::horizontal( f32, _mm_add_ps ) );
+    EXPECT_DOUBLE_EQ(  3, ls::horizontal( f64, _mm_add_pd ) );
+
+#ifdef LITESIMD_HAS_AVX
+    // Sum ones, because iota will give us an overflow
+    auto  i8a = ls::simd_type<  int8_t, ls::avx_tag >( 1 );
+    auto i16a = ls::iota< int16_t, ls::avx_tag >( 1 );
+    auto i32a = ls::iota< int32_t, ls::avx_tag >( 1 );
+    auto i64a = ls::iota< int64_t, ls::avx_tag >( 1 );
+    auto f32a = ls::iota<   float, ls::avx_tag >( 1 );
+    auto f64a = ls::iota<  double, ls::avx_tag >( 1 );
+
+    EXPECT_EQ(  32, ls::horizontal(  i8a, _mm256_add_epi8 ) );
+    EXPECT_EQ( 136, ls::horizontal( i16a, _mm256_add_epi16 ) );
+    EXPECT_EQ(  36, ls::horizontal( i32a, _mm256_add_epi32 ) );
+    EXPECT_EQ(  10, ls::horizontal( i64a, _mm256_add_epi64 ) );
+    EXPECT_FLOAT_EQ(  36, ls::horizontal( f32a, _mm256_add_ps ) );
+    EXPECT_DOUBLE_EQ( 10, ls::horizontal( f64a, _mm256_add_pd ) );
+#endif // LITESIMD_HAS_AVX
+}
+
 #endif // LITESIMD_HAS_SSE
