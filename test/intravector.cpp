@@ -60,6 +60,26 @@ TYPED_TEST(IntravectorTypedTest, HorizontalAritmeticTest)
     EXPECT_EQ( sum, ls::horizontal( a, ls::add< type, tag > ) );
 }
 
+TYPED_TEST(IntravectorTypedTest, HorizontalLambdaTest)
+{
+    using type = typename TypeParam::first_type;
+    using tag = typename TypeParam::second_type;
+    using simd = ls::simd_type< type, tag >;
+
+    simd a = ls::iota< type, tag >( 1 );
+    type sum = 0;
+    for( size_t i = 0; i < simd::simd_size; ++i )
+    {
+        sum += i + 2;
+    }
+    --sum;
+    auto func = []( simd lhs, simd rhs ) -> simd
+    {
+        return ls::add( static_cast< type >( 1 ), ls::add( lhs, rhs ) );
+    };
+    EXPECT_EQ( sum, ls::horizontal( a, func ) );
+}
+
 TEST(BaseTest, HorizontalIntrincsTest)
 {
     // Sum ones, because iota will give us an overflow
