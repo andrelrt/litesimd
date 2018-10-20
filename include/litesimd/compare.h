@@ -39,7 +39,7 @@ namespace litesimd {
 /**
  * \defgroup compare Comparision operations
  *
- * In litesimd, compare group has functions to compare values, with `grater than`
+ * In litesimd, the compare group has functions to compare values, with `grater than`
  * and `equal to` operators, and to manipulate the result.
  *
  * All this functions are accessable at `<litesimd/compare.h>`
