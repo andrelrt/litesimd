@@ -55,7 +55,7 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( div, type )
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/arithmetic.h>
  * #include <litesimd/helpers/iostream.h>
@@ -89,7 +89,7 @@ inline auto operator+( LHS lhs, RHS rhs ) -> decltype( add( lhs, rhs ) )
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/arithmetic.h>
  * #include <litesimd/helpers/iostream.h>

@@ -39,7 +39,7 @@ namespace litesimd {
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/bitwise.h>
  * #include <litesimd/helpers/iostream.h>
@@ -71,7 +71,7 @@ bit_and( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/bitwise.h>
  * #include <litesimd/helpers/iostream.h>
@@ -103,7 +103,7 @@ bit_or( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/bitwise.h>
  * #include <litesimd/helpers/iostream.h>
@@ -135,7 +135,7 @@ bit_xor( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/bitwise.h>
  * #include <litesimd/helpers/iostream.h>

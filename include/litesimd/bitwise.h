@@ -54,7 +54,7 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( bit_xor, type )
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/bitwise.h>
  *
@@ -91,7 +91,7 @@ inline typename SimdType_T::simd_value_type bit_and( SimdType_T vec )
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/bitwise.h>
  *
@@ -128,7 +128,7 @@ inline typename SimdType_T::simd_value_type bit_or( SimdType_T vec )
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/bitwise.h>
  *
@@ -165,7 +165,7 @@ inline typename SimdType_T::simd_value_type bit_xor( SimdType_T vec )
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/bitwise.h>
  * #include <litesimd/helpers/iostream.h>
@@ -199,7 +199,7 @@ inline auto operator&( LHS lhs, RHS rhs ) -> decltype( bit_and( lhs, rhs ) )
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/bitwise.h>
  * #include <litesimd/helpers/iostream.h>
@@ -233,7 +233,7 @@ inline auto operator|( LHS lhs, RHS rhs ) -> decltype( bit_or( lhs, rhs ) )
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/bitwise.h>
  * #include <litesimd/helpers/iostream.h>
@@ -267,7 +267,7 @@ inline auto operator^( LHS lhs, RHS rhs ) -> decltype( bit_xor( lhs, rhs ) )
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/bitwise.h>
  * #include <litesimd/helpers/iostream.h>

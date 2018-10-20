@@ -50,7 +50,7 @@ namespace litesimd {
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/algorithm.h>
  * #include <litesimd/helpers/iostream.h>
@@ -95,7 +95,7 @@ add( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/algorithm.h>
  * #include <litesimd/helpers/iostream.h>
@@ -140,7 +140,7 @@ sub( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/algorithm.h>
  * #include <litesimd/helpers/iostream.h>
@@ -186,7 +186,7 @@ mullo( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/algorithm.h>
  * #include <litesimd/helpers/iostream.h>

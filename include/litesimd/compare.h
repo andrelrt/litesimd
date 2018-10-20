@@ -87,7 +87,7 @@ namespace litesimd {
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/compare.h>
  *
@@ -155,7 +155,7 @@ bitmask_last_index( uint32_t bmask )
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/compare.h>
  *
@@ -227,7 +227,7 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( greater, type )
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/compare.h>
  *
@@ -268,7 +268,7 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( greater_bitmask, bitmask_type )
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/compare.h>
  *
@@ -309,7 +309,7 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( greater_last_index, index_type )
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/compare.h>
  *
@@ -354,7 +354,7 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( equal_to, type )
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/compare.h>
  *
@@ -395,7 +395,7 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( equal_to_bitmask, bitmask_type )
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/compare.h>
  *
@@ -436,7 +436,7 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( equal_to_last_index, index_type )
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/compare.h>
  *

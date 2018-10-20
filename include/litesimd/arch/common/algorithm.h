@@ -47,7 +47,7 @@ namespace litesimd {
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/algorithm.h>
  * #include <litesimd/helpers/iostream.h>
@@ -88,7 +88,7 @@ min( simd_type< Value_T, Tag_T >, simd_type< Value_T, Tag_T > ){}
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/algorithm.h>
  * #include <litesimd/helpers/iostream.h>

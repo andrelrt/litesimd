@@ -49,7 +49,7 @@ namespace litesimd {
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/algorithm.h>
  *
@@ -91,7 +91,7 @@ inline typename SimdType_T::simd_value_type min( SimdType_T vec )
  * **Example**
  * ```{.cpp}
  * // max example
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/algorithm.h>
  *

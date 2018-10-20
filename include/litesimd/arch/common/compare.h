@@ -37,7 +37,7 @@ namespace litesimd {
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/compare.h>
  *
@@ -75,7 +75,7 @@ mask_to_bitmask( simd_type< ValueType_T, Tag_T > /*mask*/ )
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/compare.h>
  *
@@ -108,7 +108,7 @@ greater( simd_type< ValueType_T, Tag_T > /*lhs*/, simd_type< ValueType_T, Tag_T 
  *
  * **Example**
  * ```{.cpp}
- * #include <iostreams>
+ * #include <iostream>
  * #include <litesimd/types.h>
  * #include <litesimd/compare.h>
  *
