@@ -72,7 +72,7 @@ namespace litesimd {
  */
 template< typename ValueType_T, typename Tag_T = default_tag >
 simd_type< ValueType_T, Tag_T >
-add( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
+add( simd_type< ValueType_T, Tag_T > lhs, simd_type< ValueType_T, Tag_T > rhs ){}
 
 /**
  * \ingroup arithmetic
@@ -117,7 +117,7 @@ add( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
  */
 template< typename ValueType_T, typename Tag_T = default_tag >
 simd_type< ValueType_T, Tag_T >
-sub( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
+sub( simd_type< ValueType_T, Tag_T > lhs, simd_type< ValueType_T, Tag_T > rhs ){}
 
 /**
  * \ingroup arithmetic
@@ -163,7 +163,7 @@ sub( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
  */
 template< typename ValueType_T, typename Tag_T = default_tag >
 simd_type< ValueType_T, Tag_T >
-mullo( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
+mullo( simd_type< ValueType_T, Tag_T > lhs, simd_type< ValueType_T, Tag_T > rhs ){}
 
 /**
  * \ingroup arithmetic
@@ -209,11 +209,11 @@ mullo( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
  */
 template< typename ValueType_T, typename Tag_T = default_tag >
 simd_type< ValueType_T, Tag_T >
-mulhi( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
+mulhi( simd_type< ValueType_T, Tag_T > lhs, simd_type< ValueType_T, Tag_T > rhs ){}
 
 template< typename ValueType_T, typename Tag_T = default_tag >
 simd_type< ValueType_T, Tag_T >
-div( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
+div( simd_type< ValueType_T, Tag_T > lhs, simd_type< ValueType_T, Tag_T > rhs ){}
 
 } // namespace litesimd
 

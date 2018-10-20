@@ -60,7 +60,7 @@ namespace litesimd {
  */
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline simd_type< ValueType_T, Tag_T >
-bit_and( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
+bit_and( simd_type< ValueType_T, Tag_T > lhs, simd_type< ValueType_T, Tag_T > rhs ){}
 
 /**
  * \ingroup bitwise
@@ -92,7 +92,7 @@ bit_and( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
  */
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline simd_type< ValueType_T, Tag_T >
-bit_or( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
+bit_or( simd_type< ValueType_T, Tag_T > lhs, simd_type< ValueType_T, Tag_T > rhs ){}
 
 /**
  * \ingroup bitwise
@@ -124,7 +124,7 @@ bit_or( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
  */
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline simd_type< ValueType_T, Tag_T >
-bit_xor( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
+bit_xor( simd_type< ValueType_T, Tag_T > lhs, simd_type< ValueType_T, Tag_T > rhs ){}
 
 /**
  * \ingroup bitwise

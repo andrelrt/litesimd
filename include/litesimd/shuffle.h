@@ -192,6 +192,7 @@ get( simd_type< ValueType_T, Tag_T > vec )
  * fail with <b>`"Index out of bounds"`</b> error on invalid values.
  *
  * \param vec SIMD register
+ * \param val The value to be set
  * \tparam index Index of the value inside the SIMD register
  * \tparam ValueType_T Base type of original SIMD register
  * \returns The value extracted
