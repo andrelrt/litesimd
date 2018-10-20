@@ -30,7 +30,7 @@ namespace litesimd {
 /**
  * \defgroup intravector Intravector operations
  *
- * In litesimd, the intravector compare group has functions which operates between
+ * In litesimd, the intravector group has functions which operates between
  * the values of one SIMD register.
  *
  * All this functions are accessable at `<litesimd/intravector.h>`
@@ -39,6 +39,17 @@ namespace litesimd {
 /**
  * \ingroup intravector
  * \brief Apply a generic SIMD binary function to reduce all SIMD values to a single one.
+ *
+ * The SIMD binary function should receive 2 simd_type and return the same type.
+ * Lambda functions could be used as well.
+ *
+ * ```{.cpp}
+ * ls::t_int32_simd vec( 1 );
+ * ls::horizontal( vec, []( ls::t_int32_simd x, ls::t_int32_simd y )
+ * {
+ *     return (x ^ y) | 1;
+ * } );
+ * ```
  *
  * \param vec SIMD register to be reduced
  * \param func SIMD binary function
