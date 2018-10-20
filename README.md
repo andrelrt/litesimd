@@ -46,7 +46,7 @@ int main()
     int32_t val = 5;
 
     // int32_simd_size is how many int32_t fits on t_int32_simd (8)
-    for( size_t i = 0; i <= ls::int32_simd_size; ++i )
+    for( size_t i = 0; i <= ls::t_int32_simd::simd_size; ++i )
     {
         // Compare 'val' against all 'cmp' values
         uint32_t bitmask = ls::greater_bitmask( val, cmp );

@@ -46,7 +46,7 @@ int main()
     int32_t val = 5;
 
     // int32_simd_size is how many int32_t fits on t_int32_simd (4 - SSE, 8 - AVX)
-    for( size_t i = 0; i <= ls::int32_simd_size; ++i )
+    for( size_t i = 0; i <= ls::t_int32_simd::simd_size; ++i )
     {
         // Compare 'val' against all 'cmp' values
         uint32_t mask = ls::greater_bitmask( val, cmp );
@@ -68,7 +68,7 @@ int main()
                       << " is less than all values of " << cmp
                       << std::endl;
         }
-        else if( index == ls::int32_simd_size -1 )
+        else if( index == ls::t_int32_simd::simd_size-1 )
         {
             std::cout << "The value " << val
                       << " is greater than all values of " << cmp

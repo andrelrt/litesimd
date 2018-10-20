@@ -43,8 +43,8 @@ struct default_simd_to_lower
     {
         ls::t_int8_simd* data = (ls::t_int8_simd*) str.data();
 
-        size_t sz = str.size() & ~(ls::int8_simd_size-1);
-        for( size_t i = 0; i < sz; i += ls::int8_simd_size)
+        size_t sz = str.size() & ~(ls::t_int32_simd::simd_size-1);
+        for( size_t i = 0; i < sz; i += ls::t_int32_simd::simd_size)
         {
             *data = ls::blend< int8_t >(
                         ls::bit_and< int8_t >(

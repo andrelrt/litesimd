@@ -30,7 +30,7 @@
 namespace litesimd {
 
 /**
- * \defgroup shuffle SIMD register manipulation
+ * \defgroup shuffle Register manipulation
  *
  * In litesimd, the shuffle group has functions to manipulate the SIMD register.
  *

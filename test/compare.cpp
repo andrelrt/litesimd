@@ -144,15 +144,15 @@ TEST(SimdCompareTest, GreaterThanDefault)
     ls::t_int32_simd cmp;
     int32_t* pCmp = reinterpret_cast<int32_t*>( &cmp );
     int32_t val = 2;
-    for( size_t i = 0; i < ls::int32_simd_size; ++i )
+    for( size_t i = 0; i < ls::t_int32_simd::simd_size; ++i )
     {
         pCmp[ i ] = val;
         val += 2;
     }
-    ls::t_bitmask mask = 0;
+    ls::t_int32_simd::bitmask_type mask = 0;
     val = 1;
 
-    for( ls::t_bitmask i = 0; i < ls::int32_simd_size + 1; ++i )
+    for( ls::t_int32_simd::bitmask_type i = 0; i < ls::t_int32_simd::simd_size + 1; ++i )
     {
         EXPECT_EQ( mask, ls::greater_bitmask( val, cmp ) )
             << "val: " << val
@@ -183,17 +183,17 @@ TEST(SimdCompareTest, GreaterThanDefaultSimd)
     ls::t_int32_simd cmp;
     int32_t* pCmp = reinterpret_cast<int32_t*>( &cmp );
     int32_t val = 2;
-    for( size_t i = 0; i < ls::int32_simd_size; ++i )
+    for( size_t i = 0; i < ls::t_int32_simd::simd_size; ++i )
     {
         pCmp[ i ] = val;
         val += 2;
     }
-    ls::t_bitmask mask = 0;
+    ls::t_int32_simd::bitmask_type mask = 0;
     val = 1;
 
-    for( ls::t_bitmask i = 0; i < ls::int32_simd_size + 1; ++i )
+    for( ls::t_int32_simd::bitmask_type i = 0; i < ls::t_int32_simd::simd_size + 1; ++i )
     {
-        auto simdVal = ls::from_value( val );
+        auto simdVal = ls::simd_type< int32_t >( val );
         EXPECT_EQ( mask, ls::greater_bitmask( simdVal, cmp ) )
             << "val: " << val
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
@@ -203,7 +203,7 @@ TEST(SimdCompareTest, GreaterThanDefaultSimd)
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
             << ls::greater_last_index( simdVal, cmp );
 
-        simdVal = ls::from_value( val + 1 );
+        simdVal = ls::simd_type< int32_t >( val + 1 );
         EXPECT_EQ( mask, ls::greater_bitmask( simdVal, cmp ) )
             << "val: " << val + 1
             << " - hex: 0x" << std::hex << std::setw(8) << std::setfill( '0' )
