@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/andrelrt/litesimd.svg?branch=master)](https://travis-ci.org/andrelrt/litesimd) [![Build status](https://ci.appveyor.com/api/projects/status/t3fmylykanoma9ja/branch/master?svg=true)](https://ci.appveyor.com/project/andrelrt/litesimd/branch/master) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
+[![Build Status](https://travis-ci.org/andrelrt/litesimd.svg?branch=master)](https://travis-ci.org/andrelrt/litesimd) [![Build status](https://ci.appveyor.com/api/projects/status/t3fmylykanoma9ja/branch/master?svg=true)](https://ci.appveyor.com/project/andrelrt/litesimd/branch/master) [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) [![Documentation](https://codedocs.xyz/andrelrt/litesimd.svg)](https://codedocs.xyz/andrelrt/litesimd/)
 
 Litesimd is a no overhead, header only, C++ library for SIMD processing. This library goal is to provide tools for developers to incorporate SIMD processing in all kinds of algorithms not only for calculations. To achieve this goal, some design principles are observed.
 
