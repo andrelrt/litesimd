@@ -81,6 +81,8 @@ TYPED_TEST(IntravectorTypedTest, HorizontalLambdaTest)
     EXPECT_EQ( sum, ls::horizontal( a, func ) );
 }
 
+#if (__GNUC__ >= 5) || defined(__clang__)
+// Not compatible with old GCCs
 TEST(BaseTest, HorizontalIntrincsTest)
 {
     // Sum ones, because iota will give us an overflow
@@ -115,5 +117,6 @@ TEST(BaseTest, HorizontalIntrincsTest)
     EXPECT_DOUBLE_EQ( 10, ls::horizontal( f64a, _mm256_add_pd ) );
 #endif // LITESIMD_HAS_AVX
 }
+#endif // __GNUC__
 
 #endif // LITESIMD_HAS_SSE
