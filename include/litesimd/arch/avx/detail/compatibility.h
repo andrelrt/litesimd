@@ -34,7 +34,7 @@ static inline double _mm256_cvtsd_f64( __m256d vec ) { return _mm_cvtsd_f64( _mm
 #if defined(_MSC_VER)
 static inline __m256i _mm256_insert_epi64( __m256i vec, int64_t val, const int imm8 )
 {
-    return _mm256_blend_epi32( vec, _mm_set1_epi64x( val ), 3 << (2*imm8) );
+    return _mm256_blend_epi32( vec, _mm256_set1_epi64x( val ), 3 << (2*imm8) );
 }
 #endif _MSC_VER
 
