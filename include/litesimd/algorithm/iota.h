@@ -23,7 +23,7 @@
 #ifndef LITESIMD_ALGORITHM_IOTA_H
 #define LITESIMD_ALGORITHM_IOTA_H
 
-#include <litesimd/shuffle.h>
+#include <litesimd/arithmetic.h>
 
 namespace litesimd {
 
@@ -33,7 +33,7 @@ namespace litesimd {
  *
  * Assigns to every element in SIMD register successive values of _val_, as if incremented with `++val` after each element is written.
  *
- * \param val Start value (default 0)
+ * \param val Start value (optional, default 0)
  * \returns SIMD register with increasing values
  *
  * **Example**
@@ -62,15 +62,16 @@ namespace litesimd {
  */
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline simd_type< ValueType_T, Tag_T >
-iota( ValueType_T val = 0 )
+iota( ValueType_T val )
 {
-    using simd_type = simd_type< ValueType_T, Tag_T >;
-    simd_type ret;
-    for( size_t i = 0; i < simd_type::simd_size; ++i )
-    {
-        ret = high_insert( ret, static_cast< ValueType_T >( val + i ) );
-    }
-    return ret;
+    return add( val, simd_type< ValueType_T, Tag_T >::iota() );
+}
+
+template< typename ValueType_T, typename Tag_T = default_tag >
+inline simd_type< ValueType_T, Tag_T >
+iota()
+{
+    return simd_type< ValueType_T, Tag_T >::iota();
 }
 
 } // namespace litesimd

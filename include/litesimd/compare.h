@@ -110,38 +110,21 @@ namespace litesimd {
  * ```
  * @{
  */
-template< typename ValueType_T,
+template< typename ValueType_T, typename Tag_T = default_tag,
           typename std::enable_if< std::is_integral< ValueType_T >::value >::type* = nullptr >
 inline int
 bitmask_last_index( uint32_t bmask )
 {
-#ifdef _WIN32
-    unsigned long index;
-    return (0 == _BitScanReverse( &index, bmask ))
-        ? -1
-        : index / sizeof(ValueType_T);
-#else
-    return (bmask == 0)
-        ? -1
-        : _bit_scan_reverse( bmask ) / sizeof(ValueType_T);
-#endif
+    auto bsr = bit_scan_reverse< Tag_T >( bmask );
+    return bsr.second ? bsr.first/sizeof(ValueType_T) : -1;
 }
 
-template< typename ValueType_T,
+template< typename ValueType_T, typename Tag_T = default_tag,
           typename std::enable_if< std::is_floating_point< ValueType_T >::value >::type* = nullptr >
 inline int
 bitmask_last_index( uint32_t bmask )
 {
-#ifdef _WIN32
-    unsigned long index;
-    return (0 == _BitScanReverse( &index, bmask ))
-        ? -1
-        : index;
-#else
-    return (bmask == 0)
-        ? -1
-        : _bit_scan_reverse( bmask );
-#endif
+    return bit_scan_reverse< Tag_T >( bmask ).first;
 }
 /**@}*/
 
@@ -178,38 +161,21 @@ bitmask_last_index( uint32_t bmask )
  * ```
  */
 ///@{
-template< typename ValueType_T,
+template< typename ValueType_T, typename Tag_T = default_tag,
           typename std::enable_if< std::is_integral< ValueType_T >::value >::type* = nullptr >
 inline int
 bitmask_first_index( uint32_t bmask )
 {
-#ifdef _WIN32
-    unsigned long index;
-    return (0 == _BitScanForward( &index, bmask ))
-        ? -1
-        : index / sizeof(ValueType_T);
-#else
-    return (bmask == 0)
-        ? -1
-        : _bit_scan_forward( bmask ) / sizeof(ValueType_T);
-#endif
+    auto bsr = bit_scan_forward< Tag_T >( bmask );
+    return bsr.second ? bsr.first/sizeof(ValueType_T) : -1;
 }
 
-template< typename ValueType_T,
+template< typename ValueType_T, typename Tag_T = default_tag,
           typename std::enable_if< std::is_floating_point< ValueType_T >::value >::type* = nullptr >
 inline int
 bitmask_first_index( uint32_t bmask )
 {
-#ifdef _WIN32
-    unsigned long index;
-    return (0 == _BitScanForward( &index, bmask ))
-        ? -1
-        : index;
-#else
-    return (bmask == 0)
-        ? -1
-        : _bit_scan_forward( bmask );
-#endif
+    return bit_scan_forward< Tag_T >( bmask ).first;
 }
 ///@}
 
@@ -292,7 +258,7 @@ inline int
 greater_last_index( simd_type< ValueType_T, Tag_T > lhs,
                     simd_type< ValueType_T, Tag_T > rhs )
 {
-    return bitmask_last_index< ValueType_T >(
+    return bitmask_last_index< ValueType_T, Tag_T >(
                 greater_bitmask< ValueType_T, Tag_T >( lhs, rhs )
             );
 }

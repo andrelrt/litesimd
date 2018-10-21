@@ -159,14 +159,14 @@ inline Function_T for_each_backward( SimdType_T vec, Function_T func )
  * \see for_each_index_backward
  * \see for_each
  */
-template< typename ValueType_T, typename Function_T,
+template< typename ValueType_T, typename Function_T, typename Tag_T = default_tag,
           typename std::enable_if<std::is_integral<ValueType_T>::value>::type* = nullptr >
 inline Function_T for_each_index( uint32_t bitmask, Function_T func )
 {
     constexpr uint32_t mask = (1 << sizeof(ValueType_T)) -1;
     while( bitmask != 0 )
     {
-        int idx = bitmask_first_index< ValueType_T >( bitmask );
+        int idx = bitmask_first_index< ValueType_T, Tag_T >( bitmask );
         if( !func( idx ) )
             break;
         bitmask &= ~(mask << (idx*sizeof(ValueType_T)));
@@ -174,13 +174,13 @@ inline Function_T for_each_index( uint32_t bitmask, Function_T func )
     return std::move( func );
 }
 
-template< typename ValueType_T, typename Function_T,
+template< typename ValueType_T, typename Function_T, typename Tag_T = default_tag,
           typename std::enable_if<std::is_floating_point<ValueType_T>::value>::type* = nullptr >
 inline Function_T for_each_index( uint32_t bitmask, Function_T func )
 {
     while( bitmask != 0 )
     {
-        int idx = bitmask_first_index< ValueType_T >( bitmask );
+        int idx = bitmask_first_index< ValueType_T, Tag_T >( bitmask );
         if( !func( idx ) )
             break;
         bitmask &= ~(1 << idx);

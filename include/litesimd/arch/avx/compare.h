@@ -27,8 +27,23 @@
 
 #include <litesimd/types.h>
 #include <litesimd/arch/common/compare.h>
+#include <litesimd/arch/sse/compare.h>
 
 namespace litesimd {
+
+// Bit scan
+// ---------------------------------------------------------------------------------------
+template<> inline std::pair<int, bool>
+bit_scan_forward< avx_tag >( uint32_t bitmask )
+{
+    return bit_scan_forward< sse_tag >( bitmask );
+}
+
+template<> inline std::pair<int, bool>
+bit_scan_reverse< avx_tag >( uint32_t bitmask )
+{
+    return bit_scan_reverse< sse_tag >( bitmask );
+}
 
 // Mask to bitmask
 // ---------------------------------------------------------------------------------------

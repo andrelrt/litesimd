@@ -31,6 +31,39 @@
 
 namespace litesimd {
 
+
+// Bit scan
+// ---------------------------------------------------------------------------------------
+template<> inline std::pair<int, bool>
+bit_scan_forward< sse_tag >( uint32_t bitmask )
+{
+#ifdef _WIN32
+    unsigned long index;
+    return (0 == _BitScanForward( &index, bitmask ))
+        ? std::make_pair( -1, false )
+        : std::make_pair( index, true );
+#else
+    return (bitmask == 0)
+        ? std::make_pair( -1, false )
+        : std::make_pair( _bit_scan_forward( bitmask ), true );
+#endif
+}
+
+template<> inline std::pair<int, bool>
+bit_scan_reverse< sse_tag >( uint32_t bitmask )
+{
+#ifdef _WIN32
+    unsigned long index;
+    return (0 == _BitScanReverse( &index, bitmask ))
+        ? std::make_pair( -1, false )
+        : std::make_pair( index, true );
+#else
+    return (bitmask == 0)
+        ? std::make_pair( -1, false )
+        : std::make_pair( _bit_scan_reverse( bitmask ), true );
+#endif
+}
+
 // Mask to bitmask
 // ---------------------------------------------------------------------------------------
 #define DEF_MASK_TO_BITMASK( TYPE_T, CMD ) \
@@ -38,7 +71,6 @@ template<> inline typename simd_type< TYPE_T, sse_tag >::bitmask_type \
 mask_to_bitmask< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > mask ) { \
     return CMD( mask ); \
 }
-
 DEF_MASK_TO_BITMASK( int8_t,  _mm_movemask_epi8 )
 DEF_MASK_TO_BITMASK( int16_t, _mm_movemask_epi8 )
 DEF_MASK_TO_BITMASK( int32_t, _mm_movemask_epi8 )

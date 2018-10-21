@@ -23,9 +23,18 @@
 #ifndef LITESIMD_ARCH_COMMON_COMPARE_H
 #define LITESIMD_ARCH_COMMON_COMPARE_H
 
+#include <utility>
 #include <litesimd/types.h>
 
 namespace litesimd {
+
+// Bit scan
+// ---------------------------------------------------------------------------------------
+template< typename Tag_T = default_tag >
+std::pair<int, bool> bit_scan_forward( uint32_t bitmask ){}
+
+template< typename Tag_T = default_tag >
+std::pair<int, bool> bit_scan_reverse( uint32_t bitmask ){}
 
 /**
  * \ingroup compare

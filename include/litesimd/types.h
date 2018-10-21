@@ -142,6 +142,9 @@ public:
     /// Returns a simd_type with all bits 1
     static inline simd_type ones() { return simd_type( simd_traits::ones() ); }
 
+    /// Returns a simd_type with increasing values from 0 to simd_size -1, eg. (3, 2, 1, 0).
+    static inline simd_type iota() { return simd_type( simd_traits::iota() ); }
+
 private:
     inner_type v_;
 };
