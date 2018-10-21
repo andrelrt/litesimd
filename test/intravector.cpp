@@ -50,6 +50,7 @@ TYPED_TEST(IntravectorTypedTest, HorizontalAritmeticTest)
     using type = typename TypeParam::first_type;
     using tag = typename TypeParam::second_type;
     using simd = ls::simd_type< type, tag >;
+    using func_t = simd(*)(simd, simd);
 
     simd a = ls::iota< type, tag >( 1 );
     type sum = 0;
@@ -57,7 +58,7 @@ TYPED_TEST(IntravectorTypedTest, HorizontalAritmeticTest)
     {
         sum += i + 1;
     }
-    EXPECT_EQ( sum, ls::horizontal( a, ls::add< type, tag > ) );
+    EXPECT_EQ( sum, ls::horizontal( a, static_cast< func_t >(ls::add< type, tag >) ) );
 }
 
 TYPED_TEST(IntravectorTypedTest, HorizontalLambdaTest)

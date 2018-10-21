@@ -68,9 +68,12 @@ namespace litesimd {
  * {
  *     namespace ls = litesimd;
  *
+ *     using func_t = ls::t_int32_simd(*)(ls::t_int32_simd, ls::t_int32_simd);
+ *
  *     ls::t_int32_simd x( 1, 2, 3, 4 );
  *     std::cout << "horizontal( x, add ): "
- *               << ls::horizontal( x, ls::add< int32_t > ) << std::endl;
+ *               << ls::horizontal( x, static_cast< func_t >(ls::add< int32_t >) )
+ *               << std::endl;
  *     return 0;
  * }
  * ```
