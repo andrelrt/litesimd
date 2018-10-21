@@ -29,11 +29,34 @@
 
 namespace litesimd {
 
-// Aligned STL substitutes
-// ---------------------------------------------------------------------------------------
+/**
+ * \defgroup helpers Helper classes and compatibility
+ *
+ * Helpers defines a group of type substitution and `std` compatibility functions
+ * and classes.
+ *
+ * Each file must be included separately from the path `<litesimd/helpers/[file].h>`
+ */
+
+/**
+ * \ingroup helpers
+ * \brief Aligned `std::vector`
+ *
+ * This type is a drop-in substitute to `std::vector` with aligned allocator.
+ *
+ * Depends on `boost::align`.
+ */
 template< typename Val_T >
 using vector = std::vector< Val_T, boost::alignment::aligned_allocator<Val_T, 64> >;
 
+/**
+ * \ingroup helpers
+ * \brief Aligned `std::string`
+ *
+ * This type is a drop-in substitute to `std::string` with aligned allocator.
+ *
+ * Depends on `boost::align`.
+ */
 using string = std::basic_string< char,
                                   std::char_traits<char>,
                                   boost::alignment::aligned_allocator<char, 64> >;

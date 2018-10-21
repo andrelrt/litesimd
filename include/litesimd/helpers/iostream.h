@@ -32,8 +32,14 @@
 
 namespace litesimd {
 
-// Stream Operators
-// -----------------------------------------------------------------------------
+/**
+ * \ingroup helpers
+ * \brief Compatibility version to `operator<<` to output a `simd_type` on `ostream`.
+ *
+ * \param out Output stream
+ * \param vec simd_type to print to stream
+ * \return The output stream
+ */
 template< typename SimdType_T,
           typename std::enable_if<std::is_integral<typename SimdType_T::simd_value_type>::value>::type* = nullptr >
 inline std::ostream& operator<<( std::ostream& out, SimdType_T vec )
