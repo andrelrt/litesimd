@@ -32,7 +32,7 @@ namespace litesimd {
 
 template<> struct traits<  int8_t, sse_tag >{
     using simd_type = __m128i;
-    using bitmask_type = uint16_t;
+    using bitmask_type = uint32_t;
     static inline simd_type zero() { return _mm_setzero_si128(); }
     static inline simd_type ones() { return _mm_cmpeq_epi8( zero(), zero() ); }
     static inline simd_type from_value( int8_t v ) { return _mm_set1_epi8( v ); }
@@ -49,7 +49,7 @@ template<> struct traits<  int8_t, sse_tag >{
 
 template<> struct traits<  int16_t, sse_tag >{
     using simd_type = __m128i;
-    using bitmask_type = uint16_t;
+    using bitmask_type = uint32_t;
     static inline simd_type zero() { return _mm_setzero_si128(); }
     static inline simd_type ones() { return _mm_cmpeq_epi8( zero(), zero() ); }
     static inline simd_type from_value( int16_t v ) { return _mm_set1_epi16( v ); }
@@ -63,7 +63,7 @@ template<> struct traits<  int16_t, sse_tag >{
 
 template<> struct traits<  int32_t, sse_tag >{
     using simd_type = __m128i;
-    using bitmask_type = uint16_t;
+    using bitmask_type = uint32_t;
     static inline simd_type zero() { return _mm_setzero_si128(); }
     static inline simd_type ones() { return _mm_cmpeq_epi8( zero(), zero() ); }
     static inline simd_type from_value( int32_t v ) { return _mm_set1_epi32( v ); }
@@ -76,7 +76,7 @@ template<> struct traits<  int32_t, sse_tag >{
 
 template<> struct traits<  int64_t, sse_tag >{
     using simd_type = __m128i;
-    using bitmask_type = uint16_t;
+    using bitmask_type = uint32_t;
     static inline simd_type zero() { return _mm_setzero_si128(); }
     static inline simd_type ones() { return _mm_cmpeq_epi8( zero(), zero() ); }
     static inline simd_type from_value( int64_t v ) { return _mm_set1_epi64x( v ); }
@@ -89,7 +89,7 @@ template<> struct traits<  int64_t, sse_tag >{
 
 template<> struct traits<   float, sse_tag >{
     using simd_type = __m128;
-    using bitmask_type = uint16_t;
+    using bitmask_type = uint32_t;
     static inline simd_type zero() { return _mm_setzero_ps(); }
     static inline simd_type ones() { return _mm_cmpeq_ps( zero(), zero() ); }
     static inline simd_type from_value( float v ) { return _mm_set1_ps( v ); }
@@ -102,7 +102,7 @@ template<> struct traits<   float, sse_tag >{
 
 template<> struct traits<  double, sse_tag >{
     using simd_type = __m128d;
-    using bitmask_type = uint16_t;
+    using bitmask_type = uint32_t;
     static inline simd_type zero() { return _mm_setzero_pd(); }
     static inline simd_type ones() { return _mm_cmpeq_pd( zero(), zero() ); }
     static inline simd_type from_value( double v ) { return _mm_set1_pd( v ); }
