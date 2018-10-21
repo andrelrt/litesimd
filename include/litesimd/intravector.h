@@ -85,6 +85,15 @@ inline ValueType_T horizontal( simd_type< ValueType_T, Tag_T > vec, Function_T f
     return intravector_op< ValueType_T, Tag_T >()( vec, func );
 }
 
+template< typename SimdType_T, typename Function_T,
+          typename SimdType_T::simd_value_type* = nullptr >
+inline typename SimdType_T::simd_value_type
+horizontal( SimdType_T vec, Function_T func )
+{
+    return horizontal< typename SimdType_T::simd_value_type, Function_T,
+                       typename SimdType_T::simd_tag >( vec, func );
+}
+
 } // namespace litesimd
 
 #endif // LITESIMD_INTRAVECTOR_H
