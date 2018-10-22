@@ -23,9 +23,11 @@
 #ifndef LITESIMD_ARCH_AVX_ALGORITHM_H
 #define LITESIMD_ARCH_AVX_ALGORITHM_H
 
-#include "../common/algorithm.h"
-#include "../../compare.h"
-#include "../../shuffle.h"
+#ifdef LITESIMD_HAS_AVX
+
+#include <litesimd/arch/common/algorithm.h>
+#include <litesimd/compare.h>
+#include <litesimd/shuffle.h>
 
 namespace litesimd {
 
@@ -73,4 +75,5 @@ max< int64_t, avx_tag >( simd_type< int64_t, avx_tag > lhs, simd_type< int64_t, 
 
 } // namespace litesimd
 
+#endif // LITESIMD_HAS_AVX
 #endif // LITESIMD_ARCH_AVX_ALGORITHM_H

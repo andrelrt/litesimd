@@ -26,8 +26,8 @@
 #ifdef LITESIMD_HAS_SSE
 
 #include <smmintrin.h>
-#include "../../types.h"
-#include "../common/shuffle.h"
+#include <litesimd/types.h>
+#include <litesimd/arch/common/shuffle.h>
 
 namespace litesimd {
 

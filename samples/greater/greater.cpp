@@ -32,16 +32,21 @@ int main()
 {
     namespace ls = litesimd;
 
-    // int32_t vector in default instruction set (AVX2)
+    // int32_t vector in default instruction set (SSE/AVX)
     ls::t_int32_simd cmp;
 
     // litesimd types are intrincs compatible
+#ifdef LITESIMD_HAS_AVX
     cmp = _mm256_set_epi32( 80, 70, 60, 50, 40, 30, 20, 10 );
+#else
+    // No AVX, using SSE
+    cmp = _mm_set_epi32( 40, 30, 20, 10 );
+#endif // LITESIMD_HAS_AVX
 
     int32_t val = 5;
 
-    // int32_simd_size is how many int32_t fits on t_int32_simd (8)
-    for( size_t i = 0; i <= ls::int32_simd_size; ++i )
+    // int32_simd_size is how many int32_t fits on t_int32_simd (4 - SSE, 8 - AVX)
+    for( size_t i = 0; i <= ls::t_int32_simd::simd_size; ++i )
     {
         // Compare 'val' against all 'cmp' values
         uint32_t mask = ls::greater_bitmask( val, cmp );
@@ -63,7 +68,7 @@ int main()
                       << " is less than all values of " << cmp
                       << std::endl;
         }
-        else if( index == ls::int32_simd_size -1 )
+        else if( index == ls::t_int32_simd::simd_size-1 )
         {
             std::cout << "The value " << val
                       << " is greater than all values of " << cmp
@@ -82,3 +87,16 @@ int main()
     }
     return 0;
 }
+
+// The output on AVX will be
+//
+// $ ./greater
+// The value 5 is less than all values of (80, 70, 60, 50, 40, 30, 20, 10)
+// The value 15 is between items 0 and 1 of (80, 70, 60, 50, 40, 30, 20, 10)
+// The value 25 is between items 1 and 2 of (80, 70, 60, 50, 40, 30, 20, 10)
+// The value 35 is between items 2 and 3 of (80, 70, 60, 50, 40, 30, 20, 10)
+// The value 45 is between items 3 and 4 of (80, 70, 60, 50, 40, 30, 20, 10)
+// The value 55 is between items 4 and 5 of (80, 70, 60, 50, 40, 30, 20, 10)
+// The value 65 is between items 5 and 6 of (80, 70, 60, 50, 40, 30, 20, 10)
+// The value 75 is between items 6 and 7 of (80, 70, 60, 50, 40, 30, 20, 10)
+// The value 85 is greater than all values of (80, 70, 60, 50, 40, 30, 20, 10)

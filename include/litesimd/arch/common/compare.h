@@ -23,30 +23,122 @@
 #ifndef LITESIMD_ARCH_COMMON_COMPARE_H
 #define LITESIMD_ARCH_COMMON_COMPARE_H
 
-#include "../../types.h"
+#include <utility>
+#include <litesimd/types.h>
 
 namespace litesimd {
 
-// Mask to bitmask
+// Bit scan
 // ---------------------------------------------------------------------------------------
+template< typename Tag_T = default_tag >
+std::pair<int, bool> bit_scan_forward( uint32_t bitmask ){}
+
+template< typename Tag_T = default_tag >
+std::pair<int, bool> bit_scan_reverse( uint32_t bitmask ){}
+
+/**
+ * \ingroup compare
+ * \brief Converts a SIMD mask to a bitmask
+ *
+ * \param mask SIMD mask to be converted
+ * \tparam ValueType_T Base type of original SIMD register
+ * \returns Bitmask equivalent
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/compare.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 9, 8, 7, 6 );
+ *     ls::t_int32_simd y( 9, 8, 5, 6 );
+ *     auto mask = ls::equal_to( x, y ); // (0xFFFFFFFF, 0xFFFFFFFF, 0x00000000, 0xFFFFFFFF)
+ *     std::cout << "mask_to_bitmask< int32_t >( mask ): " << std::hex
+ *               << ls::mask_to_bitmask< int32_t >( mask ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * mask_to_bitmask< int32_t >( mask ): ff0f
+ * ```
+ */
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline typename simd_type< ValueType_T, Tag_T >::bitmask_type
-mask_to_bitmask( simd_type< ValueType_T, Tag_T > )
+mask_to_bitmask( simd_type< ValueType_T, Tag_T > mask )
 {
     return 0;
 }
 
-// Greater than
-// ---------------------------------------------------------------------------------------
+/**
+ * \ingroup compare
+ * \brief Compares two SIMD registers and returns a mask representing the values of the first parameter is greater than the second parameter
+ *
+ * \param lhs, rhs Values to be compared
+ * \tparam ValueType_T Base type of SIMD register
+ * \returns Mask representing the values of the lhs parameter which are greater than the rhs parameter
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/compare.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 9, 8, 7, 6 );
+ *     ls::t_int32_simd y( 9, 8, 5, 6 );
+ *     std::cout << "greater( x, y ): " << std::hex << ls::greater( x, y ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * greater( x, y ): (0, 0, ffffffff, 0)
+ * ```
+ */
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline simd_type< ValueType_T, Tag_T >
-greater( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
+greater( simd_type< ValueType_T, Tag_T > lhs, simd_type< ValueType_T, Tag_T > rhs ){}
 
-// Equals
-// ---------------------------------------------------------------------------------------
+/**
+ * \ingroup compare
+ * \brief Compares two SIMD registers and returns a mask of equal values
+ *
+ * \param lhs, rhs Values to be compared
+ * \tparam ValueType_T Base type of SIMD register
+ * \returns Mask representing the values of the lhs parameter which are equal to the rhs parameter
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/compare.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 9, 8, 7, 6 );
+ *     ls::t_int32_simd y( 9, 8, 5, 6 );
+ *     std::cout << "equal_to( x, y ): " << std::hex << ls::equal_to( x, y ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * equal_to( x, y ): (ffffffff, ffffffff, 0, ffffffff)
+ * ```
+ */
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline simd_type< ValueType_T, Tag_T >
-equal_to( simd_type< ValueType_T, Tag_T >, simd_type< ValueType_T, Tag_T > ){}
+equal_to( simd_type< ValueType_T, Tag_T > lhs, simd_type< ValueType_T, Tag_T > rhs ){}
 
 } // namespace litesimd
 

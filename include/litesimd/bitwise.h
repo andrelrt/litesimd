@@ -23,12 +23,21 @@
 #ifndef LITESIMD_BITWISE_H
 #define LITESIMD_BITWISE_H
 
-#include "types.h"
-#include "intravector.h"
-#include "arch/bitwise.h"
-#include "detail/helper_macros.h"
+#include <litesimd/types.h>
+#include <litesimd/intravector.h>
+#include <litesimd/arch/bitwise.h>
+#include <litesimd/detail/helper_macros.h>
 
 namespace litesimd {
+
+/**
+ * \defgroup bitwise Bitwise operations
+ *
+ * In litesimd, bitwise group has functions to execute the basic binary operations
+ * (and, or, xor, not).
+ *
+ * All this functions are accessable at `<litesimd/bitwise.h>`
+ */
 
 // Basic bitwise operations adaptors
 // ---------------------------------------------------------------------------------------
@@ -36,6 +45,33 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( bit_and, type )
 DEFINE_BINARY_FUNCTION_ADAPTORS( bit_or, type )
 DEFINE_BINARY_FUNCTION_ADAPTORS( bit_xor, type )
 
+/**
+ * \ingroup bitwise
+ * \brief Returns the result of `AND` operation among all numbers in the SIMD register.
+ *
+ * \param vec SIMD register to apply `AND` operator
+ * \returns Result of `AND` operation among all values
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/bitwise.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd a( 0x71, 0x3c, 0x1e, 0x0f );
+ *     std::cout << "bit_and( a ): " << ls::bit_and( a ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * bit_and( a ): 8
+ * ```
+ */
 template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
 inline typename SimdType_T::simd_value_type bit_and( SimdType_T vec )
 {
@@ -46,6 +82,33 @@ inline typename SimdType_T::simd_value_type bit_and( SimdType_T vec )
     return intravector_op< type, tag >()( vec, op() );
 }
 
+/**
+ * \ingroup bitwise
+ * \brief Returns the result of `OR` operation among all numbers in the SIMD register.
+ *
+ * \param vec SIMD register to apply `OR` operator
+ * \returns Result of `OR` operation among all values
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/bitwise.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd a( 9, 2, 4, 8 );
+ *     std::cout << "bit_or( a ): " << ls::bit_or( a ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * bit_or( a ): 15
+ * ```
+ */
 template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
 inline typename SimdType_T::simd_value_type bit_or( SimdType_T vec )
 {
@@ -56,6 +119,33 @@ inline typename SimdType_T::simd_value_type bit_or( SimdType_T vec )
     return intravector_op< type, tag >()( vec, op() );
 }
 
+/**
+ * \ingroup bitwise
+ * \brief Returns the result of `XOR` operation among all numbers in the SIMD register.
+ *
+ * \param vec SIMD register to apply `XOR` operator
+ * \returns Result of `XOR` operation among all values
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/bitwise.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd a( 9, 2, 4, 8 );
+ *     std::cout << "bit_xor( a ): " << ls::bit_xor( a ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * bit_xor( a ): 7
+ * ```
+ */
 template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
 inline typename SimdType_T::simd_value_type bit_xor( SimdType_T vec )
 {
@@ -66,28 +156,140 @@ inline typename SimdType_T::simd_value_type bit_xor( SimdType_T vec )
     return intravector_op< type, tag >()( vec, op() );
 }
 
+/**
+ * \ingroup bitwise
+ * \brief Returns the bitwise AND operation between passed parameters.
+ *
+ * \param lhs, rhs SIMD registers to apply bitwise AND operation.
+ * \returns SIMD register with the result of the operation.
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/bitwise.h>
+ * #include <litesimd/helpers/iostream.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd a( 3 ), b( 6 );
+ *     std::cout << "a & b:  " << a & b << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * a & b: (2, 2, 2, 2)
+ * ```
+ */
 template< typename LHS, typename RHS >
-inline auto operator&( LHS lhs, RHS rhs )
+inline auto operator&( LHS lhs, RHS rhs ) -> decltype( bit_and( lhs, rhs ) )
 {
     return bit_and( lhs, rhs );
 }
 
+/**
+ * \ingroup bitwise
+ * \brief Returns the bitwise OR operation between passed parameters.
+ *
+ * \param lhs, rhs SIMD registers to apply bitwise OR operation.
+ * \returns SIMD register with the result of the operation.
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/bitwise.h>
+ * #include <litesimd/helpers/iostream.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd a( 3 ), b( 6 );
+ *     std::cout << "a | b:  " << a | b << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * a | b: (7, 7, 7, 7)
+ * ```
+ */
 template< typename LHS, typename RHS >
-inline auto operator|( LHS lhs, RHS rhs )
+inline auto operator|( LHS lhs, RHS rhs ) -> decltype( bit_or( lhs, rhs ) )
 {
     return bit_or( lhs, rhs );
 }
 
+/**
+ * \ingroup bitwise
+ * \brief Returns the bitwise XOR operation between passed parameters.
+ *
+ * \param lhs, rhs SIMD registers to apply bitwise XOR operation.
+ * \returns SIMD register with the result of the operation.
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/bitwise.h>
+ * #include <litesimd/helpers/iostream.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd a( 3 ), b( 6 );
+ *     std::cout << "a ^ b:  " << a ^ b << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * a ^ b: (5, 5, 5, 5)
+ * ```
+ */
 template< typename LHS, typename RHS >
-inline auto operator^( LHS lhs, RHS rhs )
+inline auto operator^( LHS lhs, RHS rhs ) -> decltype( bit_xor( lhs, rhs ) )
 {
     return bit_xor( lhs, rhs );
 }
 
-template< typename LHS >
-inline auto operator~( LHS lhs )
+/**
+ * \ingroup bitwise
+ * \brief Inverts all bits on a SIMD register.
+ *
+ * \param rhs SIMD register to negate.
+ * \returns SIMD register with all bit inverted.
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/bitwise.h>
+ * #include <litesimd/helpers/iostream.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd a( 0xfffffff0 );
+ *     std::cout << "~a: " << ~a << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * ~a: (15, 15, 15, 15)
+ * ```
+ */
+template< typename RHS >
+inline auto operator~( RHS rhs ) -> decltype( bit_not( rhs ) )
 {
-    return bit_not( lhs );
+    return bit_not( rhs );
 }
 
 } // namespace litesimd

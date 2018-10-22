@@ -23,14 +23,78 @@
 #ifndef LITESIMD_INTRAVECTOR_H
 #define LITESIMD_INTRAVECTOR_H
 
-#include "arch/intravector.h"
+#include <litesimd/arch/intravector.h>
 
 namespace litesimd {
 
+/**
+ * \defgroup intravector Intravector operations
+ *
+ * In litesimd, the intravector group has functions which operates between
+ * the values of one SIMD register.
+ *
+ * All this functions are accessable at `<litesimd/intravector.h>`
+ */
+
+/**
+ * \ingroup intravector
+ * \brief Apply a generic SIMD binary function to reduce all SIMD values to a single one.
+ *
+ * The SIMD binary function should receive 2 simd_type and return the same type.
+ * Lambda functions could be used as well.
+ *
+ * ```{.cpp}
+ * ls::t_int32_simd vec( 1 );
+ * ls::horizontal( vec, []( ls::t_int32_simd x, ls::t_int32_simd y )
+ * {
+ *     return (x ^ y) | 1;
+ * } );
+ * ```
+ *
+ * \param vec SIMD register to be reduced
+ * \param func SIMD binary function
+ * \tparam ValueType_T Base type of original SIMD register
+ * \tparam Function_T Binary function type
+ * \returns The result of reduction
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/arithmetic.h>
+ * #include <litesimd/intravector.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     using func_t = ls::t_int32_simd(*)(ls::t_int32_simd, ls::t_int32_simd);
+ *
+ *     ls::t_int32_simd x( 1, 2, 3, 4 );
+ *     std::cout << "horizontal( x, add ): "
+ *               << ls::horizontal( x, static_cast< func_t >(ls::add< int32_t >) )
+ *               << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * horizontal( x, add ): 10
+ * ```
+ */
 template< typename ValueType_T, typename Function_T, typename Tag_T = default_tag >
 inline ValueType_T horizontal( simd_type< ValueType_T, Tag_T > vec, Function_T func )
 {
     return intravector_op< ValueType_T, Tag_T >()( vec, func );
+}
+
+template< typename SimdType_T, typename Function_T,
+          typename SimdType_T::simd_value_type* = nullptr >
+inline typename SimdType_T::simd_value_type
+horizontal( SimdType_T vec, Function_T func )
+{
+    return horizontal< typename SimdType_T::simd_value_type, Function_T,
+                       typename SimdType_T::simd_tag >( vec, func );
 }
 
 } // namespace litesimd

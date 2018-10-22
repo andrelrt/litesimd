@@ -20,15 +20,30 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_AVX_COMPARE_H
-#define LITESIMD_AVX_COMPARE_H
+#ifndef LITESIMD_ARCH_AVX_COMPARE_H
+#define LITESIMD_ARCH_AVX_COMPARE_H
 
 #ifdef LITESIMD_HAS_AVX
 
-#include "../../types.h"
-#include "../common/compare.h"
+#include <litesimd/types.h>
+#include <litesimd/arch/common/compare.h>
+#include <litesimd/arch/sse/compare.h>
 
 namespace litesimd {
+
+// Bit scan
+// ---------------------------------------------------------------------------------------
+template<> inline std::pair<int, bool>
+bit_scan_forward< avx_tag >( uint32_t bitmask )
+{
+    return bit_scan_forward< sse_tag >( bitmask );
+}
+
+template<> inline std::pair<int, bool>
+bit_scan_reverse< avx_tag >( uint32_t bitmask )
+{
+    return bit_scan_reverse< sse_tag >( bitmask );
+}
 
 // Mask to bitmask
 // ---------------------------------------------------------------------------------------
@@ -114,4 +129,4 @@ equal_to< double, avx_tag >( simd_type< double, avx_tag > lhs,
 } // namespace litesimd
 
 #endif // LITESIMD_HAS_AVX
-#endif // LITESIMD_AVX_COMPARE_H
+#endif // LITESIMD_ARCH_AVX_COMPARE_H

@@ -1,0 +1,43 @@
+version: 0.1.0.{build}
+skip_tags: true
+image:
+    - Visual Studio 2015
+    - Visual Studio 2017
+platform: x64
+configuration: Release
+clone_folder: c:\projects\litesimd
+
+environment:
+    BOOST_ROOT: c:\Libraries\boost_1_65_1
+    matrix:
+    - arch: Win64
+matrix:
+    fast_finish: true
+
+# skip unsupported combinations
+init:
+    - set arch=
+    - if "%arch%"=="Win64" ( set arch= Win64)
+    - echo %arch%
+    - echo %APPVEYOR_BUILD_WORKER_IMAGE%
+    - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2017" ( set generator="Visual Studio 15 2017%arch%" )
+    - if "%APPVEYOR_BUILD_WORKER_IMAGE%"=="Visual Studio 2015" ( set generator="Visual Studio 14 2015%arch%" )
+    - echo %generator%
+
+before_build:
+    - cmd: |-
+        mkdir build
+        cd build
+        cmake --version
+        cmake -G %generator% -DCMAKE_BUILD_TYPE=Release ..
+build:
+    project: c:\projects\litesimd\build\litesimd.sln
+    verbosity: minimal
+    parallel: true
+only_commits:
+  files:
+      - CMakeLists.txt
+      - appveyor.yml
+      - include/
+      - samples/
+      - test/  

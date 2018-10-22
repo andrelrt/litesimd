@@ -25,8 +25,9 @@
 
 #ifdef LITESIMD_HAS_AVX
 
-#include "../../types.h"
-#include "../common/shuffle.h"
+#include <litesimd/types.h>
+#include <litesimd/arch/common/shuffle.h>
+#include <litesimd/arch/avx/detail/compatibility.h>
 
 namespace litesimd {
 
@@ -152,8 +153,10 @@ struct set_functor< index, float, avx_tag >
     simd_type< float, avx_tag > inline
     operator()( simd_type< float, avx_tag > vec, float val )
     {
-        auto mask = _mm256_cmpeq_epi32( _mm256_set1_epi32( index ),
-                                        _mm256_set_epi32( 7, 6, 5, 4, 3, 2, 1, 0 ) );
+        auto mask = _mm256_cmp_ps(
+                _mm256_set1_ps( index ),
+                _mm256_set_ps( 7.0f, 6.0f, 5.0f, 4.0f, 3.0f, 2.0f, 1.0f, 0.0f ),
+                _CMP_EQ_OQ );
 
         return _mm256_blendv_ps( vec, _mm256_set1_ps( val ), mask );
     }
@@ -165,8 +168,10 @@ struct set_functor< index, double, avx_tag >
     simd_type< double, avx_tag > inline
     operator()( simd_type< double, avx_tag > vec, double val )
     {
-        auto mask = _mm256_cmpeq_epi64( _mm256_set1_epi64x( index ),
-                                        _mm256_set_epi64x( 3, 2, 1, 0 ) );
+        auto mask = _mm256_cmp_pd(
+                _mm256_set1_pd( index ),
+                _mm256_set_pd( 3.0, 2.0, 1.0, 0.0 ),
+                _CMP_EQ_OQ );
 
         return _mm256_blendv_pd( vec, _mm256_set1_pd( val ), mask );
     }

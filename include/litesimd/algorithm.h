@@ -23,16 +23,54 @@
 #ifndef LITESIMD_ALGORITHM_H
 #define LITESIMD_ALGORITHM_H
 
-#include "arch/sse/algorithm.h"
-#include "arch/avx/algorithm.h"
-#include "algorithm/for_each.h"
-#include "algorithm/iota.h"
-#include "intravector.h"
+#include <litesimd/arch/sse/algorithm.h>
+#include <litesimd/arch/avx/algorithm.h>
+#include <litesimd/algorithm/for_each.h>
+#include <litesimd/algorithm/iota.h>
+#include <litesimd/intravector.h>
 
 namespace litesimd {
 
-// Min max
-// ---------------------------------------------------------------------------------------
+/**
+ * \defgroup algorithm Algorithm functions
+ *
+ * Algorithm defines a collection of functions especially designed to be used
+ * on each value inside the packed SIMD register.
+ *
+ * All this functions are accessable at `<litesimd/algorithm.h>`
+ */
+
+/**
+ * \ingroup algorithm
+ * \brief Returns the smallest of each number in the SIMD register.
+ *
+ * \param vec SIMD register to compare
+ * \return The lesser of the values in SIMD register
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/algorithm.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *     std::cout << "min( zero ) == " << ls::min( ls::t_int32_simd::zero() ) << std::endl;
+ *     std::cout << "min( iota ) == " << ls::min( ls::iota< int32_t >( 5 ) ) << std::endl;
+ *     std::cout << "min( 4,3,2,1 ) == " << ls::min( ls::simd_type< int32_t, ls::sse_tag >( 4, 3, 2, 1 ) ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * min( zero ) == 0
+ * min( iota ) == 5
+ * min( 4,3,2,1 ) == 1
+ * ```
+ *
+ * \see max
+ */
 template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
 inline typename SimdType_T::simd_value_type min( SimdType_T vec )
 {
@@ -43,6 +81,38 @@ inline typename SimdType_T::simd_value_type min( SimdType_T vec )
     return intravector_op< type, tag >()( vec, op() );
 }
 
+/**
+ * \ingroup algorithm
+ * \brief Returns the largest the of each number in the SIMD register.
+ *
+ * \param vec SIMD register to compare
+ * \return The greater of the values in SIMD register
+ *
+ * **Example**
+ * ```{.cpp}
+ * // max example
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/algorithm.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *     std::cout << "max( zero ) == " << ls::max( ls::t_int32_simd::zero() ) << std::endl;
+ *     std::cout << "max( iota ) == " << ls::max( ls::iota< int32_t, ls::sse_tag >( 5 ) ) << std::endl;
+ *     std::cout << "max( 4,3,2,1 ) == " << ls::max( ls::simd_type< int32_t, ls::sse_tag >( 4, 3, 2, 1 ) ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * max( zero ) == 0
+ * max( iota ) == 8
+ * max( 4,3,2,1 ) == 4
+ * ```
+ *
+ * \see min
+ */
 template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
 inline typename SimdType_T::simd_value_type max( SimdType_T vec )
 {

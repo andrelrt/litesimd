@@ -23,21 +23,55 @@
 #ifndef LITESIMD_ALGORITHM_IOTA_H
 #define LITESIMD_ALGORITHM_IOTA_H
 
-#include "../shuffle.h"
+#include <litesimd/arithmetic.h>
 
 namespace litesimd {
 
+/**
+ * \ingroup algorithm
+ * \brief Store increasing sequence on a SIMD register
+ *
+ * Assigns to every element in SIMD register successive values of _val_, as if incremented with `++val` after each element is written.
+ *
+ * \param val Start value (optional, default 0)
+ * \returns SIMD register with increasing values
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/algorithm.h>
+ * #include <litesimd/helpers/iostream.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     std::cout << "iota< int32_t >(): " << ls::iota< int32_t >() << std::endl;
+ *     std::cout << "iota< int16_t >( 4 ): " << ls::iota< int16_t >( 4 ) << std::endl;
+ *     std::cout << "iota< double >( 1.2 ): " << ls::iota< double >( 1.2 ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * iota< int32_t >(): (3, 2, 1, 0)
+ * iota< int16_t >( 4 ): (11, 10, 9, 8, 7, 6, 5, 4)
+ * iota< double >( 1.2 ): (2.2, 1.2)
+ * ```
+ */
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline simd_type< ValueType_T, Tag_T >
 iota( ValueType_T val )
 {
-    using simd_type = simd_type< ValueType_T, Tag_T >;
-    simd_type ret;
-    for( size_t i = 0; i < simd_type::simd_size; ++i )
-    {
-        ret = high_insert( ret, static_cast< ValueType_T >( val + i ) );
-    }
-    return ret;
+    return add( val, simd_type< ValueType_T, Tag_T >::iota() );
+}
+
+template< typename ValueType_T, typename Tag_T = default_tag >
+inline simd_type< ValueType_T, Tag_T >
+iota()
+{
+    return simd_type< ValueType_T, Tag_T >::iota();
 }
 
 } // namespace litesimd

@@ -23,7 +23,39 @@ matrix:
         apt:
           sources: *all_sources
           packages: ['gcc-7', 'g++-7', 'cmake', 'boost1.67']
-      env: CCOMPILER='gcc-7' CXXCOMPILER='g++-7'
+      env: MYCC='gcc-7' MYCXX='g++-7'
+
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: *all_sources
+          packages: ['gcc-6', 'g++-6', 'cmake', 'boost1.67']
+      env: MYCC='gcc-6' MYCXX='g++-6'
+
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: *all_sources
+          packages: ['gcc-5', 'g++-5', 'cmake', 'boost1.67']
+      env: MYCC='gcc-5' MYCXX='g++-5'
+
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: *all_sources
+          packages: ['gcc-4.9', 'g++-4.9', 'cmake', 'boost1.67']
+      env: MYCC='gcc-4.9' MYCXX='g++-4.9'
+
+    - os: linux
+      compiler: gcc
+      addons:
+        apt:
+          sources: *all_sources
+          packages: ['gcc-4.8', 'g++-4.8', 'cmake', 'boost1.67']
+      env: MYCC='gcc-4.8' MYCXX='g++-4.8'
 
     - os: linux
       compiler: clang
@@ -31,16 +63,65 @@ matrix:
         apt:
           sources: *all_sources
           packages: ['clang-6.0', 'libstdc++-6-dev', 'cmake', 'boost1.67']
-      env: CCOMPILER='clang-6.0' CXXCOMPILER='clang++-6.0'
+      env: MYCC='clang-6.0' MYCXX='clang++-6.0'
+
+    - os: linux
+      compiler: clang
+      addons:
+        apt:
+          sources: *all_sources
+          packages: ['clang-5.0', 'libstdc++-5-dev', 'cmake', 'boost1.67']
+      env: MYCC='clang-5.0' MYCXX='clang++-5.0'
+
+    - os: linux
+      compiler: clang
+      addons:
+        apt:
+          sources: *all_sources
+          packages: ['clang-4.0', 'libstdc++-4.8-dev', 'cmake', 'boost1.67']
+      env: MYCC='clang-4.0' MYCXX='clang++-4.0'
 
     - os: osx
       osx_image: xcode9.4
       compiler: clang
-      env: CCOMPILER='clang' CXXCOMPILER='clang++'
+      env: MYCC='clang' MYCXX='clang++'
+
+    - os: osx
+      osx_image: xcode9.3
+      compiler: clang
+      env: MYCC='clang' MYCXX='clang++'
+
+    - os: osx
+      osx_image: xcode9.2
+      compiler: clang
+      env: MYCC='clang' MYCXX='clang++'
+
+    - os: osx
+      osx_image: xcode9.1
+      compiler: clang
+      env: MYCC='clang' MYCXX='clang++'
+
+    - os: osx
+      osx_image: xcode9
+      compiler: clang
+      env: MYCC='clang' MYCXX='clang++'
+
+    - os: osx
+      osx_image: xcode8.3
+      compiler: clang
+      env: MYCC='clang' MYCXX='clang++'
+
+before_script:
+  - |
+    if [[ "${TRAVIS_OS_NAME}" == "linux" ]]; then
+      CMAKE_URL="https://cmake.org/files/v3.12/cmake-3.12.2-Linux-x86_64.tar.gz"
+      mkdir cmake && travis_retry wget --no-check-certificate --quiet -O - ${CMAKE_URL} | tar --strip-components=1 -xz -C cmake
+      export PATH=${PWD}/cmake/bin:${PATH}
+    fi
 
 script:
-  - export CC=$CCOMPILER
-  - export CXX=$CXXCOMPILER
+  - export CC=${MYCC}
+  - export CXX=${MYCXX}
   - cmake --version
-  - $CXX -v
+  - ${CXX} -v
   - (mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Release .. && cmake --build . && ctest -V .)

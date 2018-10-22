@@ -23,14 +23,52 @@
 #ifndef LITESIMD_SHUFFLE_H
 #define LITESIMD_SHUFFLE_H
 
-#include "types.h"
-#include "arch/shuffle.h"
-#include "detail/helper_macros.h"
+#include <litesimd/types.h>
+#include <litesimd/arch/shuffle.h>
+#include <litesimd/detail/helper_macros.h>
 
 namespace litesimd {
 
-// High/Low insert
-// ---------------------------------------------------------------------------------------
+/**
+ * \defgroup shuffle Register manipulation
+ *
+ * In litesimd, the shuffle group has functions to manipulate the SIMD register.
+ *
+ * All this functions are accessable at `<litesimd/shuffle.h>`
+ */
+
+/**
+ * \ingroup shuffle
+ * \brief Shift all values one index lower inside the SIMD register and
+ *        insert a value on the highest index.
+ *
+ * \param vec SIMD register
+ * \param val Value to be inserted
+ * \tparam ValueType_T Base type of original SIMD register
+ * \returns SIMD register with the highest index modified
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/shuffle.h>
+ * #include <litesimd/helpers/iostream.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 3, 2, 1, 0 );
+ *     std::cout << "high_insert( x, 9 ): "
+ *               << ls::high_insert( x, 9 ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * high_insert( x, 9 ): (9, 3, 2, 1)
+ * ```
+ */
 template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
 inline SimdType_T
 high_insert( SimdType_T vec, typename SimdType_T::simd_value_type val )
@@ -39,6 +77,38 @@ high_insert( SimdType_T vec, typename SimdType_T::simd_value_type val )
                         typename SimdType_T::simd_tag >( vec, val );
 }
 
+/**
+ * \ingroup shuffle
+ * \brief Shift all values one index lower inside the SIMD register and
+ *        insert a value on the lowest index.
+ *
+ * \param vec SIMD register
+ * \param val Value to be inserted
+ * \tparam ValueType_T Base type of original SIMD register
+ * \returns SIMD register with the lowest index modified
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/shuffle.h>
+ * #include <litesimd/helpers/iostream.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 3, 2, 1, 0 );
+ *     std::cout << "low_insert( x, 9 ): "
+ *               << ls::low_insert( x, 9 ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * low_insert( x, 9 ): (2, 1, 0, 9)
+ * ```
+ */
 template< typename SimdType_T, typename SimdType_T::simd_value_type* = nullptr >
 inline SimdType_T
 low_insert( SimdType_T vec, typename SimdType_T::simd_value_type val )
@@ -47,7 +117,7 @@ low_insert( SimdType_T vec, typename SimdType_T::simd_value_type val )
                        typename SimdType_T::simd_tag >( vec, val );
 }
 
-// Blend
+// Blend helper functions (comments on arch/common)
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T, typename Tag_T = default_tag >
 inline simd_type< ValueType_T, Tag_T >
@@ -71,8 +141,39 @@ blend( simd_type< ValueType_T, Tag_T > mask,
                                         simd_type< ValueType_T, Tag_T >( falseVal ) );
 }
 
-// Get Set
-// ---------------------------------------------------------------------------------------
+/**
+ * \ingroup shuffle
+ * \brief Extract one value from SIMD register.
+ *
+ * The `index` template parameter is verified with `static_assert` and the compilation will
+ * fail with <b>`"Index out of bounds"`</b> error on invalid values.
+ *
+ * \param vec SIMD register
+ * \tparam index Index of the value inside the SIMD register
+ * \tparam ValueType_T Base type of original SIMD register
+ * \returns The value extracted
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/shuffle.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 9, 7, 5, 2 );
+ *     std::cout << "get<2>( x ): "
+ *               << ls::get<2>( x ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * get<2>( x ): 7
+ * ```
+ */
 template< int index, typename ValueType_T, typename Tag_T = default_tag >
 inline ValueType_T
 get( simd_type< ValueType_T, Tag_T > vec )
@@ -83,6 +184,41 @@ get( simd_type< ValueType_T, Tag_T > vec )
     return get_functor< index, ValueType_T, Tag_T >()( vec );
 }
 
+/**
+ * \ingroup shuffle
+ * \brief Extract one value from SIMD register.
+ *
+ * The `index` template parameter is verified with `static_assert` and the compilation will
+ * fail with <b>`"Index out of bounds"`</b> error on invalid values.
+ *
+ * \param vec SIMD register
+ * \param val The value to be set
+ * \tparam index Index of the value inside the SIMD register
+ * \tparam ValueType_T Base type of original SIMD register
+ * \returns The value extracted
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/shuffle.h>
+ * #include <litesimd/helpers/iostream.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 9, 7, 5, 2 );
+ *     std::cout << "set<2>( x, 11 ): "
+ *               << ls::set<2>( x, 11 ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * set<2>( x, 11 ): (9, 11, 5, 2)
+ * ```
+ */
 template< int index, typename ValueType_T, typename Tag_T = default_tag >
 inline simd_type< ValueType_T, Tag_T >
 set( simd_type< ValueType_T, Tag_T > vec, ValueType_T val )

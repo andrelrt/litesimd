@@ -23,11 +23,20 @@
 #ifndef LITESIMD_ARITHMETIC_H
 #define LITESIMD_ARITHMETIC_H
 
-#include "types.h"
-#include "arch/arithmetic.h"
-#include "detail/helper_macros.h"
+#include <litesimd/types.h>
+#include <litesimd/arch/arithmetic.h>
+#include <litesimd/detail/helper_macros.h>
 
 namespace litesimd {
+
+/**
+ * \defgroup arithmetic Arithmetic operations
+ *
+ * In litesimd, arithmetic group has binary functions to execute the basic arithmetic operations
+ * (addition, subtraction, multiplication and division).
+ *
+ * All this functions are accessable at `<litesimd/arithmetic.h>`
+ */
 
 // Basic operations
 // ---------------------------------------------------------------------------------------
@@ -37,14 +46,70 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( mullo, type )
 DEFINE_BINARY_FUNCTION_ADAPTORS( mulhi, type )
 DEFINE_BINARY_FUNCTION_ADAPTORS( div, type )
 
+/**
+ * \ingroup arithmetic
+ * \brief Returns the sum of two values.
+ *
+ * \param lhs, rhs Values to be added.
+ * \returns Sum of the two values.
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/arithmetic.h>
+ * #include <litesimd/helpers/iostream.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd a( 1 ), b( 10 );
+ *     std::cout << "a + b:  " << a + b << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * a + b: (11, 11, 11, 11)
+ * ```
+ */
 template< typename LHS, typename RHS >
-inline auto operator+( LHS lhs, RHS rhs )
+inline auto operator+( LHS lhs, RHS rhs ) -> decltype( add( lhs, rhs ) )
 {
     return add( lhs, rhs );
 }
 
+/**
+ * \ingroup arithmetic
+ * \brief Returns the subtraction of two values.
+ *
+ * \param lhs, rhs Values to be subtracted.
+ * \returns Difference of the two values.
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/arithmetic.h>
+ * #include <litesimd/helpers/iostream.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd a( 10 ), b( 1 );
+ *     std::cout << "a - b:  " << a - b << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * a - b: (9, 9, 9, 9)
+ * ```
+ */
 template< typename LHS, typename RHS >
-inline auto operator-( LHS lhs, RHS rhs )
+inline auto operator-( LHS lhs, RHS rhs ) -> decltype( sub( lhs, rhs ) )
 {
     return sub( lhs, rhs );
 }

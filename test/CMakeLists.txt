@@ -1,5 +1,4 @@
 project(litesimd_test)
-cmake_minimum_required(VERSION 2.8)
 
 find_package(Threads REQUIRED)
 
@@ -38,7 +37,16 @@ set_target_properties(libgtest PROPERTIES
 #    "IMPORTED_LINK_INTERFACE_LIBRARIES" "${CMAKE_THREAD_LIBS_INIT}"
 #)
 
-enable_testing()
+cmake_policy(SET CMP0054 NEW)
+if(CMAKE_VERSION VERSION_LESS "3.10")
+    cmake_policy(SET CMP0057 NEW)
+endif()
+
+if(CMAKE_VERSION VERSION_LESS "3.9")
+    find_package(GTest)
+else()
+    include(GoogleTest)
+endif()
 
 # Test project
 aux_source_directory(. SRC_LIST)
@@ -58,7 +66,12 @@ target_link_libraries(${PROJECT_NAME} PRIVATE
     libgtest
 )
 
-set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 14)
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 11)
 
-add_test(NAME litesimd_test
-    COMMAND ${PROJECT_NAME})
+if(CMAKE_VERSION VERSION_LESS "3.9")
+    GTEST_ADD_TESTS(${PROJECT_NAME} "" AUTO)
+elseif(CMAKE_VERSION VERSION_LESS "3.10")
+    gtest_add_tests(TARGET ${PROJECT_NAME})
+else()
+    gtest_discover_tests(${PROJECT_NAME})
+endif()

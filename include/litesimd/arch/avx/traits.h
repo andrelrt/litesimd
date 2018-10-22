@@ -26,7 +26,7 @@
 #ifdef LITESIMD_HAS_AVX
 
 #include <immintrin.h>
-#include "../common/traits.h"
+#include <litesimd/arch/common/traits.h>
 
 namespace litesimd {
 
@@ -50,6 +50,8 @@ template<> struct traits<  int8_t, avx_tag >{
                                 v15, v14, v13, v12, v11, v10,  v9,  v8,
                                  v7,  v6,  v5,  v4,  v3,  v2,  v1,  v0 );
     }
+    static inline simd_type iota() { return from_values( 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16,
+                                                         15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 ); }
 };
 
 template<> struct traits<  int16_t, avx_tag >{
@@ -66,6 +68,7 @@ template<> struct traits<  int16_t, avx_tag >{
         return _mm256_set_epi16( v15, v14, v13, v12, v11, v10,  v9,  v8,
                                   v7,  v6,  v5,  v4,  v3,  v2,  v1,  v0 );
     }
+    static inline simd_type iota() { return from_values( 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 ); }
 };
 
 template<> struct traits<  int32_t, avx_tag >{
@@ -79,6 +82,7 @@ template<> struct traits<  int32_t, avx_tag >{
     {
         return _mm256_set_epi32( v7, v6, v5, v4, v3, v2, v1, v0 );
     }
+    static inline simd_type iota() { return from_values( 7, 6, 5, 4, 3, 2, 1, 0 ); }
 };
 
 template<> struct traits<  int64_t, avx_tag >{
@@ -91,6 +95,7 @@ template<> struct traits<  int64_t, avx_tag >{
     {
         return _mm256_set_epi64x( v3, v2, v1, v0 );
     }
+    static inline simd_type iota() { return from_values( 3, 2, 1, 0 ); }
 };
 
 template<> struct traits<   float, avx_tag >{
@@ -104,6 +109,7 @@ template<> struct traits<   float, avx_tag >{
     {
         return _mm256_set_ps( v7, v6, v5, v4, v3, v2, v1, v0 );
     }
+    static inline simd_type iota() { return from_values( 7, 6, 5, 4, 3, 2, 1, 0 ); }
 };
 
 template<> struct traits<  double, avx_tag >{
@@ -116,6 +122,7 @@ template<> struct traits<  double, avx_tag >{
     {
         return _mm256_set_pd( v3, v2, v1, v0 );
     }
+    static inline simd_type iota() { return from_values( 3, 2, 1, 0 ); }
 };
 
 } // namespace litesimd

@@ -1,4 +1,3 @@
-
 // MIT License
 //
 // Copyright (c) 2018 André Tupinambá
@@ -21,10 +20,24 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_TRAITS_H
-#define LITESIMD_TRAITS_H
+#ifndef LITESIMD_AVX_DETAIL_COMPATIBILITY_H
+#define LITESIMD_AVX_DETAIL_COMPATIBILITY_H
 
-#include "arch/tag.h"
-#include "arch/traits.h"
+#ifdef LITESIMD_HAS_AVX
 
-#endif //LITESIMD_TRAITS_H
+#if (__GNUC__ < 7) && !defined(__clang__)
+// old GCC workarounds
+static inline float _mm256_cvtss_f32( __m256 vec ) { return _mm_cvtss_f32( _mm256_extractf128_ps( vec, 0 ) ); }
+static inline double _mm256_cvtsd_f64( __m256d vec ) { return _mm_cvtsd_f64( _mm256_extractf128_pd( vec, 0 ) ); }
+#endif
+
+#if defined(_MSC_VER)
+static constexpr __m256i _mm256_insert_epi64( __m256i vec, int64_t val, const int imm8 )
+{
+    constexpr int mask = 3 << (2*imm8);
+    return _mm256_blend_epi32( vec, _mm256_set1_epi64x( val ), mask );
+}
+#endif _MSC_VER
+
+#endif // LITESIMD_HAS_AVX
+#endif // LITESIMD_AVX_DETAIL_COMPATIBILITY_H

@@ -23,9 +23,9 @@
 #ifndef LITESIMD_ARCH_ARITHMETIC_H
 #define LITESIMD_ARCH_ARITHMETIC_H
 
-#include "../types.h"
-#include "sse/arithmetic.h"
-#include "avx/arithmetic.h"
+#include <litesimd/types.h>
+#include <litesimd/arch/sse/arithmetic.h>
+#include <litesimd/arch/avx/arithmetic.h>
 
 #endif // LITESIMD_ARCH_ARITHMETIC_H
 

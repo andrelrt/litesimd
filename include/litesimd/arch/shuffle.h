@@ -23,8 +23,8 @@
 #ifndef LITESIMD_ARCH_SHUFFLE_H
 #define LITESIMD_ARCH_SHUFFLE_H
 
-#include "../types.h"
-#include "sse/shuffle.h"
-#include "avx/shuffle.h"
+#include <litesimd/types.h>
+#include <litesimd/arch/sse/shuffle.h>
+#include <litesimd/arch/avx/shuffle.h>
 
 #endif // LITESIMD_ARCH_SHUFFLE_H

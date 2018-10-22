@@ -26,16 +26,22 @@
 #include <iostream>
 #include <iomanip>
 #include <type_traits>
-#include "../types.h"
-#include "../shuffle.h"
-#include "../algorithm.h"
+#include <litesimd/types.h>
+#include <litesimd/shuffle.h>
+#include <litesimd/algorithm.h>
 
 namespace litesimd {
 
-// Stream Operators
-// -----------------------------------------------------------------------------
+/**
+ * \ingroup helpers
+ * \brief Compatibility version to `operator<<` to output a `simd_type` on `ostream`.
+ *
+ * \param out Output stream
+ * \param vec simd_type to print to stream
+ * \return The output stream
+ */
 template< typename SimdType_T,
-          std::enable_if_t<std::is_integral<typename SimdType_T::simd_value_type>::value>* = nullptr >
+          typename std::enable_if<std::is_integral<typename SimdType_T::simd_value_type>::value>::type* = nullptr >
 inline std::ostream& operator<<( std::ostream& out, SimdType_T vec )
 {
     std::ios_base::fmtflags f( out.flags() );
@@ -57,7 +63,7 @@ inline std::ostream& operator<<( std::ostream& out, SimdType_T vec )
 }
 
 template< typename SimdType_T,
-          std::enable_if_t<std::is_floating_point<typename SimdType_T::simd_value_type>::value>* = nullptr >
+          typename std::enable_if<std::is_floating_point<typename SimdType_T::simd_value_type>::value>::type* = nullptr >
 inline std::ostream& operator<<( std::ostream& out, SimdType_T vec )
 {
     std::ios_base::fmtflags f( out.flags() );

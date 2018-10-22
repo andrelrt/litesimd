@@ -32,18 +32,19 @@
 #include <litesimd/bitwise.h>
 #include <litesimd/shuffle.h>
 #include <litesimd/arithmetic.h>
+#include <litesimd/helpers/containers.h>
 
 bool g_verbose = true;
 namespace ls = litesimd;
 
 struct default_simd_to_lower
 {
-    void operator()( std::string& str )
+    void operator()( ls::string& str )
     {
         ls::t_int8_simd* data = (ls::t_int8_simd*) str.data();
 
-        size_t sz = str.size() & ~(ls::int8_simd_size-1);
-        for( size_t i = 0; i < sz; i += ls::int8_simd_size)
+        size_t sz = str.size() & ~(ls::t_int32_simd::simd_size-1);
+        for( size_t i = 0; i < sz; i += ls::t_int32_simd::simd_size)
         {
             *data = ls::blend< int8_t >(
                         ls::bit_and< int8_t >(
@@ -65,7 +66,7 @@ struct default_simd_to_lower
 template< typename TAG_T >
 struct to_lower
 {
-    void operator()( std::string& str )
+    void operator()( ls::string& str )
     {
         constexpr static size_t array_size = ls::simd_type< int8_t, TAG_T >::simd_size;
         using simd_type = ls::simd_type< int8_t, TAG_T >;
@@ -105,6 +106,7 @@ maskstore< ls::sse_tag >( ls::simd_type< int8_t, ls::sse_tag >* ptr,
     _mm_maskmoveu_si128( val, mask, (char*)ptr );
 }
 
+#ifdef LITESIMD_HAS_AVX
 template<> void
 maskstore< ls::avx_tag >( ls::simd_type< int8_t, ls::avx_tag >* ptr,
                           ls::simd_type< int8_t, ls::avx_tag > val,
@@ -118,11 +120,12 @@ maskstore< ls::avx_tag >( ls::simd_type< int8_t, ls::avx_tag >* ptr,
                          _mm256_extracti128_si256( mask, 1 ),
                          (char*)(ssePtr + 1) );
 }
+#endif // LITESIMD_HAS_AVX
 
 template< typename TAG_T >
 struct maskmove_to_lower
 {
-    void operator()( std::string& str )
+    void operator()( ls::string& str )
     {
         constexpr static size_t array_size = ls::simd_type< int8_t, TAG_T >::simd_size;
         using simd_type = ls::simd_type< int8_t, TAG_T >;
@@ -150,7 +153,7 @@ struct maskmove_to_lower
 
 struct std_to_lower
 {
-    void operator()( std::string& str )
+    void operator()( ls::string& str )
     {
         for( size_t i = 0; i < str.size(); ++i )
         {
@@ -161,7 +164,7 @@ struct std_to_lower
 
 struct cachesize_to_lower
 {
-    void operator()( std::string& str )
+    void operator()( ls::string& str )
     {
         size_t sz = str.size();
         for( size_t i = 0; i < sz; ++i )
@@ -173,7 +176,7 @@ struct cachesize_to_lower
 
 struct autovec_to_lower
 {
-    void operator()( std::string& str )
+    void operator()( ls::string& str )
     {
         size_t sz = str.size();
         char* s = (char*) str.data();
@@ -184,17 +187,17 @@ struct autovec_to_lower
     }
 };
 
-void do_nothing( const std::string& );
+void do_nothing( const ls::string& );
 
 template< typename TO_LOWER_T >
-uint64_t bench( const std::string& name, size_t size, size_t loop )
+uint64_t bench( const ls::string& name, size_t size, size_t loop )
 {
 	using functor = TO_LOWER_T;
 
     boost::timer::cpu_timer timer;
     functor toLower;
 
-    std::string str( size, 'C' );
+    ls::string str( size, 'C' );
 
     timer.start();
     for( size_t j = 0; j < loop; ++j )
@@ -226,12 +229,16 @@ int main(int argc, char* /*argv*/[])
     {
         uint64_t base = bench< cachesize_to_lower >( "Scalar ", runSize, loop );
         uint64_t sse = bench< to_lower< ls::sse_tag > >( "SSE ...", runSize, loop );
+#ifdef LITESIMD_HAS_AVX
         uint64_t avx = bench< to_lower< ls::avx_tag > >( "AVX ...", runSize, loop );
+#endif // LITESIMD_HAS_AVX
 
         if( g_verbose )
         {
             bench< maskmove_to_lower< ls::sse_tag > >( "MM SSE ", runSize, loop );
+#ifdef LITESIMD_HAS_AVX
             bench< maskmove_to_lower< ls::avx_tag > >( "MM AVX ", runSize, loop );
+#endif // LITESIMD_HAS_AVX
             bench< std_to_lower >( "STD ...", runSize, loop );
             bench< autovec_to_lower >( "Autovec", runSize, loop );
             bench< default_simd_to_lower >( "Default", runSize, loop );
@@ -239,8 +246,10 @@ int main(int argc, char* /*argv*/[])
                       << std::endl << "Index Speed up SSE.......: " << std::fixed << std::setprecision(2)
                       << static_cast<float>(base)/static_cast<float>(sse) << "x"
 
+#ifdef LITESIMD_HAS_AVX
                       << std::endl << "Index Speed up AVX.......: " << std::fixed << std::setprecision(2)
                       << static_cast<float>(base)/static_cast<float>(avx) << "x"
+#endif // LITESIMD_HAS_AVX
 
                       << std::endl << std::endl;
         }
@@ -249,7 +258,9 @@ int main(int argc, char* /*argv*/[])
             std::cout
                 << base << ","
                 << sse << ","
+#ifdef LITESIMD_HAS_AVX
                 << avx
+#endif // LITESIMD_HAS_AVX
                 << std::endl;
         }
     }
