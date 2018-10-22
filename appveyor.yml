@@ -29,7 +29,7 @@ before_build:
         mkdir build
         cd build
         cmake --version
-        cmake -G %generator% -DCMAKE_BUILD_TYPE=Release ..
+        cmake -G %generator% -DCMAKE_BUILD_TYPE=Release -DCMAKE_GENERATOR_PLATFORM=x64 ..
 build:
     project: c:\projects\litesimd\build\litesimd.sln
     verbosity: minimal
