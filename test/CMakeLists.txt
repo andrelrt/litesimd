@@ -8,10 +8,11 @@ include(ExternalProject)
 # Download and install GoogleTest
 ExternalProject_Add(
     gtest
-    URL https://github.com/google/googletest/archive/release-1.8.0.zip
+    URL https://github.com/google/googletest/archive/release-1.8.1.zip
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/gtest
     # Disable install step
     INSTALL_COMMAND ""
+    CMAKE_ARGS "-DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}"
 )
 
 # Get GTest source and binary directories from CMake project
@@ -22,10 +23,17 @@ add_library(libgtest IMPORTED STATIC GLOBAL)
 add_dependencies(libgtest gtest)
 
 # Set libgtest properties
+if(MSVC)
+set_target_properties(libgtest PROPERTIES
+    "IMPORTED_LOCATION" "${binary_dir}/googlemock/gtest/Release/gtest.lib"
+    "IMPORTED_LINK_INTERFACE_LIBRARIES" "${CMAKE_THREAD_LIBS_INIT}"
+)
+else()
 set_target_properties(libgtest PROPERTIES
     "IMPORTED_LOCATION" "${binary_dir}/googlemock/gtest/libgtest.a"
     "IMPORTED_LINK_INTERFACE_LIBRARIES" "${CMAKE_THREAD_LIBS_INIT}"
 )
+endif()
 
 # Create a libgmock target to be used as a dependency by test programs
 #add_library(libgmock IMPORTED STATIC GLOBAL)
