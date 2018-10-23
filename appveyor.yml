@@ -8,6 +8,7 @@ configuration: Release
 clone_folder: c:\projects\litesimd
 
 environment:
+    CXXFLAGS: -DWIN32_LEAN_AND_MEAN -DBOOST_TEST_DYN_LINK
     matrix:
     - arch: Win64
 matrix:
