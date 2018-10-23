@@ -100,7 +100,7 @@ struct litesimd_boyer_moore_horspool2
         using simd = ls::simd_type< int8_t, Tag_T >;
         constexpr size_t simd_size = ls::simd_type< int8_t, Tag_T >::simd_size;
 
-        int32_t find_size = find.size();
+        int32_t find_size = (int32_t) find.size();
 
         size_t simd_str_size = str.size() / simd_size;
         size_t simd_find_size = find_size / simd_size -1;
@@ -132,7 +132,7 @@ struct litesimd_boyer_moore_horspool2
             }
             else
             {
-                size_t bitmask = ls::mask_to_bitmask< int8_t, Tag_T >( mask );
+                uint32_t bitmask = ls::mask_to_bitmask< int8_t, Tag_T >( mask );
                 size_t skip = 0;
                 bool found = true;
                 size_t ret = 0;
@@ -189,7 +189,7 @@ uint64_t bench( const std::string& name, size_t size, size_t seek, size_t loop )
 
     srand( 1 );
     std::string str( size, ' ' );
-    std::generate( str.begin(), str.end(), [](){ return 32 + rand() % 96; } );
+    std::generate( str.begin(), str.end(), []() -> char { return 32 + rand() % 96; } );
     std::string find = str.substr( size - seek );
 
     size_t pos;
