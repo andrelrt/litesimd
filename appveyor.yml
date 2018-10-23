@@ -8,7 +8,6 @@ configuration: Release
 clone_folder: c:\projects\litesimd
 
 environment:
-    BOOST_ROOT: c:\Libraries\boost_1_65_1
     matrix:
     - arch: Win64
 matrix:
@@ -29,7 +28,7 @@ before_build:
         mkdir build
         cd build
         cmake --version
-        cmake -G %generator% -DCMAKE_BUILD_TYPE=Release -DCMAKE_GENERATOR_PLATFORM=x64 ..
+        cmake -G %generator% -DBOOST_ROOT=C:\Libraries\boost_1_65_1 -DCMAKE_BUILD_TYPE=Release -DCMAKE_GENERATOR_PLATFORM=x64 ..
 build:
     project: c:\projects\litesimd\build\litesimd.sln
     verbosity: minimal
