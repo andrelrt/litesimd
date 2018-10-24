@@ -29,7 +29,7 @@ before_build:
         mkdir build
         cd build
         cmake --version
-        cmake -G %generator% -DBOOST_ROOT=C:\Libraries\boost_1_65_1 -DBoost_USE_STATIC_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_GENERATOR_PLATFORM=x64 ..
+        cmake -G %generator% -DAPPVEYOR -DBOOST_ROOT=C:\Libraries\boost_1_65_1 -DBoost_USE_STATIC_LIBS=ON -DCMAKE_BUILD_TYPE=Release -DCMAKE_GENERATOR_PLATFORM=x64 ..
 build:
     project: c:\projects\litesimd\build\litesimd.sln
     verbosity: minimal
@@ -40,4 +40,4 @@ only_commits:
       - appveyor.yml
       - include/
       - samples/
-      - test/  
+      - test/
