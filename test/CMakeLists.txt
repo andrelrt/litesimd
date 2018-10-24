@@ -5,6 +5,9 @@ find_package(Threads REQUIRED)
 # Enable ExternalProject CMake module
 include(ExternalProject)
 
+list(APPEND GTEST_CMAKE_ARGS "-DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}")
+list(APPEND GTEST_CMAKE_ARGS "-DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}")
+
 # Download and install GoogleTest
 ExternalProject_Add(
     gtest
@@ -12,7 +15,7 @@ ExternalProject_Add(
     PREFIX ${CMAKE_CURRENT_BINARY_DIR}/gtest
     # Disable install step
     INSTALL_COMMAND ""
-    CMAKE_ARGS "-DCMAKE_C_COMPILER=${CMAKE_C_COMPILER} -DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}"
+    CMAKE_ARGS ${GTEST_CMAKE_ARGS}
 )
 
 # Get GTest source and binary directories from CMake project
