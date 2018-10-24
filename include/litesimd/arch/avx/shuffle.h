@@ -55,7 +55,7 @@ struct get_functor< index, int8_t, avx_tag >
 {
     int8_t inline operator()( simd_type< int8_t, avx_tag > vec )
     {
-        return _mm256_extract_epi8( vec, index );
+        return (int8_t) _mm256_extract_epi8( vec, index );
     }
 };
 
@@ -64,7 +64,7 @@ struct get_functor< index, int16_t, avx_tag >
 {
     int16_t inline operator()( simd_type< int16_t, avx_tag > vec )
     {
-        return _mm256_extract_epi16( vec, index );
+        return (int16_t) _mm256_extract_epi16( vec, index );
     }
 };
 
@@ -73,7 +73,7 @@ struct get_functor< index, int32_t, avx_tag >
 {
     int32_t inline operator()( simd_type< int32_t, avx_tag > vec )
     {
-        return _mm256_extract_epi32( vec, index );
+        return (int32_t) _mm256_extract_epi32( vec, index );
     }
 };
 
@@ -82,7 +82,7 @@ struct get_functor< index, int64_t, avx_tag >
 {
     int64_t inline operator()( simd_type< int64_t, avx_tag > vec )
     {
-        return _mm256_extract_epi64( vec, index );
+        return (int64_t) _mm256_extract_epi64( vec, index );
     }
 };
 

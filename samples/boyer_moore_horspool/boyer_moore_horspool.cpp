@@ -100,12 +100,12 @@ struct litesimd_boyer_moore_horspool2
         using simd = ls::simd_type< int8_t, Tag_T >;
         constexpr size_t simd_size = ls::simd_type< int8_t, Tag_T >::simd_size;
 
-        int32_t find_size = find.size();
+        int32_t find_size = (int32_t) find.size();
 
         size_t simd_str_size = str.size() / simd_size;
         size_t simd_find_size = find_size / simd_size -1;
         const simd* simd_str = reinterpret_cast<const simd*>( str.data() );
-        _mm_prefetch( (void*)(simd_str + simd_find_size), _MM_HINT_T0 );
+        _mm_prefetch( (char const*)(simd_str + simd_find_size), _MM_HINT_T0 );
 
         std::array< int32_t, 256 > index;
         index.fill( std::max<int32_t>( 1, find_size / simd_size ) );
@@ -127,12 +127,12 @@ struct litesimd_boyer_moore_horspool2
             if( is_zero< Tag_T >( mask ) )
             {
                 size_t zskip = index[ str_data[ base_end - 1 ] ];
-                _mm_prefetch( (void*)(simd_str + simd_idx + zskip), _MM_HINT_T0 );
+                _mm_prefetch( (char const*)(simd_str + simd_idx + zskip), _MM_HINT_T0 );
                 simd_idx += zskip;
             }
             else
             {
-                size_t bitmask = ls::mask_to_bitmask< int8_t, Tag_T >( mask );
+                uint32_t bitmask = ls::mask_to_bitmask< int8_t, Tag_T >( mask );
                 size_t skip = 0;
                 bool found = true;
                 size_t ret = 0;
@@ -150,7 +150,7 @@ struct litesimd_boyer_moore_horspool2
                         {
                             found = false;
                             skip = index[ str_data[ idx ] ];
-                            _mm_prefetch( (void*)(simd_str + simd_idx + skip), _MM_HINT_T0 );
+                            _mm_prefetch( (char const*)(simd_str + simd_idx + skip), _MM_HINT_T0 );
                             do_break = ( skip > simd_size ); // not found and it impossible for this simd has a hit
                             break;
                         }
@@ -171,7 +171,7 @@ struct litesimd_boyer_moore_horspool2
                 if( found )
                     return ret;
 
-                _mm_prefetch( (void*)(simd_str + simd_idx + skip), _MM_HINT_T0 );
+                _mm_prefetch( (char const*)(simd_str + simd_idx + skip), _MM_HINT_T0 );
                 simd_idx += skip;
             }
         }
@@ -189,7 +189,7 @@ uint64_t bench( const std::string& name, size_t size, size_t seek, size_t loop )
 
     srand( 1 );
     std::string str( size, ' ' );
-    std::generate( str.begin(), str.end(), [](){ return 32 + rand() % 96; } );
+    std::generate( str.begin(), str.end(), []() -> char { return 32 + rand() % 96; } );
     std::string find = str.substr( size - seek );
 
     size_t pos;

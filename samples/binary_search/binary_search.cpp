@@ -253,19 +253,19 @@ ForwardIterator simd_lower_bound2( ForwardIterator beg, ForwardIterator end,
 
     const value_type* start = &(*beg);
 
-    _mm_prefetch( start + step * 1, _MM_HINT_T0 );
-    _mm_prefetch( start + step * 2, _MM_HINT_T0 );
-    _mm_prefetch( start + step * 3, _MM_HINT_T0 );
-    _mm_prefetch( start + step * 4, _MM_HINT_T0 );
-    _mm_prefetch( start + step * 5, _MM_HINT_T0 );
-    _mm_prefetch( start + step * 6, _MM_HINT_T0 );
-    _mm_prefetch( start + step * 7, _MM_HINT_T0 );
-    _mm_prefetch( start + step * 8, _MM_HINT_T0 );
+    _mm_prefetch( (char const*)(start + step * 1), _MM_HINT_T0 );
+    _mm_prefetch( (char const*)(start + step * 2), _MM_HINT_T0 );
+    _mm_prefetch( (char const*)(start + step * 3), _MM_HINT_T0 );
+    _mm_prefetch( (char const*)(start + step * 4), _MM_HINT_T0 );
+    _mm_prefetch( (char const*)(start + step * 5), _MM_HINT_T0 );
+    _mm_prefetch( (char const*)(start + step * 6), _MM_HINT_T0 );
+    _mm_prefetch( (char const*)(start + step * 7), _MM_HINT_T0 );
+    _mm_prefetch( (char const*)(start + step * 8), _MM_HINT_T0 );
 
     // Create SIMD index key
     ls::simd_type< int32_t, TAG_T > indexes =
         ls::mullo( ls::simd_type< int32_t, TAG_T >( 8, 7, 6, 5, 4, 3, 2, 1 ),
-                   ls::simd_type< int32_t, TAG_T >( step ) );
+                   ls::simd_type< int32_t, TAG_T >( static_cast<int32_t>( step ) ) );
 
     // Create SIMD search key
     simd_type cmp = i32Gather< TAG_T >( start, indexes );

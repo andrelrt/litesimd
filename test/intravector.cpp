@@ -56,7 +56,7 @@ TYPED_TEST(IntravectorTypedTest, HorizontalAritmeticTest)
     type sum = 0;
     for( size_t i = 0; i < simd::simd_size; ++i )
     {
-        sum += i + 1;
+        sum += static_cast<type>( i + 1 );
     }
     EXPECT_EQ( sum, ls::horizontal( a, static_cast< func_t >(ls::add< type, tag >) ) );
 }
@@ -71,7 +71,7 @@ TYPED_TEST(IntravectorTypedTest, HorizontalLambdaTest)
     type sum = 0;
     for( size_t i = 0; i < simd::simd_size; ++i )
     {
-        sum += i + 2;
+        sum += static_cast<type>( i + 2 );
     }
     --sum;
     auto func = []( simd lhs, simd rhs ) -> simd
