@@ -25,11 +25,10 @@ set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 enable_testing()
 
 add_library(${PROJECT_NAME} INTERFACE)
-target_include_directories(${PROJECT_NAME}
-    INTERFACE include
-)
+target_compile_definitions(${PROJECT_NAME} INTERFACE LIBRARY_HEADER_ONLY)
+target_include_directories(${PROJECT_NAME} INTERFACE include)
+install(DIRECTORY include/ DESTINATION include)
 
 add_subdirectory(doc)
 add_subdirectory(samples)
 add_subdirectory(test)
-
