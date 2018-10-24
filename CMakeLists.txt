@@ -9,7 +9,7 @@ if(MSVC)
         "$<$<CONFIG:RELEASE>:/O2>"
         "$<$<CONFIG:RELEASE>:/Oi>"
         "/arch:AVX2"
-        "$<IF:$<BOOL:${APPVEYOR}>,/MD,/MT$<$<CONFIG:Debug>:d>>"
+        "$<IF:$<BOOL:${APPVEYOR}>,/MD,/MT>$<$<CONFIG:Debug>:d>"
     )
 else()
     add_compile_options(
@@ -25,6 +25,9 @@ endif()
 set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 
 enable_testing()
+
+add_library(${PROJECT_NAME} INTERFACE)
+target_include_directories(${PROJECT_NAME} INTERFACE include/)
 
 add_subdirectory(doc)
 add_subdirectory(samples)

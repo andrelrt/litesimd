@@ -31,10 +31,10 @@ namespace litesimd {
 // Bit scan
 // ---------------------------------------------------------------------------------------
 template< typename Tag_T = default_tag >
-std::pair<int, bool> bit_scan_forward( uint32_t bitmask ){}
+std::pair<int, bool> bit_scan_forward( uint32_t bitmask ){ return std::make_pair( -1, false ); }
 
 template< typename Tag_T = default_tag >
-std::pair<int, bool> bit_scan_reverse( uint32_t bitmask ){}
+std::pair<int, bool> bit_scan_reverse( uint32_t bitmask ){ return std::make_pair( -1, false ); }
 
 /**
  * \ingroup compare

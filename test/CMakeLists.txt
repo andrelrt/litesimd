@@ -69,10 +69,10 @@ target_include_directories(${PROJECT_NAME}
 	SYSTEM PUBLIC
     ${Boost_INCLUDE_DIRS}
     "${source_dir}/googletest/include"
-    "${CMAKE_SOURCE_DIR}/include"
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
+    litesimd
     ${Boost_LIBRARIES}
     libgtest
 )
