@@ -152,7 +152,8 @@ TEST(SimdCompareTest, GreaterThanDefault)
     ls::t_int32_simd::bitmask_type mask = 0;
     val = 1;
 
-    for( ls::t_int32_simd::index_type i = 0; i < ls::t_int32_simd::simd_size + 1; ++i )
+    ls::t_int32_simd::index_type end = ls::t_int32_simd::simd_size + 1;
+    for( ls::t_int32_simd::index_type i = 0; i < end; ++i )
     {
         EXPECT_EQ( mask, ls::greater_bitmask( val, cmp ) )
             << "val: " << val
@@ -191,7 +192,8 @@ TEST(SimdCompareTest, GreaterThanDefaultSimd)
     ls::t_int32_simd::bitmask_type mask = 0;
     val = 1;
 
-    for( ls::t_int32_simd::index_type i = 0; i < ls::t_int32_simd::simd_size + 1; ++i )
+    ls::t_int32_simd::index_type end = ls::t_int32_simd::simd_size + 1;
+    for( ls::t_int32_simd::index_type i = 0; i < end; ++i )
     {
         auto simdVal = ls::simd_type< int32_t >( val );
         EXPECT_EQ( mask, ls::greater_bitmask( simdVal, cmp ) )
