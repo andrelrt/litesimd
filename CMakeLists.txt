@@ -14,8 +14,6 @@ if(MSVC)
 else()
     add_compile_options(
         "-Wall"
-        "-Wextra"
-        "-Werror"
         "-march=native"
         "-mtune=native"
         "-fno-strict-aliasing"
@@ -27,7 +25,9 @@ set( CMAKE_EXPORT_COMPILE_COMMANDS ON )
 enable_testing()
 
 add_library(${PROJECT_NAME} INTERFACE)
-target_include_directories(${PROJECT_NAME} INTERFACE include/)
+target_include_directories(${PROJECT_NAME}
+    INTERFACE include
+)
 
 add_subdirectory(doc)
 add_subdirectory(samples)
