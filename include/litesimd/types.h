@@ -165,4 +165,4 @@ using t_double_simd = simd_type< double, default_tag >;
 
 } // namespace litesimd
 
-#endif //LITESIMD_TYPES_H
+#endif // LITESIMD_TYPES_H

@@ -12,11 +12,11 @@ if(BUILD_DOCUMENTATION)
 
     configure_file(${doxyfile_in} ${doxyfile} @ONLY)
 
-    add_custom_target(doc
+    add_custom_target(doc ALL
         COMMAND ${DOXYGEN_EXECUTABLE} ${doxyfile}
         WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
         COMMENT "Generating litesimd documentation with Doxygen"
         VERBATIM)
 
-    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc)
+    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/litesimd DESTINATION share/doc)
 endif()
