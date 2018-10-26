@@ -2,8 +2,6 @@
 
 Litesimd is a no overhead, header only, C++ library for SIMD processing. This library goal is to provide tools for developers to incorporate SIMD processing in all kinds of algorithms not only for calculations. To achieve this goal, some design principles are observed.
 
-[WIP]
-
 ## Design principles
 
 #### SIMD for all kind of algorithms
@@ -134,10 +132,34 @@ litesimd/
     test/                       ; Unit tests
 ```
 
-## Building samples and tests
+## Building
+
+As a header only library, the building process is necessary only for samples, test and documentation.
+
+```
+$ mkdir build
+$ cd build
+$ cmake -DCMAKE_BUILD_TYPE=Release <path/to/litesimd>
+$ make
+$ make install
+```
+
+Boost libraries is necessary to build the samples.
 
 ## Support
 
-## Requirements
+Litesimd is tested on follow environments:
 
+- Linux
+  - GCC: 4.8, 4.9, 5, 6, 7
+  - clang: 4, 5, 6
+- MacOSX
+  - XCode: 8.3, 9, 9.1, 9.2, 9.3, 9.4
+- Windows (WIP)
+  - MSVC: VS 2015, VS 2017
+
+Litesimd supports the follow instructions set
+
+- x86
+  - SSE4.2, AVX2
 
