@@ -8,7 +8,6 @@ if(MSVC)
         "/W4"
         "$<$<CONFIG:RELEASE>:/O2>"
         "$<$<CONFIG:RELEASE>:/Oi>"
-        "/arch:AVX2"
         "/MD$<$<CONFIG:Debug>:d>"
     )
 else()
