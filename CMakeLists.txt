@@ -9,7 +9,7 @@ if(MSVC)
         "$<$<CONFIG:RELEASE>:/O2>"
         "$<$<CONFIG:RELEASE>:/Oi>"
         "/arch:AVX2"
-        "/MT$<$<CONFIG:Debug>:d>"
+        "/MD$<$<CONFIG:Debug>:d>"
     )
 else()
     add_compile_options(
