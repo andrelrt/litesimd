@@ -7,6 +7,9 @@ include(ExternalProject)
 
 list(APPEND GTEST_CMAKE_ARGS "-DCMAKE_C_COMPILER=${CMAKE_C_COMPILER}")
 list(APPEND GTEST_CMAKE_ARGS "-DCMAKE_CXX_COMPILER=${CMAKE_CXX_COMPILER}")
+if(MSVC)
+    list(APPEND GTEST_CMAKE_ARGS "-DCMAKE_CXX_FLAGS=${CMAKE_CXX_FLAGS}")
+endif()
 
 # Download and install GoogleTest
 ExternalProject_Add(
