@@ -124,7 +124,7 @@ litesimd/
         types.h                 ; simd_type
     samples/
         binary_search/          ; Benchmark lower_bound implementations
-        boyer_moore_horspool/   ; Substring search using SIMD
+        boyer_moore_horspool/   ; Substring search using SIMD (WIP: still slower than boost, but faster than std::string::find)
         bubble_sort/            ; Classic bubble sort in SIMD style
         greater/                ; Simple greater than sample (the same of above)
         nway_tree/              ; Another approach for same lower_bound search, using trees
