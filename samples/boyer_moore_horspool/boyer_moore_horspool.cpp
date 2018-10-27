@@ -107,11 +107,11 @@ struct litesimd_boyer_moore_horspool2
         const simd* simd_str = reinterpret_cast<const simd*>( str.data() );
         _mm_prefetch( (char const*)(simd_str + simd_find_size), _MM_HINT_T0 );
 
-        std::array< int32_t, 256 > index;
-        index.fill( std::max<int32_t>( 1, find_size / simd_size ) );
+        std::array< int8_t, 256 > index;
+        index.fill( std::max<int8_t>( 1, find_size / simd_size ) );
         for( int32_t i = 0; i < find_size-1; ++i )
         {
-            index[ find[ i ] ] = std::max<int32_t>( 1, (find_size - 1 - i)/simd_size );
+            index[ find[ i ] ] = std::max<int8_t>( 1, (find_size - 1 - i)/simd_size );
         }
 
         const char* str_data = str.data();
@@ -210,7 +210,7 @@ int main(int argc, char* /*argv*/[])
 {
     constexpr size_t runSize = 0x00100000;
     constexpr size_t seekSize = 0x200;
-    constexpr size_t loop = 10000;
+    constexpr size_t loop = 100000;
     if( argc > 1 )
     {
         g_verbose = false;
