@@ -37,7 +37,7 @@
 namespace litesimd {
 
 /**
- * \defgroup compare Comparision operations
+ * \defgroup compare Comparison operations
  *
  * In litesimd, the compare group has functions to compare values, with `grater than`
  * and `equal to` operators, and to manipulate the result.
