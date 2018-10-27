@@ -144,7 +144,7 @@ $ make
 $ make install
 ```
 
-Boost libraries is required to build the samples.
+Boost libraries are required to build the samples.
 
 ## Support
 
