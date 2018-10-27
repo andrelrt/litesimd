@@ -134,7 +134,7 @@ litesimd/
 
 ## Building
 
-As a header only library, the building process is necessary only for samples, test and documentation.
+As a header only library, the building process is only for samples, test and documentation.
 
 ```
 $ mkdir build
@@ -144,7 +144,7 @@ $ make
 $ make install
 ```
 
-Boost libraries is necessary to build the samples.
+Boost libraries is required to build the samples.
 
 ## Support
 
@@ -158,8 +158,7 @@ Litesimd is tested on follow environments:
 - Windows (WIP)
   - MSVC: VS 2015, VS 2017
 
-Litesimd supports the follow instructions set
+Litesimd supports the follow instructions set:
 
 - x86
   - SSE4.2, AVX2
-
