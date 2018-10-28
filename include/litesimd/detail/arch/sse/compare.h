@@ -113,6 +113,50 @@ DEF_EQUALS( float,   _mm_cmpeq_ps )
 DEF_EQUALS( double,  _mm_cmpeq_pd )
 #undef DEF_EQUALS
 
+// all_of
+// ---------------------------------------------------------------------------------------
+template< typename ValueType_T >
+struct all_of_op< ValueType_T, sse_tag >
+{
+    inline bool operator()( simd_type< ValueType_T, sse_tag > mask )
+    {
+        return !!_mm_test_all_ones( mask );
+    }
+};
+
+template< typename ValueType_T >
+struct all_of_bitmask_op< ValueType_T,
+              typename std::enable_if<std::is_integral<ValueType_T>::value, sse_tag>::type >
+{
+    inline bool operator()( typename simd_type< ValueType_T, sse_tag >::bitmask_type bitmask )
+    {
+        return (bitmask == 0xffff);
+    }
+};
+
+template< typename ValueType_T >
+struct all_of_bitmask_op< ValueType_T,
+              typename std::enable_if<std::is_floating_point<ValueType_T>::value, sse_tag>::type >
+{
+    inline bool operator()( typename simd_type< ValueType_T, sse_tag >::bitmask_type bitmask )
+    {
+        constexpr static typename simd_type< ValueType_T, sse_tag >::bitmask_type true_mask =
+            (1 << simd_type< ValueType_T, sse_tag >::simd_size) -1;
+        return (bitmask == true_mask);
+    }
+};
+
+// none_of
+// ---------------------------------------------------------------------------------------
+template< typename ValueType_T >
+struct none_of_op< ValueType_T, sse_tag >
+{
+    inline bool operator()( simd_type< ValueType_T, sse_tag > mask )
+    {
+        return !!_mm_testz_si128( mask, simd_type< ValueType_T, sse_tag >::ones() );
+    }
+};
+
 } // namespace litesimd
 
 #endif // LITESIMD_HAS_SSE

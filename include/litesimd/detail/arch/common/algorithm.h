@@ -67,8 +67,8 @@ namespace litesimd {
  *
  * \see max
  */
-template< typename Value_T, typename Tag_T > inline simd_type< Value_T, Tag_T >
-min( simd_type< Value_T, Tag_T > lhs, simd_type< Value_T, Tag_T > rhs ){}
+template< typename ValueType_T, typename Tag_T > inline simd_type< ValueType_T, Tag_T >
+min( simd_type< ValueType_T, Tag_T > lhs, simd_type< ValueType_T, Tag_T > rhs ){}
 
 /**
  * \ingroup algorithm
@@ -108,8 +108,8 @@ min( simd_type< Value_T, Tag_T > lhs, simd_type< Value_T, Tag_T > rhs ){}
  *
  * \see min
  */
-template< typename Value_T, typename Tag_T > inline simd_type< Value_T, Tag_T >
-max( simd_type< Value_T, Tag_T > lhs, simd_type< Value_T, Tag_T > rhs ){}
+template< typename ValueType_T, typename Tag_T > inline simd_type< ValueType_T, Tag_T >
+max( simd_type< ValueType_T, Tag_T > lhs, simd_type< ValueType_T, Tag_T > rhs ){}
 
 } // namespace litesimd
 

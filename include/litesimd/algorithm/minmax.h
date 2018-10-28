@@ -23,8 +23,8 @@
 #ifndef LITESIMD_ALGORITHM_MINMAX_H
 #define LITESIMD_ALGORITHM_MINMAX_H
 
-#include <litesimd/arch/sse/algorithm.h>
-#include <litesimd/arch/avx/algorithm.h>
+#include <litesimd/detail/arch/sse/algorithm.h>
+#include <litesimd/detail/arch/avx/algorithm.h>
 #include <litesimd/intravector.h>
 
 namespace litesimd {

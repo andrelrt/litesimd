@@ -140,6 +140,15 @@ template< typename ValueType_T, typename Tag_T = default_tag >
 inline simd_type< ValueType_T, Tag_T >
 equal_to( simd_type< ValueType_T, Tag_T > lhs, simd_type< ValueType_T, Tag_T > rhs ){}
 
+template< typename ValueType_T, typename Tag_T = default_tag >
+struct all_of_op{};
+
+template< typename ValueType_T, typename Tag_T = default_tag >
+struct all_of_bitmask_op{};
+
+template< typename ValueType_T, typename Tag_T = default_tag >
+struct none_of_op{};
+
 } // namespace litesimd
 
 #endif // LITESIMD_ARCH_COMMON_COMPARE_H
