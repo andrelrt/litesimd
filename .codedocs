@@ -1,1 +1,2 @@
 DOXYFILE = doc/litesimd.doxy
+INPUT = include
