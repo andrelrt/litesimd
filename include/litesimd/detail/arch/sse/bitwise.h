@@ -20,65 +20,65 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_AVX_BITWISE_H
-#define LITESIMD_AVX_BITWISE_H
+#ifndef LITESIMD_SSE_BITWISE_H
+#define LITESIMD_SSE_BITWISE_H
 
-#ifdef LITESIMD_HAS_AVX
+#ifdef LITESIMD_HAS_SSE
 
 #include <litesimd/types.h>
-#include <litesimd/arch/common/bitwise.h>
+#include <litesimd/detail/arch/common/bitwise.h>
 
 namespace litesimd {
 
 // Bit AND
 // ---------------------------------------------------------------------------------------
 #define DEF_BIT_AND( TYPE_T, CMD ) \
-template<> inline simd_type< TYPE_T, avx_tag > \
-bit_and< TYPE_T, avx_tag >( simd_type< TYPE_T, avx_tag > lhs, \
-                            simd_type< TYPE_T, avx_tag > rhs ) { \
+template<> inline simd_type< TYPE_T, sse_tag > \
+bit_and< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > lhs, \
+                            simd_type< TYPE_T, sse_tag > rhs ) { \
     return CMD( lhs, rhs ); }
 
-DEF_BIT_AND( int8_t,  _mm256_and_si256 )
-DEF_BIT_AND( int16_t, _mm256_and_si256 )
-DEF_BIT_AND( int32_t, _mm256_and_si256 )
-DEF_BIT_AND( int64_t, _mm256_and_si256 )
-DEF_BIT_AND( float,   _mm256_and_ps )
-DEF_BIT_AND( double,  _mm256_and_pd )
+DEF_BIT_AND( int8_t,  _mm_and_si128 )
+DEF_BIT_AND( int16_t, _mm_and_si128 )
+DEF_BIT_AND( int32_t, _mm_and_si128 )
+DEF_BIT_AND( int64_t, _mm_and_si128 )
+DEF_BIT_AND( float,   _mm_and_ps )
+DEF_BIT_AND( double,  _mm_and_pd )
 #undef DEF_BIT_AND
 
 // Bit OR
 // ---------------------------------------------------------------------------------------
 #define DEF_BIT_OR( TYPE_T, CMD ) \
-template<> inline simd_type< TYPE_T, avx_tag > \
-bit_or< TYPE_T, avx_tag >( simd_type< TYPE_T, avx_tag > lhs, \
-                           simd_type< TYPE_T, avx_tag > rhs ) { \
+template<> inline simd_type< TYPE_T, sse_tag > \
+bit_or< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > lhs, \
+                           simd_type< TYPE_T, sse_tag > rhs ) { \
     return CMD( lhs, rhs ); }
 
-DEF_BIT_OR( int8_t,  _mm256_or_si256 )
-DEF_BIT_OR( int16_t, _mm256_or_si256 )
-DEF_BIT_OR( int32_t, _mm256_or_si256 )
-DEF_BIT_OR( int64_t, _mm256_or_si256 )
-DEF_BIT_OR( float,   _mm256_or_ps )
-DEF_BIT_OR( double,  _mm256_or_pd )
+DEF_BIT_OR( int8_t,  _mm_or_si128 )
+DEF_BIT_OR( int16_t, _mm_or_si128 )
+DEF_BIT_OR( int32_t, _mm_or_si128 )
+DEF_BIT_OR( int64_t, _mm_or_si128 )
+DEF_BIT_OR( float,   _mm_or_ps )
+DEF_BIT_OR( double,  _mm_or_pd )
 #undef DEF_BIT_OR
 
 // Bit XOR
 // ---------------------------------------------------------------------------------------
 #define DEF_BIT_XOR( TYPE_T, CMD ) \
-template<> inline simd_type< TYPE_T, avx_tag > \
-bit_xor< TYPE_T, avx_tag >( simd_type< TYPE_T, avx_tag > lhs, \
-                            simd_type< TYPE_T, avx_tag > rhs ) { \
+template<> inline simd_type< TYPE_T, sse_tag > \
+bit_xor< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > lhs, \
+                            simd_type< TYPE_T, sse_tag > rhs ) { \
     return CMD( lhs, rhs ); }
 
-DEF_BIT_XOR( int8_t,  _mm256_xor_si256 )
-DEF_BIT_XOR( int16_t, _mm256_xor_si256 )
-DEF_BIT_XOR( int32_t, _mm256_xor_si256 )
-DEF_BIT_XOR( int64_t, _mm256_xor_si256 )
-DEF_BIT_XOR( float,   _mm256_xor_ps )
-DEF_BIT_XOR( double,  _mm256_xor_pd )
+DEF_BIT_XOR( int8_t,  _mm_xor_si128 )
+DEF_BIT_XOR( int16_t, _mm_xor_si128 )
+DEF_BIT_XOR( int32_t, _mm_xor_si128 )
+DEF_BIT_XOR( int64_t, _mm_xor_si128 )
+DEF_BIT_XOR( float,   _mm_xor_ps )
+DEF_BIT_XOR( double,  _mm_xor_pd )
 #undef DEF_BIT_XOR
 
 } // namespace litesimd
 
-#endif // LITESIMD_HAS_AVX
-#endif // LITESIMD_AVX_BITWISE_H
+#endif // LITESIMD_HAS_SSE
+#endif // LITESIMD_SSE_BITWISE_H

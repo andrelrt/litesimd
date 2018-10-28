@@ -20,25 +20,19 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_ARCH_TAG_H
-#define LITESIMD_ARCH_TAG_H
+#ifndef LITESIMD_AVX_TAG_H
+#define LITESIMD_AVX_TAG_H
 
-#include <litesimd/arch/sse/tag.h>
-#include <litesimd/arch/avx/tag.h>
+#include <litesimd/detail/arch/common/arch.h>
+
+#ifdef LITESIMD_HAS_AVX
 
 namespace litesimd {
 
-#if defined(LITESIMD_HAS_AVX)
-
-    using default_tag = avx_tag;
-
-#elif defined(LITESIMD_HAS_SSE)
-
-    using default_tag = sse_tag;
-
-#endif //LITESIMD_HAS_SSE
-
+struct avx_tag {};
 
 } // namespace litesimd
 
-#endif // LITESIMD_ARCH_TAG_H
+#endif //LITESIMD_HAS_AVX
+
+#endif //LITESIMD_AVX_TAG_H

@@ -26,7 +26,7 @@
 #ifdef LITESIMD_HAS_SSE
 
 #include <litesimd/types.h>
-#include <litesimd/arch/common/compare.h>
+#include <litesimd/detail/arch/common/compare.h>
 #include <litesimd/detail/helper_macros.h>
 
 namespace litesimd {

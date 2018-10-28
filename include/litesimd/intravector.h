@@ -23,7 +23,7 @@
 #ifndef LITESIMD_INTRAVECTOR_H
 #define LITESIMD_INTRAVECTOR_H
 
-#include <litesimd/arch/intravector.h>
+#include <litesimd/detail/arch/intravector.h>
 
 namespace litesimd {
 

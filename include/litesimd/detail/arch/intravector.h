@@ -20,16 +20,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_COMMON_TRAITS_H
-#define LITESIMD_COMMON_TRAITS_H
+#ifndef LITESIMD_ARCH_INTRAVECTOR_H
+#define LITESIMD_ARCH_INTRAVECTOR_H
 
-#include <litesimd/arch/tag.h>
+#include <litesimd/detail/arch/sse/intravector.h>
+#include <litesimd/detail/arch/avx/intravector.h>
 
-namespace litesimd {
+#endif // LITESIMD_ARCH_INTRAVECTOR_H
 
-template< typename ValueType_T, typename Tag_T = default_tag >
-struct traits{};
-
-} // namespace litesimd
-
-#endif //LITESIMD_COMMON_TRAITS_H

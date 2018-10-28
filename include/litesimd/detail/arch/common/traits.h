@@ -20,11 +20,16 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_ARCH_BITWISE_H
-#define LITESIMD_ARCH_BITWISE_H
+#ifndef LITESIMD_COMMON_TRAITS_H
+#define LITESIMD_COMMON_TRAITS_H
 
-#include <litesimd/types.h>
-#include <litesimd/arch/sse/bitwise.h>
-#include <litesimd/arch/avx/bitwise.h>
+#include <litesimd/detail/arch/tag.h>
 
-#endif // LITESIMD_ARCH_BITWISE_H
+namespace litesimd {
+
+template< typename ValueType_T, typename Tag_T = default_tag >
+struct traits{};
+
+} // namespace litesimd
+
+#endif //LITESIMD_COMMON_TRAITS_H

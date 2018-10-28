@@ -24,7 +24,7 @@
 #define LITESIMD_ARCH_COMPARE_H
 
 #include <litesimd/types.h>
-#include <litesimd/arch/sse/compare.h>
-#include <litesimd/arch/avx/compare.h>
+#include <litesimd/detail/arch/sse/compare.h>
+#include <litesimd/detail/arch/avx/compare.h>
 
 #endif // LITESIMD_ARCH_COMPARE_H

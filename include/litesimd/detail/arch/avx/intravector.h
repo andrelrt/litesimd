@@ -25,8 +25,8 @@
 
 #ifdef LITESIMD_HAS_AVX
 
-#include <litesimd/arch/common/intravector.h>
-#include <litesimd/arch/avx/detail/compatibility.h>
+#include <litesimd/detail/arch/common/intravector.h>
+#include <litesimd/detail/arch/avx/detail/compatibility.h>
 
 namespace litesimd {
 
