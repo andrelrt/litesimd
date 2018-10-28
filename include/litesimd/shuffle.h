@@ -24,7 +24,7 @@
 #define LITESIMD_SHUFFLE_H
 
 #include <litesimd/types.h>
-#include <litesimd/arch/shuffle.h>
+#include <litesimd/detail/arch/shuffle.h>
 #include <litesimd/detail/helper_macros.h>
 
 namespace litesimd {

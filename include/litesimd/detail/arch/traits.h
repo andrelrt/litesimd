@@ -20,11 +20,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_ARCH_SHUFFLE_H
-#define LITESIMD_ARCH_SHUFFLE_H
+#ifndef LITESIMD_ARCH_TRAITS_H
+#define LITESIMD_ARCH_TRAITS_H
 
-#include <litesimd/types.h>
-#include <litesimd/arch/sse/shuffle.h>
-#include <litesimd/arch/avx/shuffle.h>
+#include <litesimd/detail/arch/tag.h>
+#include <litesimd/detail/arch/sse/traits.h>
+#include <litesimd/detail/arch/avx/traits.h>
 
-#endif // LITESIMD_ARCH_SHUFFLE_H
+#endif // LITESIMD_ARCH_TRAITS_H

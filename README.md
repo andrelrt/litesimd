@@ -110,8 +110,7 @@ litesimd/
         algorithm/
             for_each.h          ; for_each item of simd_type, also for_each index of bitmask
             iota.h              ; Fill vetor with [0, simd_size), eg. (3, 2, 1, 0)
-        arch/                   ; Architecture dependent code, should not included directly
-        detail/                 ; Internal helper functions/classes, should not included directly
+        detail/                 ; Internal functions, classes and architecture dependent code. Should not be included directly
         helpers/
             containers.h        ; Aligned std containers, depends on boost::align
             iostream.h          ; operator<< overload for litesimd types

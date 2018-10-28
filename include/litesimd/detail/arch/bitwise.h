@@ -20,19 +20,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_AVX_TAG_H
-#define LITESIMD_AVX_TAG_H
+#ifndef LITESIMD_ARCH_BITWISE_H
+#define LITESIMD_ARCH_BITWISE_H
 
-#include <litesimd/arch/common/arch.h>
+#include <litesimd/types.h>
+#include <litesimd/detail/arch/sse/bitwise.h>
+#include <litesimd/detail/arch/avx/bitwise.h>
 
-#ifdef LITESIMD_HAS_AVX
-
-namespace litesimd {
-
-struct avx_tag {};
-
-} // namespace litesimd
-
-#endif //LITESIMD_HAS_AVX
-
-#endif //LITESIMD_AVX_TAG_H
+#endif // LITESIMD_ARCH_BITWISE_H

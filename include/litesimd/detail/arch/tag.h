@@ -20,11 +20,25 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_ARCH_INTRAVECTOR_H
-#define LITESIMD_ARCH_INTRAVECTOR_H
+#ifndef LITESIMD_ARCH_TAG_H
+#define LITESIMD_ARCH_TAG_H
 
-#include <litesimd/arch/sse/intravector.h>
-#include <litesimd/arch/avx/intravector.h>
+#include <litesimd/detail/arch/sse/tag.h>
+#include <litesimd/detail/arch/avx/tag.h>
 
-#endif // LITESIMD_ARCH_INTRAVECTOR_H
+namespace litesimd {
 
+#if defined(LITESIMD_HAS_AVX)
+
+    using default_tag = avx_tag;
+
+#elif defined(LITESIMD_HAS_SSE)
+
+    using default_tag = sse_tag;
+
+#endif //LITESIMD_HAS_SSE
+
+
+} // namespace litesimd
+
+#endif // LITESIMD_ARCH_TAG_H

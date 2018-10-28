@@ -25,7 +25,7 @@
 
 #ifdef LITESIMD_HAS_AVX
 
-#include <litesimd/arch/common/algorithm.h>
+#include <litesimd/detail/arch/common/algorithm.h>
 #include <litesimd/compare.h>
 #include <litesimd/shuffle.h>
 

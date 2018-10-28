@@ -20,13 +20,11 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_ARCH_ARITHMETIC_H
-#define LITESIMD_ARCH_ARITHMETIC_H
+#ifndef LITESIMD_ARCH_SHUFFLE_H
+#define LITESIMD_ARCH_SHUFFLE_H
 
 #include <litesimd/types.h>
-#include <litesimd/arch/sse/arithmetic.h>
-#include <litesimd/arch/avx/arithmetic.h>
+#include <litesimd/detail/arch/sse/shuffle.h>
+#include <litesimd/detail/arch/avx/shuffle.h>
 
-#endif // LITESIMD_ARCH_ARITHMETIC_H
-
-
+#endif // LITESIMD_ARCH_SHUFFLE_H

@@ -20,84 +20,84 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
-#ifndef LITESIMD_AVX_ARITHMETIC_H
-#define LITESIMD_AVX_ARITHMETIC_H
+#ifndef LITESIMD_SSE_ARITHMETIC_H
+#define LITESIMD_SSE_ARITHMETIC_H
 
-#ifdef LITESIMD_HAS_AVX
+#ifdef LITESIMD_HAS_SSE
 
 #include <litesimd/types.h>
-#include <litesimd/arch/common/arithmetic.h>
+#include <litesimd/detail/arch/common/arithmetic.h>
 
 namespace litesimd {
 
 // Add
 // ---------------------------------------------------------------------------------------
 #define DEF_ADD( TYPE_T, CMD ) \
-template<> inline simd_type< TYPE_T, avx_tag > \
-add< TYPE_T, avx_tag >( simd_type< TYPE_T, avx_tag > lhs, \
-                        simd_type< TYPE_T, avx_tag > rhs ) { \
+template<> inline simd_type< TYPE_T, sse_tag > \
+add< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > lhs, \
+                        simd_type< TYPE_T, sse_tag > rhs ) { \
     return CMD( lhs, rhs ); }
 
-DEF_ADD( int8_t,  _mm256_add_epi8 )
-DEF_ADD( int16_t, _mm256_add_epi16 )
-DEF_ADD( int32_t, _mm256_add_epi32 )
-DEF_ADD( int64_t, _mm256_add_epi64 )
-DEF_ADD( float,   _mm256_add_ps )
-DEF_ADD( double,  _mm256_add_pd )
+DEF_ADD( int8_t,  _mm_add_epi8 )
+DEF_ADD( int16_t, _mm_add_epi16 )
+DEF_ADD( int32_t, _mm_add_epi32 )
+DEF_ADD( int64_t, _mm_add_epi64 )
+DEF_ADD( float,   _mm_add_ps )
+DEF_ADD( double,  _mm_add_pd )
 #undef DEF_ADD
 
 // Sub
 // ---------------------------------------------------------------------------------------
 #define DEF_SUB( TYPE_T, CMD ) \
-template<> inline simd_type< TYPE_T, avx_tag > \
-sub< TYPE_T, avx_tag >( simd_type< TYPE_T, avx_tag > lhs, \
-                        simd_type< TYPE_T, avx_tag > rhs ) { \
+template<> inline simd_type< TYPE_T, sse_tag > \
+sub< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > lhs, \
+                        simd_type< TYPE_T, sse_tag > rhs ) { \
     return CMD( lhs, rhs ); }
 
-DEF_SUB( int8_t,  _mm256_sub_epi8 )
-DEF_SUB( int16_t, _mm256_sub_epi16 )
-DEF_SUB( int32_t, _mm256_sub_epi32 )
-DEF_SUB( int64_t, _mm256_sub_epi64 )
-DEF_SUB( float,   _mm256_sub_ps )
-DEF_SUB( double,  _mm256_sub_pd )
+DEF_SUB( int8_t,  _mm_sub_epi8 )
+DEF_SUB( int16_t, _mm_sub_epi16 )
+DEF_SUB( int32_t, _mm_sub_epi32 )
+DEF_SUB( int64_t, _mm_sub_epi64 )
+DEF_SUB( float,   _mm_sub_ps )
+DEF_SUB( double,  _mm_sub_pd )
 #undef DEF_SUB
 
 // MulLo
 // ---------------------------------------------------------------------------------------
 #define DEF_MULLO( TYPE_T, CMD ) \
-template<> inline simd_type< TYPE_T, avx_tag > \
-mullo< TYPE_T, avx_tag >( simd_type< TYPE_T, avx_tag > lhs, \
-                          simd_type< TYPE_T, avx_tag > rhs ) { \
+template<> inline simd_type< TYPE_T, sse_tag > \
+mullo< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > lhs, \
+                          simd_type< TYPE_T, sse_tag > rhs ) { \
     return CMD( lhs, rhs ); }
 
-DEF_MULLO( int16_t, _mm256_mullo_epi16 )
-DEF_MULLO( int32_t, _mm256_mullo_epi32 )
+DEF_MULLO( int16_t, _mm_mullo_epi16 )
+DEF_MULLO( int32_t, _mm_mullo_epi32 )
 #undef DEF_MULLO
 
 // MulHi
 // ---------------------------------------------------------------------------------------
 #define DEF_MULHI( TYPE_T, CMD ) \
-template<> inline simd_type< TYPE_T, avx_tag > \
-mulhi< TYPE_T, avx_tag >( simd_type< TYPE_T, avx_tag > lhs, \
-                          simd_type< TYPE_T, avx_tag > rhs ) { \
+template<> inline simd_type< TYPE_T, sse_tag > \
+mulhi< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > lhs, \
+                          simd_type< TYPE_T, sse_tag > rhs ) { \
     return CMD( lhs, rhs ); }
 
-DEF_MULHI( int16_t, _mm256_mulhi_epi16 )
+DEF_MULHI( int16_t, _mm_mulhi_epi16 )
 #undef DEF_MULHI
 
 // Div
 // ---------------------------------------------------------------------------------------
 #define DEF_DIV( TYPE_T, CMD ) \
-template<> inline simd_type< TYPE_T, avx_tag > \
-div< TYPE_T, avx_tag >( simd_type< TYPE_T, avx_tag > lhs, \
-                        simd_type< TYPE_T, avx_tag > rhs ) { \
+template<> inline simd_type< TYPE_T, sse_tag > \
+div< TYPE_T, sse_tag >( simd_type< TYPE_T, sse_tag > lhs, \
+                        simd_type< TYPE_T, sse_tag > rhs ) { \
     return CMD( lhs, rhs ); }
 
-DEF_DIV( float,   _mm256_div_ps )
-DEF_DIV( double,  _mm256_div_pd )
+DEF_DIV( float,   _mm_div_ps )
+DEF_DIV( double,  _mm_div_pd )
 #undef DEF_DIV
 
 } // namespace litesimd
 
-#endif // LITESIMD_HAS_AVX
-#endif // LITESIMD_AVX_ARITHMETIC_H
+#endif // LITESIMD_HAS_SSE
+#endif // LITESIMD_SSE_ARITHMETIC_H
