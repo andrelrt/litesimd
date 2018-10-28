@@ -23,7 +23,7 @@
 #ifndef LITESIMD_AVX_TAG_H
 #define LITESIMD_AVX_TAG_H
 
-#include <litesimd/arch/common/arch.h>
+#include <litesimd/detail/arch/common/arch.h>
 
 #ifdef LITESIMD_HAS_AVX
 

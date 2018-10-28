@@ -24,7 +24,7 @@
 #define LITESIMD_ARCH_BITWISE_H
 
 #include <litesimd/types.h>
-#include <litesimd/arch/sse/bitwise.h>
-#include <litesimd/arch/avx/bitwise.h>
+#include <litesimd/detail/arch/sse/bitwise.h>
+#include <litesimd/detail/arch/avx/bitwise.h>
 
 #endif // LITESIMD_ARCH_BITWISE_H

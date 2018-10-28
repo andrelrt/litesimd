@@ -25,7 +25,7 @@
 
 #include <litesimd/types.h>
 #include <litesimd/intravector.h>
-#include <litesimd/arch/bitwise.h>
+#include <litesimd/detail/arch/bitwise.h>
 #include <litesimd/detail/helper_macros.h>
 
 namespace litesimd {

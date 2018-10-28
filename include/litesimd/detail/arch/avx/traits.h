@@ -26,7 +26,7 @@
 #ifdef LITESIMD_HAS_AVX
 
 #include <immintrin.h>
-#include <litesimd/arch/common/traits.h>
+#include <litesimd/detail/arch/common/traits.h>
 
 namespace litesimd {
 

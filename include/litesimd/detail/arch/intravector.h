@@ -23,8 +23,8 @@
 #ifndef LITESIMD_ARCH_INTRAVECTOR_H
 #define LITESIMD_ARCH_INTRAVECTOR_H
 
-#include <litesimd/arch/sse/intravector.h>
-#include <litesimd/arch/avx/intravector.h>
+#include <litesimd/detail/arch/sse/intravector.h>
+#include <litesimd/detail/arch/avx/intravector.h>
 
 #endif // LITESIMD_ARCH_INTRAVECTOR_H
 

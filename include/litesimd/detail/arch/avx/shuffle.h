@@ -26,8 +26,8 @@
 #ifdef LITESIMD_HAS_AVX
 
 #include <litesimd/types.h>
-#include <litesimd/arch/common/shuffle.h>
-#include <litesimd/arch/avx/detail/compatibility.h>
+#include <litesimd/detail/arch/common/shuffle.h>
+#include <litesimd/detail/arch/avx/detail/compatibility.h>
 
 namespace litesimd {
 

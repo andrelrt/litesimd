@@ -27,7 +27,7 @@
 
 #include <smmintrin.h>
 #include <litesimd/types.h>
-#include <litesimd/arch/common/shuffle.h>
+#include <litesimd/detail/arch/common/shuffle.h>
 
 namespace litesimd {
 

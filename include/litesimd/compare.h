@@ -31,7 +31,7 @@
 #endif
 #include <type_traits>
 #include <litesimd/types.h>
-#include <litesimd/arch/compare.h>
+#include <litesimd/detail/arch/compare.h>
 #include <litesimd/detail/helper_macros.h>
 
 namespace litesimd {

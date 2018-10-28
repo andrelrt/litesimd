@@ -23,8 +23,8 @@
 #ifndef LITESIMD_ARCH_TAG_H
 #define LITESIMD_ARCH_TAG_H
 
-#include <litesimd/arch/sse/tag.h>
-#include <litesimd/arch/avx/tag.h>
+#include <litesimd/detail/arch/sse/tag.h>
+#include <litesimd/detail/arch/avx/tag.h>
 
 namespace litesimd {
 

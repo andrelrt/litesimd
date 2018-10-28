@@ -26,7 +26,7 @@
 #ifdef LITESIMD_HAS_AVX
 
 #include <litesimd/types.h>
-#include <litesimd/arch/common/bitwise.h>
+#include <litesimd/detail/arch/common/bitwise.h>
 
 namespace litesimd {
 
