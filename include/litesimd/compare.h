@@ -465,38 +465,70 @@ DEFINE_BINARY_FUNCTION_ADAPTORS( equal_to_first_index, index_type )
  * all_of( equal_to( x, z ) ): true
  * ```
  */
-template< typename ValueType_T, typename Tag_T = default_tag > inline bool
-all_of( simd_type< ValueType_T, Tag_T > mask )
+template< typename ValueType_T, typename Tag_T = default_tag >
+inline bool all_of( simd_type< ValueType_T, Tag_T > mask )
 {
     return all_of_op< ValueType_T, Tag_T >()( mask );
 }
 
-template< typename ValueType_T, typename Tag_T > inline bool
-all_of( typename simd_type< ValueType_T, Tag_T >::bitmask_type bitmask )
+/**
+ * \ingroup compare
+ * \brief Verify a bitmask and returns true if all values are true.
+ *
+ * \param bitmask The bitmask to be verified
+ * \tparam ValueType_T Base type of SIMD register
+ * \returns `true` if *all* values are `true`, otherwise returns `false`
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/compare.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 9, 8, 7, 6 );
+ *     ls::t_int32_simd y( 9, 8, 5, 6 );
+ *     auto z = x;
+ *     std::cout << "all_of( equal_to_bitmask( x, y ) ): " << std::boolalpha << ls::all_of( ls::equal_to_bitmask( x, y ) ) << std::endl;
+ *     std::cout << "all_of( equal_to_bitmask( x, z ) ): " << std::boolalpha << ls::all_of( ls::equal_to_bitmask( x, z ) ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * all_of( equal_to_bitmask( x, y ) ): false
+ * all_of( equal_to_bitmask( x, z ) ): true
+ * ```
+ */
+template< typename ValueType_T, typename Tag_T >
+inline bool all_of( typename simd_type< ValueType_T, Tag_T >::bitmask_type bitmask )
 {
     return all_of_bitmask_op< ValueType_T, Tag_T >()( bitmask );
 }
 
-template< typename ValueType_T, typename Tag_T > inline bool
-none_of( simd_type< ValueType_T, Tag_T > mask )
+template< typename ValueType_T, typename Tag_T >
+inline bool none_of( simd_type< ValueType_T, Tag_T > mask )
 {
     return none_of_op< ValueType_T, Tag_T >()( mask );
 }
 
-template< typename ValueType_T, typename Tag_T > inline bool
-none_of( typename simd_type< ValueType_T, Tag_T >::bitmask_type bitmask )
+template< typename ValueType_T, typename Tag_T >
+inline bool none_of( typename simd_type< ValueType_T, Tag_T >::bitmask_type bitmask )
 {
     return (bitmask == 0);
 }
 
-template< typename ValueType_T, typename Tag_T > inline bool
-any_of( simd_type< ValueType_T, Tag_T > mask )
+template< typename ValueType_T, typename Tag_T >
+inline bool any_of( simd_type< ValueType_T, Tag_T > mask )
 {
     return !none_of< ValueType_T, Tag_T >( mask );
 }
 
-template< typename ValueType_T, typename Tag_T > inline bool
-any_of( typename simd_type< ValueType_T, Tag_T >::bitmask_type bitmask )
+template< typename ValueType_T, typename Tag_T >
+inline bool any_of( typename simd_type< ValueType_T, Tag_T >::bitmask_type bitmask )
 {
     return !none_of< ValueType_T, Tag_T >( bitmask );
 }
