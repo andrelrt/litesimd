@@ -433,6 +433,330 @@ equal_to_first_index( simd_type< ValueType_T, Tag_T > lhs,
 
 DEFINE_BINARY_FUNCTION_ADAPTORS( equal_to_first_index, index_type )
 
+/**
+ * \ingroup compare
+ * \brief Verify a _SIMD mask_ and returns true if all values are true.
+ *
+ * \param mask SIMD mask to be verified
+ * \tparam ValueType_T Base type of SIMD register
+ * \returns `true` if **all** values are `true`, otherwise returns `false`
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/compare.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 9, 8, 7, 6 );
+ *     ls::t_int32_simd y( 9, 8, 5, 6 );
+ *     auto z = x;
+ *     std::cout << "all_of( equal_to( x, y ) ): " << std::boolalpha << ls::all_of( ls::equal_to( x, y ) ) << std::endl;
+ *     std::cout << "all_of( equal_to( x, z ) ): " << std::boolalpha << ls::all_of( ls::equal_to( x, z ) ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * all_of( equal_to( x, y ) ): false
+ * all_of( equal_to( x, z ) ): true
+ * ```
+ */
+template< typename ValueType_T, typename Tag_T = default_tag >
+inline bool all_of( simd_type< ValueType_T, Tag_T > mask )
+{
+    return all_of_op< ValueType_T, Tag_T >()( mask );
+}
+
+/**
+ * \ingroup compare
+ * \brief Verify a bitmask and returns true if all values are true.
+ *
+ * \param bitmask The bitmask to be verified
+ * \tparam ValueType_T Base type of SIMD register
+ * \returns `true` if **all** values are `true`, otherwise returns `false`
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/compare.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 9, 8, 7, 6 );
+ *     ls::t_int32_simd y( 9, 8, 5, 6 );
+ *     auto z = x;
+ *     std::cout << "all_of( equal_to_bitmask( x, y ) ): " << std::boolalpha << ls::all_of< int32_t >( ls::equal_to_bitmask( x, y ) ) << std::endl;
+ *     std::cout << "all_of( equal_to_bitmask( x, z ) ): " << std::boolalpha << ls::all_of< int32_t >( ls::equal_to_bitmask( x, z ) ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * all_of( equal_to_bitmask( x, y ) ): false
+ * all_of( equal_to_bitmask( x, z ) ): true
+ * ```
+ */
+template< typename ValueType_T, typename Tag_T >
+inline bool all_of( typename simd_type< ValueType_T, Tag_T >::bitmask_type bitmask )
+{
+    return all_of_bitmask_op< ValueType_T, Tag_T >()( bitmask );
+}
+
+/**
+ * \ingroup compare
+ * \brief Verify a _SIMD mask_ and returns true if all values are false.
+ *
+ * \param mask SIMD mask to be verified
+ * \tparam ValueType_T Base type of SIMD register
+ * \returns `true` if **all** values are `false`, otherwise returns `false`
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/compare.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 9, 8, 7, 6 );
+ *     ls::t_int32_simd y( 9, 8, 5, 6 );
+ *     auto z = ls::t_int32_simd::zero();
+ *     std::cout << "none_of( equal_to( x, y ) ): " << std::boolalpha << ls::none_of( ls::equal_to( x, y ) ) << std::endl;
+ *     std::cout << "none_of( equal_to( x, z ) ): " << std::boolalpha << ls::none_of( ls::equal_to( x, z ) ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * none_of( equal_to( x, y ) ): false
+ * none_of( equal_to( x, z ) ): true
+ * ```
+ */
+template< typename ValueType_T, typename Tag_T >
+inline bool none_of( simd_type< ValueType_T, Tag_T > mask )
+{
+    return none_of_op< ValueType_T, Tag_T >()( mask );
+}
+
+/**
+ * \ingroup compare
+ * \brief Verify a bitmask and returns true if all values are false.
+ *
+ * \param bitmask The bitmask to be verified
+ * \tparam ValueType_T Base type of SIMD register
+ * \returns `true` if **all** values are `false`, otherwise returns `false`
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/compare.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 9, 8, 7, 6 );
+ *     ls::t_int32_simd y( 9, 8, 5, 6 );
+ *     auto z = ls::t_int32_simd::zero();
+ *     std::cout << "none_of( equal_to_bitmask( x, y ) ): " << std::boolalpha << ls::none_of< int32_t >( ls::equal_to_bitmask( x, y ) ) << std::endl;
+ *     std::cout << "none_of( equal_to_bitmask( x, z ) ): " << std::boolalpha << ls::none_of< int32_t >( ls::equal_to_bitmask( x, z ) ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * none_of( equal_to( x, y ) ): false
+ * none_of( equal_to( x, z ) ): true
+ * ```
+ */
+template< typename ValueType_T, typename Tag_T >
+inline bool none_of( typename simd_type< ValueType_T, Tag_T >::bitmask_type bitmask )
+{
+    return (bitmask == 0);
+}
+
+/**
+ * \ingroup compare
+ * \brief Verify a _SIMD mask_ and returns true if any value is true.
+ *
+ * \param mask SIMD mask to be verified
+ * \tparam ValueType_T Base type of SIMD register
+ * \returns `true` if **any** value is `true`, otherwise returns `false`
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/compare.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 9, 8, 7, 6 );
+ *     ls::t_int32_simd y( 9, 8, 5, 6 );
+ *     auto z = ls::t_int32_simd::zero();
+ *     std::cout << "any_of( equal_to( x, y ) ): " << std::boolalpha << ls::any_of( ls::equal_to( x, y ) ) << std::endl;
+ *     std::cout << "any_of( equal_to( x, z ) ): " << std::boolalpha << ls::any_of( ls::equal_to( x, z ) ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * any_of( equal_to( x, y ) ): true
+ * any_of( equal_to( x, z ) ): false
+ * ```
+ */
+template< typename ValueType_T, typename Tag_T >
+inline bool any_of( simd_type< ValueType_T, Tag_T > mask )
+{
+    return !none_of< ValueType_T, Tag_T >( mask );
+}
+
+/**
+ * \ingroup compare
+ * \brief Verify a bitmask and returns true if any value is true.
+ *
+ * \param bitmask The bitmask to be verified
+ * \tparam ValueType_T Base type of SIMD register
+ * \returns `true` if **any** value is `true`, otherwise returns `false`
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/compare.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 9, 8, 7, 6 );
+ *     ls::t_int32_simd y( 9, 8, 5, 6 );
+ *     auto z = ls::t_int32_simd::zero();
+ *     std::cout << "any_of( equal_to_bitmask( x, y ) ): " << std::boolalpha << ls::any_of< int32_t >( ls::equal_to_bitmask( x, y ) ) << std::endl;
+ *     std::cout << "any_of( equal_to_bitmask( x, z ) ): " << std::boolalpha << ls::any_of< int32_t >( ls::equal_to_bitmask( x, z ) ) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * any_of( equal_to( x, y ) ): true
+ * any_of( equal_to( x, z ) ): false
+ * ```
+ */
+template< typename ValueType_T, typename Tag_T >
+inline bool any_of( typename simd_type< ValueType_T, Tag_T >::bitmask_type bitmask )
+{
+    return !none_of< ValueType_T, Tag_T >( bitmask );
+}
+
+/**
+ * \ingroup compare
+ * \brief Compares two SIMD registers and returns true if all values are equal.
+ *
+ * This is implemented as:
+ * ```{.cpp}
+ * template< typename LHS, typename RHS >
+ * bool operator==( LHS lhs, RHS rhs )
+ * {
+ *     return all_of( equal_to( lhs, rhs ) );
+ * }
+ * ```
+ *
+ * \param lhs, rhs Values to be compared
+ * \returns `true` if **all** values are equal, otherwise returns `false`
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/compare.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 9, 8, 7, 6 );
+ *     ls::t_int32_simd y( 9, 8, 5, 6 );
+ *     auto z = x;
+ *     std::cout << "x == y: " << std::boolalpha << (x == y) << std::endl;
+ *     std::cout << "x == z: " << std::boolalpha << (x == z) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * x == y: false
+ * x == z: true
+ * ```
+ */
+template< typename LHS, typename RHS >
+inline bool
+operator==( LHS lhs, RHS rhs )
+{
+    return all_of( equal_to( lhs, rhs ) );
+}
+
+/**
+ * \ingroup compare
+ * \brief Compares two SIMD registers and returns true if any value is different.
+ *
+ * This is implemented as:
+ * ```{.cpp}
+ * template< typename LHS, typename RHS >
+ * bool operator!=( LHS lhs, RHS rhs )
+ * {
+ *     return !operator==( lhs, rhs );
+ * }
+ * ```
+ *
+ * \param lhs, rhs Values to be compared
+ * \returns `true` if **any** value is different, otherwise returns `false`
+ *
+ * **Example**
+ * ```{.cpp}
+ * #include <iostream>
+ * #include <litesimd/types.h>
+ * #include <litesimd/compare.h>
+ *
+ * int main()
+ * {
+ *     namespace ls = litesimd;
+ *
+ *     ls::t_int32_simd x( 9, 8, 7, 6 );
+ *     ls::t_int32_simd y( 9, 8, 5, 6 );
+ *     auto z = x;
+ *     std::cout << "x != y: " << std::boolalpha << (x != y) << std::endl;
+ *     std::cout << "x != z: " << std::boolalpha << (x != z) << std::endl;
+ *     return 0;
+ * }
+ * ```
+ * Output on a SSE compilation
+ * ```
+ * x != y: true
+ * x != z: false
+ * ```
+ */
+template< typename LHS, typename RHS >
+inline bool
+operator!=( LHS lhs, RHS rhs )
+{
+    return !operator==( lhs, rhs );
+}
+
+
+
 } // namespace litesimd
 
 #endif // LITESIMD_COMPARE_H

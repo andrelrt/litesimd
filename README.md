@@ -110,11 +110,12 @@ litesimd/
         algorithm/
             for_each.h          ; for_each item of simd_type, also for_each index of bitmask
             iota.h              ; Fill vetor with [0, simd_size), eg. (3, 2, 1, 0)
+            minmax.h            ; Min and max functions
         detail/                 ; Internal functions, classes and architecture dependent code. Should not be included directly
         helpers/
             containers.h        ; Aligned std containers, depends on boost::align
             iostream.h          ; operator<< overload for litesimd types
-        algorithm.h             ; min/max, for_each, iota and all other algorithms
+        algorithm.h             ; Includes all algorithms
         arithmetic.h            ; add, sub, mul, mullo, mulhi, div functions
         bitwise.h               ; bit_and, bit_or, bit_xor and bit_not functions
         compare.h               ; greater, equal_to, mask_to_bitmask, bitmask_to_high/low_index

@@ -28,6 +28,7 @@
 #include <litesimd/types.h>
 #include <litesimd/detail/arch/common/compare.h>
 #include <litesimd/detail/arch/sse/compare.h>
+#include <litesimd/detail/arch/avx/bitwise.h>
 
 namespace litesimd {
 
@@ -125,6 +126,88 @@ equal_to< double, avx_tag >( simd_type< double, avx_tag > lhs,
     // Quietly ignore NaN
     return _mm256_cmp_pd( lhs, rhs, _CMP_EQ_OQ );
 }
+
+// none_of
+// ---------------------------------------------------------------------------------------
+template< typename ValueType_T >
+struct none_of_op< ValueType_T,
+              typename std::enable_if<std::is_integral<ValueType_T>::value, avx_tag>::type >
+{
+    inline bool operator()( simd_type< ValueType_T, avx_tag > mask )
+    {
+        return !!_mm256_testz_si256( mask, simd_type< ValueType_T, avx_tag >::ones() );
+    }
+};
+
+template<> struct none_of_op< float, avx_tag >
+{
+    inline bool operator()( simd_type< float, avx_tag > mask )
+    {
+        __m256i imask = reinterpret_cast<__m256i>( static_cast<__m256>( mask ) );
+        return none_of_op< int32_t, avx_tag >()( imask );
+    }
+};
+
+template<> struct none_of_op< double, avx_tag >
+{
+    inline bool operator()( simd_type< double, avx_tag > mask )
+    {
+        __m256i imask = reinterpret_cast<__m256i>( static_cast<__m256d>( mask ) );
+        return none_of_op< int64_t, avx_tag >()( imask );
+    }
+};
+
+// all_of
+// ---------------------------------------------------------------------------------------
+template< typename ValueType_T >
+struct all_of_op< ValueType_T,
+              typename std::enable_if<std::is_integral<ValueType_T>::value, avx_tag>::type >
+{
+    inline bool operator()( simd_type< ValueType_T, avx_tag > mask )
+    {
+        return none_of_op< ValueType_T, avx_tag >()( bit_not( mask ) );
+    }
+};
+
+template<> struct all_of_op< float, avx_tag >
+{
+    inline bool operator()( simd_type< float, avx_tag > mask )
+    {
+        __m256i imask = reinterpret_cast<__m256i>( static_cast<__m256>( mask ) );
+        return all_of_op< int32_t, avx_tag >()( imask );
+    }
+};
+
+template<> struct all_of_op< double, avx_tag >
+{
+    inline bool operator()( simd_type< double, avx_tag > mask )
+    {
+        __m256i imask = reinterpret_cast<__m256i>( static_cast<__m256d>( mask ) );
+        return all_of_op< int64_t, avx_tag >()( imask );
+    }
+};
+
+template< typename ValueType_T >
+struct all_of_bitmask_op< ValueType_T,
+              typename std::enable_if<std::is_integral<ValueType_T>::value, avx_tag>::type >
+{
+    inline bool operator()( typename simd_type< ValueType_T, avx_tag >::bitmask_type bitmask )
+    {
+        return (bitmask == 0xffffffff);
+    }
+};
+
+template< typename ValueType_T >
+struct all_of_bitmask_op< ValueType_T,
+              typename std::enable_if<std::is_floating_point<ValueType_T>::value, avx_tag>::type >
+{
+    inline bool operator()( typename simd_type< ValueType_T, avx_tag >::bitmask_type bitmask )
+    {
+        constexpr static typename simd_type< ValueType_T, avx_tag >::bitmask_type true_mask =
+            (1 << simd_type< ValueType_T, avx_tag >::simd_size) -1;
+        return (bitmask == true_mask);
+    }
+};
 
 } // namespace litesimd
 
