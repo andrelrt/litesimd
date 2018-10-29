@@ -185,6 +185,30 @@ TYPED_TEST(SimdCompareTypes, AllAnyNoneOfTypedTest)
     EXPECT_FALSE( (ls::any_of< type, tag >( ls::equal_to_bitmask( cmp, simd::zero() ) )) );
     EXPECT_TRUE( (ls::none_of< type, tag >( ls::equal_to_bitmask( cmp, simd::zero() ) )) );
 }
+
+TYPED_TEST(SimdCompareTypes, OperatorsTypedTest)
+{
+    using type = typename TypeParam::first_type;
+    using tag = typename TypeParam::second_type;
+    using simd = ls::simd_type< type, tag >;
+    constexpr size_t size = ls::simd_type< type, tag >::simd_size;
+
+    simd cmp;
+    type* pCmp = reinterpret_cast<type*>( &cmp );
+    type val = 2;
+
+    for( size_t i = 0; i < size; ++i )
+    {
+        pCmp[ i ] = val;
+        val += 2;
+    }
+
+    simd cmpEq( cmp );
+    simd cmpDf = ls::set<0>( cmp, static_cast<type>(0) );
+
+    EXPECT_EQ( cmp, cmpEq );
+    EXPECT_NE( cmp, cmpDf );
+}
 #endif //__SSE2__
 
 TEST(SimdCompareTest, GreaterThanDefault)

@@ -661,6 +661,26 @@ inline bool any_of( typename simd_type< ValueType_T, Tag_T >::bitmask_type bitma
     return !none_of< ValueType_T, Tag_T >( bitmask );
 }
 
+template< typename SimdType_T,
+          typename SimdType_T::simd_value_type* = nullptr >
+inline bool
+operator==( SimdType_T lhs, SimdType_T rhs )
+{
+    using type = typename SimdType_T::simd_value_type;
+    using tag = typename SimdType_T::simd_tag;
+    return all_of< type, tag >( equal_to< type, tag >( lhs, rhs ) );
+}
+
+template< typename SimdType_T,
+          typename SimdType_T::simd_value_type* = nullptr >
+inline bool
+operator!=( SimdType_T lhs, SimdType_T rhs )
+{
+    return !operator==< SimdType_T >( lhs, rhs );
+}
+
+
+
 } // namespace litesimd
 
 #endif // LITESIMD_COMPARE_H
