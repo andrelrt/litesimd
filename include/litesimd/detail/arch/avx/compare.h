@@ -130,7 +130,8 @@ equal_to< double, avx_tag >( simd_type< double, avx_tag > lhs,
 // none_of
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T >
-struct none_of_op< ValueType_T, avx_tag >
+struct none_of_op< ValueType_T,
+              typename std::enable_if<std::is_integral<ValueType_T>::value, avx_tag>::type >
 {
     inline bool operator()( simd_type< ValueType_T, avx_tag > mask )
     {
@@ -138,14 +139,51 @@ struct none_of_op< ValueType_T, avx_tag >
     }
 };
 
+template<> struct none_of_op< float, avx_tag >
+{
+    inline bool operator()( simd_type< float, avx_tag > mask )
+    {
+        __m256i imask = reinterpret_cast<__m256i>( static_cast<__m256>( mask ) );
+        return none_of_op< int32_t, avx_tag >()( imask );
+    }
+};
+
+template<> struct none_of_op< double, avx_tag >
+{
+    inline bool operator()( simd_type< double, avx_tag > mask )
+    {
+        __m256i imask = reinterpret_cast<__m256i>( static_cast<__m256d>( mask ) );
+        return none_of_op< int64_t, avx_tag >()( imask );
+    }
+};
+
 // all_of
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T >
-struct all_of_op< ValueType_T, avx_tag >
+struct all_of_op< ValueType_T,
+              typename std::enable_if<std::is_integral<ValueType_T>::value, avx_tag>::type >
 {
     inline bool operator()( simd_type< ValueType_T, avx_tag > mask )
     {
         return none_of_op< ValueType_T, avx_tag >()( bit_not( mask ) );
+    }
+};
+
+template<> struct all_of_op< float, avx_tag >
+{
+    inline bool operator()( simd_type< float, avx_tag > mask )
+    {
+        __m256i imask = reinterpret_cast<__m256i>( static_cast<__m256>( mask ) );
+        return all_of_op< int32_t, avx_tag >()( imask );
+    }
+};
+
+template<> struct all_of_op< double, avx_tag >
+{
+    inline bool operator()( simd_type< double, avx_tag > mask )
+    {
+        __m256i imask = reinterpret_cast<__m256i>( static_cast<__m256d>( mask ) );
+        return all_of_op< int64_t, avx_tag >()( imask );
     }
 };
 

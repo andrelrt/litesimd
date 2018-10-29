@@ -116,15 +116,6 @@ DEF_EQUALS( double,  _mm_cmpeq_pd )
 // all_of
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T >
-struct all_of_op< ValueType_T, sse_tag >
-{
-    inline bool operator()( simd_type< ValueType_T, sse_tag > mask )
-    {
-        return !!_mm_test_all_ones( mask );
-    }
-};
-
-template< typename ValueType_T >
 struct all_of_bitmask_op< ValueType_T,
               typename std::enable_if<std::is_integral<ValueType_T>::value, sse_tag>::type >
 {
@@ -146,14 +137,45 @@ struct all_of_bitmask_op< ValueType_T,
     }
 };
 
+template< typename ValueType_T >
+struct all_of_op< ValueType_T,
+              typename std::enable_if<std::is_integral<ValueType_T>::value, sse_tag>::type >
+{
+    inline bool operator()( simd_type< ValueType_T, sse_tag > mask )
+    {
+        return !!_mm_test_all_ones( mask );
+    }
+};
+
+template< typename ValueType_T >
+struct all_of_op< ValueType_T,
+              typename std::enable_if<std::is_floating_point<ValueType_T>::value, sse_tag>::type >
+{
+    inline bool operator()( simd_type< ValueType_T, sse_tag > mask )
+    {
+        return all_of_bitmask_op< ValueType_T, sse_tag >()( mask_to_bitmask< ValueType_T, sse_tag >( mask ) );
+    }
+};
+
 // none_of
 // ---------------------------------------------------------------------------------------
 template< typename ValueType_T >
-struct none_of_op< ValueType_T, sse_tag >
+struct none_of_op< ValueType_T,
+              typename std::enable_if<std::is_integral<ValueType_T>::value, sse_tag>::type >
 {
     inline bool operator()( simd_type< ValueType_T, sse_tag > mask )
     {
         return !!_mm_testz_si128( mask, simd_type< ValueType_T, sse_tag >::ones() );
+    }
+};
+
+template< typename ValueType_T >
+struct none_of_op< ValueType_T,
+              typename std::enable_if<std::is_floating_point<ValueType_T>::value, sse_tag>::type >
+{
+    inline bool operator()( simd_type< ValueType_T, sse_tag > mask )
+    {
+        return (0 == mask_to_bitmask< ValueType_T, sse_tag >( mask ) );
     }
 };
 

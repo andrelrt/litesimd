@@ -22,6 +22,9 @@
 
 #include <litesimd/types.h>
 #include <litesimd/compare.h>
+#include <litesimd/shuffle.h>
+#include <litesimd/bitwise.h>
+#include <litesimd/helpers/iostream.h>
 #include "gtest/gtest.h"
 
 namespace ls = litesimd;
@@ -136,6 +139,54 @@ TYPED_TEST(SimdCompareTypes, EqualsTypedTest)
         if( i == 0 )
             mask = std::is_integral< type >::value ? (1 << sizeof(type)) - 1 : 1;
     }
+}
+
+TYPED_TEST(SimdCompareTypes, AllAnyNoneOfTypedTest)
+{
+    using type = typename TypeParam::first_type;
+    using tag = typename TypeParam::second_type;
+    using simd = ls::simd_type< type, tag >;
+    constexpr size_t size = ls::simd_type< type, tag >::simd_size;
+
+    simd cmp;
+    type* pCmp = reinterpret_cast<type*>( &cmp );
+    type val = 2;
+
+    for( size_t i = 0; i < size; ++i )
+    {
+        pCmp[ i ] = val;
+        val += 2;
+    }
+
+    simd cmpEq( cmp );
+    simd cmpDf = ls::set<0>( cmp, static_cast<type>(0) );
+
+    type ret = ls::get<0>(ls::bit_not(ls::equal_to( cmp, cmpEq )));
+    uint32_t *hack = reinterpret_cast<uint32_t*>( &ret );
+
+    EXPECT_TRUE( (ls::all_of< type, tag >( ls::equal_to( cmp, cmpEq ) )) ) << "val: " << ls::equal_to( cmp, cmpEq ) << " " << std::hex << *hack;
+    EXPECT_TRUE( (ls::any_of< type, tag >( ls::equal_to( cmp, cmpEq ) )) ) << "val: " << ls::equal_to( cmp, cmpEq );
+    EXPECT_FALSE( (ls::none_of< type, tag >( ls::equal_to( cmp, cmpEq ) )) ) << "val: " << std::hex << *hack;
+
+    EXPECT_FALSE( (ls::all_of< type, tag >( ls::equal_to( cmp, cmpDf ) )) );
+    EXPECT_TRUE( (ls::any_of< type, tag >( ls::equal_to( cmp, cmpDf ) )) );
+    EXPECT_FALSE( (ls::none_of< type, tag >( ls::equal_to( cmp, cmpDf ) )) );
+
+    EXPECT_FALSE( (ls::all_of< type, tag >( ls::equal_to( cmp, simd::zero() ) )) );
+    EXPECT_FALSE( (ls::any_of< type, tag >( ls::equal_to( cmp, simd::zero() ) )) );
+    EXPECT_TRUE( (ls::none_of< type, tag >( ls::equal_to( cmp, simd::zero() ) )) );
+
+    EXPECT_TRUE( (ls::all_of< type, tag >( ls::equal_to_bitmask( cmp, cmpEq ) )) );
+    EXPECT_TRUE( (ls::any_of< type, tag >( ls::equal_to_bitmask( cmp, cmpEq ) )) );
+    EXPECT_FALSE( (ls::none_of< type, tag >( ls::equal_to_bitmask( cmp, cmpEq ) )) );
+
+    EXPECT_FALSE( (ls::all_of< type, tag >( ls::equal_to_bitmask( cmp, cmpDf ) )) );
+    EXPECT_TRUE( (ls::any_of< type, tag >( ls::equal_to_bitmask( cmp, cmpDf ) )) );
+    EXPECT_FALSE( (ls::none_of< type, tag >( ls::equal_to_bitmask( cmp, cmpDf ) )) );
+
+    EXPECT_FALSE( (ls::all_of< type, tag >( ls::equal_to_bitmask( cmp, simd::zero() ) )) );
+    EXPECT_FALSE( (ls::any_of< type, tag >( ls::equal_to_bitmask( cmp, simd::zero() ) )) );
+    EXPECT_TRUE( (ls::none_of< type, tag >( ls::equal_to_bitmask( cmp, simd::zero() ) )) );
 }
 #endif //__SSE2__
 
