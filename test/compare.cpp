@@ -161,9 +161,6 @@ TYPED_TEST(SimdCompareTypes, AllAnyNoneOfTypedTest)
     simd cmpEq( cmp );
     simd cmpDf = ls::set<0>( cmp, static_cast<type>(0) );
 
-    type ret = ls::get<0>(ls::bit_not(ls::equal_to( cmp, cmpEq )));
-    uint32_t *hack = reinterpret_cast<uint32_t*>( &ret );
-
     EXPECT_TRUE( (ls::all_of< type, tag >( ls::equal_to( cmp, cmpEq ) )) );
     EXPECT_TRUE( (ls::any_of< type, tag >( ls::equal_to( cmp, cmpEq ) )) );
     EXPECT_FALSE( (ls::none_of< type, tag >( ls::equal_to( cmp, cmpEq ) )) );
