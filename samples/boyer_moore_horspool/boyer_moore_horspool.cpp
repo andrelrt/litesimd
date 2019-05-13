@@ -20,6 +20,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 // SOFTWARE.
 
+#include <cstring>
 #include <algorithm>
 #include <iostream>
 #include <iomanip>
@@ -91,6 +92,64 @@ template<> int is_zero< ls::avx_tag >( ls::simd_type< int8_t, ls::avx_tag > val 
     return _mm256_testz_si256( val, ls::simd_type< int8_t, ls::avx_tag >::ones() );
 }
 #endif // LITESIMD_HAS_AVX
+
+template< typename Tag_T >
+struct litesimd_boyer_moore_horspool
+{
+    size_t operator()( const std::string& str, const std::string& find )
+    {
+        using simd = ls::simd_type< int8_t, Tag_T >;
+        constexpr size_t simd_size = ls::simd_type< int8_t, Tag_T >::simd_size;
+
+        size_t find_size = find.size();
+
+        simd find_end = *reinterpret_cast<const simd*>( find.data() + find_size - simd_size );
+
+        std::array< size_t, 256 > index;
+        index.fill( find_size );
+        for( size_t i = 0; i < find_size; ++i )
+        {
+            index[ find[ i ] ] = find_size - i;
+        }
+
+        size_t str_size = str.size();
+        for( size_t idx = find_size -1; idx < str_size; )
+        {
+            simd cur( str[ idx ] );
+
+            auto mask = ls::equal_to< int8_t, Tag_T >( find_end, cur );
+
+            if( !is_zero< Tag_T >( mask ) )
+            {
+                size_t found = std::numeric_limits<size_t>::max();
+                uint32_t bitmask = ls::mask_to_bitmask< int8_t, Tag_T >( mask );
+                ls::for_each_index<int8_t>( bitmask, [&]( int check_idx ) -> bool
+                {
+                    simd last = *reinterpret_cast<const simd*>( str.data() + idx - check_idx );
+                    auto last_mask = ls::equal_to_bitmask< int8_t, Tag_T >( find_end, last );
+                    if( ls::all_of<int8_t, Tag_T>( last_mask ) )
+                    {
+                        auto ret = memcmp( find.c_str(),
+                                           str.data() + idx - check_idx - find_size,
+                                           find_size );
+                        if( ret == 0 )
+                        {
+                            found = check_idx;
+                            return false;
+                        }
+                    }
+                    return true;
+                });
+                if( found < str.size() )
+                {
+                    return found;
+                }
+            }
+            idx += index[ str[ idx ] ];
+        }
+        return str.size();
+    }
+};
 
 template< typename Tag_T >
 struct litesimd_boyer_moore_horspool2
@@ -225,9 +284,11 @@ int main(int argc, char* /*argv*/[])
     }
     while( 1 )
     {
-        uint64_t sse = bench< litesimd_boyer_moore_horspool2< ls::sse_tag > >( "SSE..", runSize, seekSize, loop );
+        uint64_t sse = bench< litesimd_boyer_moore_horspool< ls::sse_tag > >( "SSE..", runSize, seekSize, loop );
+        uint64_t sse2 = bench< litesimd_boyer_moore_horspool2< ls::sse_tag > >( "SSE2.", runSize, seekSize, loop );
 #ifdef LITESIMD_HAS_AVX
-        uint64_t avx = bench< litesimd_boyer_moore_horspool2< ls::avx_tag > >( "AVX..", runSize, seekSize, loop );
+        uint64_t avx = bench< litesimd_boyer_moore_horspool< ls::avx_tag > >( "AVX..", runSize, seekSize, loop );
+        uint64_t avx2 = bench< litesimd_boyer_moore_horspool2< ls::avx_tag > >( "AVX2.", runSize, seekSize, loop );
 #endif // LITESIMD_HAS_AVX
         uint64_t base = bench< boost_searcher >( "Boost", runSize, seekSize, loop );
 
@@ -240,9 +301,15 @@ int main(int argc, char* /*argv*/[])
                       << std::endl << "Index Speed up SSE.......: " << std::fixed << std::setprecision(2)
                       << static_cast<float>(base)/static_cast<float>(sse) << "x"
 
+                      << std::endl << "Index Speed up SSE2......: " << std::fixed << std::setprecision(2)
+                      << static_cast<float>(base)/static_cast<float>(sse2) << "x"
+
 #ifdef LITESIMD_HAS_AVX
                       << std::endl << "Index Speed up AVX.......: " << std::fixed << std::setprecision(2)
                       << static_cast<float>(base)/static_cast<float>(avx) << "x"
+
+                      << std::endl << "Index Speed up AVX2......: " << std::fixed << std::setprecision(2)
+                      << static_cast<float>(base)/static_cast<float>(avx2) << "x"
 #endif // LITESIMD_HAS_AVX
 
                       << std::endl << std::endl;
