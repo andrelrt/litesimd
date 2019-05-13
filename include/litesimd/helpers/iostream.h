@@ -49,8 +49,8 @@ inline std::ostream& operator<<( std::ostream& out, SimdType_T vec )
     out << "(";
     for_each_backward( vec, [&out]( int index, typename SimdType_T::simd_value_type val ) -> bool
     {
-        constexpr size_t mask = (1 << (2*sizeof(typename SimdType_T::simd_value_type)))-1;
-        out << (+val & mask);
+        //constexpr size_t mask = (1 << (2*sizeof(typename SimdType_T::simd_value_type)))-1;
+        out << static_cast<typename SimdType_T::simd_value_type>(val);
         if( index > 0 )
             out << ", ";
         return true;

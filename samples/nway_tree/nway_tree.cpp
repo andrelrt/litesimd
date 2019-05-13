@@ -30,6 +30,7 @@
 #include <litesimd/types.h>
 #include <litesimd/compare.h>
 #include <litesimd/helpers/containers.h>
+#include <litesimd/helpers/iostream.h>
 
 bool g_verbose = true;
 namespace ls = litesimd;

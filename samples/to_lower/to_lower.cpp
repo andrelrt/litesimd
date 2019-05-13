@@ -94,6 +94,38 @@ struct to_lower
 };
 
 template< typename TAG_T >
+struct to_lower2
+{
+    void operator()( ls::string& str )
+    {
+        constexpr static size_t array_size = ls::simd_type< int8_t, TAG_T >::simd_size;
+        using simd_type = ls::simd_type< int8_t, TAG_T >;
+
+        simd_type* data = (simd_type*) str.data();
+
+        size_t sz = str.size() & ~(array_size-1);
+        for( size_t i = 0; i < sz; i += array_size )
+        {
+            simd_type adder =
+                    ls::bit_and< int8_t, TAG_T >(
+                            simd_type( 0x20 ),
+                            ls::bit_and< int8_t, TAG_T >(
+                                ls::greater< int8_t, TAG_T >( *data, 'A'-1 ),
+                                ls::greater< int8_t, TAG_T >( 'Z'+1, *data ) ) );
+
+            *data = ls::add< int8_t, TAG_T >( *data, adder );
+            ++data;
+        }
+
+        size_t end = str.size();
+        for( size_t i = sz; i < end; ++i )
+        {
+            str[i] = ( 'A' <= str[i] && str[i] <= 'Z' ) ? str[i] + 0x20 : str[i];
+        }
+    }
+};
+
+template< typename TAG_T >
 void maskstore( ls::simd_type< int8_t, TAG_T >*,
                 ls::simd_type< int8_t, TAG_T >,
                 ls::simd_type< int8_t, TAG_T > ){}
@@ -235,8 +267,10 @@ int main(int argc, char* /*argv*/[])
 
         if( g_verbose )
         {
+            bench< to_lower2< ls::sse_tag > >( "SSE2 ..", runSize, loop );
             bench< maskmove_to_lower< ls::sse_tag > >( "MM SSE ", runSize, loop );
 #ifdef LITESIMD_HAS_AVX
+            bench< to_lower2< ls::avx_tag > >( "AVX2 ..", runSize, loop );
             bench< maskmove_to_lower< ls::avx_tag > >( "MM AVX ", runSize, loop );
 #endif // LITESIMD_HAS_AVX
             bench< std_to_lower >( "STD ...", runSize, loop );
