@@ -119,33 +119,17 @@ struct litesimd_boyer_moore_horspool
 
             auto mask = ls::equal_to< int8_t, Tag_T >( find_end, cur );
 
-            if( !is_zero< Tag_T >( mask ) )
+            if( is_zero< Tag_T >( mask ) )
             {
-                size_t found = std::numeric_limits<size_t>::max();
-                uint32_t bitmask = ls::mask_to_bitmask< int8_t, Tag_T >( mask );
-                ls::for_each_index<int8_t>( bitmask, [&]( int check_idx ) -> bool
-                {
-                    simd last = *reinterpret_cast<const simd*>( str.data() + idx - check_idx );
-                    auto last_mask = ls::equal_to_bitmask< int8_t, Tag_T >( find_end, last );
-                    if( ls::all_of<int8_t, Tag_T>( last_mask ) )
-                    {
-                        auto ret = memcmp( find.c_str(),
-                                           str.data() + idx - check_idx - find_size,
-                                           find_size );
-                        if( ret == 0 )
-                        {
-                            found = check_idx;
-                            return false;
-                        }
-                    }
-                    return true;
-                });
-                if( found < str.size() )
-                {
-                    return found;
-                }
+                idx += index[ str[ idx ] ];
             }
-            idx += index[ str[ idx ] ];
+            else
+            {
+                uint32_t bitmask = ls::mask_to_bitmask< int8_t, Tag_T >( mask );
+                int i = simd_size - ls::bitmask_last_index< int8_t, Tag_T >( bitmask );
+
+                idx += i;
+            }
         }
         return str.size();
     }

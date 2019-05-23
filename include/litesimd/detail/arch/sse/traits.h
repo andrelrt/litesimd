@@ -45,6 +45,10 @@ template<> struct traits<  int8_t, sse_tag >{
                               v7,  v6,  v5,  v4,  v3,  v2,  v1,  v0 );
     }
     static inline simd_type iota() { return from_values( 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 ); }
+    static inline simd_type load_unaligned( const void* ptr )
+    {
+        return _mm_lddqu_si128( reinterpret_cast<const simd_type*>( ptr ) );
+    }
 };
 
 template<> struct traits<  int16_t, sse_tag >{
@@ -59,6 +63,10 @@ template<> struct traits<  int16_t, sse_tag >{
         return _mm_set_epi16( v7, v6, v5, v4, v3, v2, v1, v0 );
     }
     static inline simd_type iota() { return from_values( 7, 6, 5, 4, 3, 2, 1, 0 ); }
+    static inline simd_type load_unaligned( const void* ptr )
+    {
+        return _mm_lddqu_si128( reinterpret_cast<const simd_type*>( ptr ) );
+    }
 };
 
 template<> struct traits<  int32_t, sse_tag >{
@@ -72,6 +80,10 @@ template<> struct traits<  int32_t, sse_tag >{
         return _mm_set_epi32( v3, v2, v1, v0 );
     }
     static inline simd_type iota() { return from_values( 3, 2, 1, 0 ); }
+    static inline simd_type load_unaligned( const void* ptr )
+    {
+        return _mm_lddqu_si128( reinterpret_cast<const simd_type*>( ptr ) );
+    }
 };
 
 template<> struct traits<  int64_t, sse_tag >{
@@ -85,6 +97,10 @@ template<> struct traits<  int64_t, sse_tag >{
         return _mm_set_epi64x( v1, v0 );
     }
     static inline simd_type iota() { return from_values( 1, 0 ); }
+    static inline simd_type load_unaligned( const void* ptr )
+    {
+        return _mm_lddqu_si128( reinterpret_cast<const simd_type*>( ptr ) );
+    }
 };
 
 template<> struct traits<   float, sse_tag >{
@@ -98,6 +114,10 @@ template<> struct traits<   float, sse_tag >{
         return _mm_set_ps( v3, v2, v1, v0 );
     }
     static inline simd_type iota() { return from_values( 3, 2, 1, 0 ); }
+    static inline simd_type load_unaligned( const void* ptr )
+    {
+        return _mm_load_ps( reinterpret_cast<const float*>( ptr ) );
+    }
 };
 
 template<> struct traits<  double, sse_tag >{
@@ -111,6 +131,10 @@ template<> struct traits<  double, sse_tag >{
         return _mm_set_pd( v1, v0 );
     }
     static inline simd_type iota() { return from_values( 1, 0 ); }
+    static inline simd_type load_unaligned( const void* ptr )
+    {
+        return _mm_load_pd( reinterpret_cast<const double*>( ptr ) );
+    }
 };
 
 } // namespace litesimd

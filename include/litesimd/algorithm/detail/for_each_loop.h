@@ -26,39 +26,54 @@
 namespace litesimd {
 namespace detail {
 
-template< int index, typename SimdType_T, typename Function_T >
+template< bool forward, int index, typename SimdType_T, typename Function_T >
 struct for_each_loop
 {
-    bool operator()( bool forward, SimdType_T vec, Function_T func )
+    using type = typename SimdType_T::simd_value_type;
+    using tag = typename SimdType_T::simd_tag;
+    bool operator()( SimdType_T vec, Function_T func )
     {
-        using type = typename SimdType_T::simd_value_type;
-        using tag = typename SimdType_T::simd_tag;
-        if( forward )
+        if( for_each_loop< true, index-1, SimdType_T, Function_T >()( vec, func ) )
         {
-            if( for_each_loop< index-1, SimdType_T, Function_T >()( true, vec, func ) )
-            {
-                return func( index, get< index, type, tag >( vec ) );
-            }
+            return func( index, get< index, type, tag >( vec ) );
         }
-        else
+        return false;
+    }
+};
+
+template< int index, typename SimdType_T, typename Function_T >
+struct for_each_loop< false, index, SimdType_T, Function_T >
+{
+    using type = typename SimdType_T::simd_value_type;
+    using tag = typename SimdType_T::simd_tag;
+    bool operator()( SimdType_T vec, Function_T func )
+    {
+        if( func( index, get< index, type, tag >( vec ) ) )
         {
-            if( func( index, get< index, type, tag >( vec ) ) )
-            {
-                return for_each_loop< index-1, SimdType_T, Function_T >()( false, vec, func );
-            }
+            return for_each_loop< false, index-1, SimdType_T, Function_T >()( vec, func );
         }
         return false;
     }
 };
 
 template< typename SimdType_T, typename Function_T >
-struct for_each_loop< 0, SimdType_T, Function_T >
+struct for_each_loop< true, 0, SimdType_T, Function_T >
 {
-    bool operator()( bool, SimdType_T vec, Function_T func )
+    using type = typename SimdType_T::simd_value_type;
+    using tag = typename SimdType_T::simd_tag;
+    bool operator()( SimdType_T vec, Function_T func )
     {
-        using type = typename SimdType_T::simd_value_type;
-        using tag = typename SimdType_T::simd_tag;
+        return func( 0, get< 0, type, tag >( vec ) );
+    }
+};
 
+template< typename SimdType_T, typename Function_T >
+struct for_each_loop< false, 0, SimdType_T, Function_T >
+{
+    using type = typename SimdType_T::simd_value_type;
+    using tag = typename SimdType_T::simd_tag;
+    bool operator()( SimdType_T vec, Function_T func )
+    {
         return func( 0, get< 0, type, tag >( vec ) );
     }
 };

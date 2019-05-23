@@ -136,6 +136,9 @@ public:
     simd_type( simd_value_type i, simd_value_type j, Value_T... v ) :
         v_( simd_traits::from_values( i, j, v... ) ) {}
 
+    /// Loads the register from an unaligned memory address
+    inline void load_unaligned( const void* ptr ) { v_ = simd_traits::load_unaligned( ptr ); }
+
     /// Returns a simd_type with all values zero
     static inline simd_type zero() { return simd_type( simd_traits::zero() ); }
 
@@ -144,6 +147,14 @@ public:
 
     /// Returns a simd_type with increasing values from 0 to simd_size -1, eg. (3, 2, 1, 0).
     static inline simd_type iota() { return simd_type( simd_traits::iota() ); }
+
+    /// Returns how many values fit on SIMD register
+    static constexpr inline size_t size() { return simd_size; }
+
+    simd_value_type& operator[]( size_t idx )
+    {
+        return reinterpret_cast<simd_value_type*>(&v_)[idx];
+    }
 
 private:
     inner_type v_;

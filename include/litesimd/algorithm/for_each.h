@@ -73,7 +73,7 @@ template< typename SimdType_T, typename Function_T,
 inline Function_T for_each( SimdType_T vec, Function_T func )
 {
     using st = SimdType_T;
-    detail::for_each_loop< st::simd_size-1, st, Function_T >()( true, vec, func );
+    detail::for_each_loop< true, st::simd_size-1, st, Function_T >()( vec, func );
     return std::move( func );
 }
 
@@ -119,7 +119,7 @@ template< typename SimdType_T, typename Function_T,
 inline Function_T for_each_backward( SimdType_T vec, Function_T func )
 {
     using st = SimdType_T;
-    detail::for_each_loop< st::simd_size-1, st, Function_T >()( false, vec, func );
+    detail::for_each_loop< false, st::simd_size-1, st, Function_T >()( vec, func );
     return std::move( func );
 }
 

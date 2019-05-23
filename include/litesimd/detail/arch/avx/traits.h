@@ -52,6 +52,10 @@ template<> struct traits<  int8_t, avx_tag >{
     }
     static inline simd_type iota() { return from_values( 31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16,
                                                          15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 ); }
+    static inline simd_type load_unaligned( const void* ptr )
+    {
+        return _mm256_lddqu_si256( reinterpret_cast<const simd_type*>( ptr ) );
+    }
 };
 
 template<> struct traits<  int16_t, avx_tag >{
@@ -69,6 +73,10 @@ template<> struct traits<  int16_t, avx_tag >{
                                   v7,  v6,  v5,  v4,  v3,  v2,  v1,  v0 );
     }
     static inline simd_type iota() { return from_values( 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0 ); }
+    static inline simd_type load_unaligned( const void* ptr )
+    {
+        return _mm256_lddqu_si256( reinterpret_cast<const simd_type*>( ptr ) );
+    }
 };
 
 template<> struct traits<  int32_t, avx_tag >{
@@ -83,6 +91,10 @@ template<> struct traits<  int32_t, avx_tag >{
         return _mm256_set_epi32( v7, v6, v5, v4, v3, v2, v1, v0 );
     }
     static inline simd_type iota() { return from_values( 7, 6, 5, 4, 3, 2, 1, 0 ); }
+    static inline simd_type load_unaligned( const void* ptr )
+    {
+        return _mm256_lddqu_si256( reinterpret_cast<const simd_type*>( ptr ) );
+    }
 };
 
 template<> struct traits<  int64_t, avx_tag >{
@@ -96,6 +108,10 @@ template<> struct traits<  int64_t, avx_tag >{
         return _mm256_set_epi64x( v3, v2, v1, v0 );
     }
     static inline simd_type iota() { return from_values( 3, 2, 1, 0 ); }
+    static inline simd_type load_unaligned( const void* ptr )
+    {
+        return _mm256_lddqu_si256( reinterpret_cast<const simd_type*>( ptr ) );
+    }
 };
 
 template<> struct traits<   float, avx_tag >{
@@ -110,6 +126,10 @@ template<> struct traits<   float, avx_tag >{
         return _mm256_set_ps( v7, v6, v5, v4, v3, v2, v1, v0 );
     }
     static inline simd_type iota() { return from_values( 7, 6, 5, 4, 3, 2, 1, 0 ); }
+    static inline simd_type load_unaligned( const void* ptr )
+    {
+        return _mm256_loadu_ps( reinterpret_cast<const float*>( ptr ) );
+    }
 };
 
 template<> struct traits<  double, avx_tag >{
@@ -123,6 +143,10 @@ template<> struct traits<  double, avx_tag >{
         return _mm256_set_pd( v3, v2, v1, v0 );
     }
     static inline simd_type iota() { return from_values( 3, 2, 1, 0 ); }
+    static inline simd_type load_unaligned( const void* ptr )
+    {
+        return _mm256_loadu_pd( reinterpret_cast<const double*>( ptr ) );
+    }
 };
 
 } // namespace litesimd

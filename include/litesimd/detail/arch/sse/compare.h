@@ -37,31 +37,48 @@ namespace litesimd {
 template<> inline std::pair<int, bool>
 bit_scan_forward< sse_tag >( uint32_t bitmask )
 {
-#ifdef _WIN32
-    unsigned long index;
-    return (0 == _BitScanForward( &index, bitmask ))
-        ? std::make_pair( -1, false )
-        : std::make_pair( index, true );
-#else
-    return (bitmask == 0)
-        ? std::make_pair( -1, false )
-        : std::make_pair( _bit_scan_forward( bitmask ), true );
-#endif
+    int def = -1;
+    int ret;
+    __asm__(
+        "bsf %[bitmask], %[ret];"
+        "cmovz %[def], %[ret];"
+        :[ret] "=r" (ret)
+        :[bitmask] "r"(bitmask), [def] "r"(def));
+    return std::make_pair( ret, true );
+//
+//#ifdef _WIN32
+//    unsigned long index;
+//    return (0 == _BitScanForward( &index, bitmask ))
+//        ? std::make_pair( -1, false )
+//        : std::make_pair( index, true );
+//#else
+//    return (bitmask == 0)
+//        ? std::make_pair( -1, false )
+//        : std::make_pair( _bit_scan_forward( bitmask ), true );
+//#endif
 }
 
 template<> inline std::pair<int, bool>
 bit_scan_reverse< sse_tag >( uint32_t bitmask )
 {
-#ifdef _WIN32
-    unsigned long index;
-    return (0 == _BitScanReverse( &index, bitmask ))
-        ? std::make_pair( -1, false )
-        : std::make_pair( index, true );
-#else
-    return (bitmask == 0)
-        ? std::make_pair( -1, false )
-        : std::make_pair( _bit_scan_reverse( bitmask ), true );
-#endif
+    int def = -1;
+    int ret;
+    __asm__(
+        "bsr %[bitmask], %[ret];"
+        "cmovz %[def], %[ret];"
+        :[ret] "=r" (ret)
+        :[bitmask] "r"(bitmask), [def] "r"(def));
+    return std::make_pair( ret, true );
+//#ifdef _WIN32
+//    unsigned long index;
+//    return (0 == _BitScanReverse( &index, bitmask ))
+//        ? std::make_pair( -1, false )
+//        : std::make_pair( index, true );
+//#else
+//    return (bitmask == 0)
+//        ? std::make_pair( -1, false )
+//        : std::make_pair( _bit_scan_reverse( bitmask ), true );
+//#endif
 }
 
 // Mask to bitmask
